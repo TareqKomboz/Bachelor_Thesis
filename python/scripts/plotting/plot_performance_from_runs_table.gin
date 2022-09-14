@@ -1,0 +1,13 @@
+Args.name               = "zo_algos_50"
+Args.algorithms         = []
+Args.trained_ons        = []
+Args.run_ids            = []
+Args.run_ons            = ["all", ]
+Args.operations         = ["all", ]
+Args.plotby             = "run_on"
+Args.episode_length     = 50
+Args.subplots           = True
+Args.barplots           = False
+Args.same_as_trained    = False
+Args.non_learned        = True
+Args.labels             = ["Grid search", "Nelder-Mead", "Powell", "Random search"]

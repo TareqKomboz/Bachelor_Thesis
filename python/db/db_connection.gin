@@ -1,0 +1,5 @@
+DBEngine.enable     = False
+DBEngine.host       = "192.168.1.2"
+DBEngine.dbname     = "investigation_of_l2o"
+DBEngine.user       = "postgres"
+DBEngine.password   = "postgres"
