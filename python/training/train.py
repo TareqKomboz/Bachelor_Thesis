@@ -55,8 +55,6 @@ def train(agent_name,
     global_step = tf.compat.v1.train.get_or_create_global_step()
 
     # create train environment
-
-
     if randomize_start:
         start_point = tf.random.uniform(shape=(batch_size, 2), minval=(-1, -1), maxval=(1, 1), dtype=tf.float32)
     else:
@@ -64,42 +62,49 @@ def train(agent_name,
 
     obj_fcts = [FUNCTIONS[function_name][0] for function_name in function_names]
 
-    train_env = create_environment(environment_type,
-                                   format_function_names(function_names),
-                                   obj_fcts,
-                                   start_point,
-                                   episode_length,
-                                   num_observations,
-                                   batch_size)
+    train_env = create_environment(
+        environment_type,
+        format_function_names(function_names),
+        obj_fcts,
+        start_point,
+        episode_length,
+        num_observations,
+        batch_size
+    )
 
     # Create evaluation and plotting environments
     eval_driver = EvaluationDriver(run_dir, num_observations, environment_type)
 
-    agent = create_agent(agent_name,
-                         train_env.observation_spec(),
-                         train_env.action_spec(),
-                         train_env.time_step_spec(),
-                         step_counter=global_step)
+    agent = create_agent(
+        agent_name,
+        train_env.observation_spec(),
+        train_env.action_spec(),
+        train_env.time_step_spec(),
+        step_counter=global_step)
 
     replay_buffer = tf_uniform_replay_buffer.TFUniformReplayBuffer(
         agent.collect_data_spec,
         batch_size=train_env.batch_size,
-        max_length=replay_buffer_capacity)
+        max_length=replay_buffer_capacity
+    )
 
     replay_observer = [replay_buffer.add_batch]
 
     train_checkpointer = common.Checkpointer(
         ckpt_dir=checkpoint_dir,
         agent=agent,
-        global_step=global_step)
+        global_step=global_step
+    )
     policy_checkpointer = common.Checkpointer(
         ckpt_dir=os.path.join(checkpoint_dir, 'policy'),
         policy=agent.policy,
-        global_step=global_step)
+        global_step=global_step
+    )
     rb_checkpointer = common.Checkpointer(
         ckpt_dir=os.path.join(checkpoint_dir, 'replay_buffer'),
         max_to_keep=1,
-        replay_buffer=replay_buffer)
+        replay_buffer=replay_buffer
+    )
 
     train_checkpointer.initialize_or_restore().expect_partial()
     load_status = policy_checkpointer.initialize_or_restore().expect_partial()

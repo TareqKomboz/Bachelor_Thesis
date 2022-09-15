@@ -7,11 +7,12 @@ class TrainingDriver:
     def __init__(self, agent, environment, replay_buffer, replay_observer, num_iterations, clear_buffer):
         self.train_losses = common.create_variable('train_losses', shape=(num_iterations,), dtype=tf.float32)
         self.train_returns = common.create_variable('returns', shape=(num_iterations,), dtype=tf.float32)
-        self.eval_performance = common.create_variable('performance',
-                                                       shape=(num_iterations, 2), dtype=tf.float32)
-        self.eval_rewards = common.create_variable('eval_rewards',
-                                                   shape=(environment.batch_size, environment.episode_length),
-                                                   dtype=tf.float32)
+        self.eval_performance = common.create_variable('performance', shape=(num_iterations, 2), dtype=tf.float32)
+        self.eval_rewards = common.create_variable(
+            'eval_rewards',
+            shape=(environment.batch_size, environment.episode_length),
+            dtype=tf.float32
+        )
         self.driver = DynamicEpisodeDriver(environment, agent.collect_policy, replay_observer)
         self.eval_driver = DynamicEpisodeDriver(environment, agent.policy, replay_observer)
         self.eval_policy = agent.policy
@@ -27,9 +28,11 @@ class TrainingDriver:
     @tf.function
     def train_step(self):
         self.driver.run()
-        iterator = iter(self.replay_buffer.as_dataset(single_deterministic_pass=False,
-                                                      sample_batch_size=self.train_env.batch_size,
-                                                      num_steps=self.train_env.episode_length))
+        iterator = iter(self.replay_buffer.as_dataset(
+            single_deterministic_pass=False,
+            sample_batch_size=self.train_env.batch_size,
+            num_steps=self.train_env.episode_length
+        ))
         experience, _ = next(iterator)
         loss = self.agent.train(experience=experience).loss
         avg_return = tf.divide(tf.reduce_sum(experience.reward), self.train_env.batch_size)

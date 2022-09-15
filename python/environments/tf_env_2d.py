@@ -16,17 +16,17 @@ LAST = ts.StepType.LAST
 class TfEnv2d(TFEnvironment):
     def __init__(self,
                  name,
-                 obj_fcts,
+                 objective_functions,
                  starting_position,
                  episode_length,
                  num_observations,
                  batch_size):
         self.name = name
-        self.obj_fcts = obj_fcts
-        if len(obj_fcts) == 1:
-            self.evaluate_obj_fct = self._evaluate_obj_fct
+        self.objective_functions = objective_functions
+        if len(objective_functions) == 1:
+            self.evaluate_objective_function = self._evaluate_objective_function
         else:
-            self.evaluate_obj_fct = self._evaluate_obj_fcts
+            self.evaluate_objective_function = self._evaluate_objective_functions
 
         self._batch_size = batch_size
         self._dtype = tf.float32
@@ -86,7 +86,7 @@ class TfEnv2d(TFEnvironment):
         self._states.assign(tf.zeros_like(self._states))
         self._states[:, 0].assign(self._state)
         self._function_values.assign(tf.zeros_like(self._function_values))
-        self._function_values[:, 0].assign(self.evaluate_obj_fct(self._initial_state))
+        self._function_values[:, 0].assign(self.evaluate_objective_function(self._initial_state))
         self._observations.assign(tf.zeros_like(self._observations))
         self._reset_observations()
 
@@ -99,7 +99,7 @@ class TfEnv2d(TFEnvironment):
         self.assign_state(action)
         self._states[:, self._steps].assign(self._state)
         self._function_values[:, self._steps].assign(
-            self.evaluate_obj_fct(self._state))
+            self.evaluate_objective_function(self._state))
         self.build_observation()
         return self.current_time_step()
 
@@ -112,15 +112,15 @@ class TfEnv2d(TFEnvironment):
     def assign_state(self, action):
         self._assign_state(action)
 
-    def _evaluate_obj_fct(self, X):
-        reward = self.obj_fcts[0](tf.transpose(X))
+    def _evaluate_objective_function(self, x):
+        reward = self.objective_functions[0](tf.transpose(x))
         return reward
 
-    def _evaluate_obj_fcts(self, X):
-        X = tf.reshape(X, (len(self.obj_fcts), int(self.batch_size / len(self.obj_fcts)), 2))
+    def _evaluate_objective_functions(self, x):
+        x = tf.reshape(x, (len(self.objective_functions), int(self.batch_size / len(self.objective_functions)), 2))
         reward = []
-        for i in range(len(X)):
-            reward.append(self.obj_fcts[i](tf.transpose(X[i])))
+        for i in range(len(x)):
+            reward.append(self.objective_functions[i](tf.transpose(x[i])))
         reward = tf.reshape(reward, (self.batch_size,))
         reward += tf.random.normal([1], mean=0, stddev=self._output_noise, dtype=self._dtype)[:, 0]
         return reward
