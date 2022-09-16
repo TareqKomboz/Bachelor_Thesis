@@ -31,17 +31,9 @@ def change_run_id(line):
 
 def add_operators(line):
     if eval(line.split("=")[1]):
-        return line.replace(line,
-                            "train.translation                                   = 1.0 \n"
-                            "train.rotation                                      = 0.0 \n"
-                            "train.input_noise                                   = 0.0 \n"
-                            "train.output_noise                                  = 0.0 \n")
+        return line.replace(line)
     else:
-        return line.replace(line,
-                            "train.translation                                   = 0.0 \n"
-                            "train.rotation                                      = 0.0 \n"
-                            "train.input_noise                                   = 0.0 \n"
-                            "train.output_noise                                  = 0.0 \n")
+        return line.replace(line)
 
 if __name__ == "__main__":
     change("train.randomize_translation", add_operators)

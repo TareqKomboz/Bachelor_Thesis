@@ -48,9 +48,7 @@ def copy(files, checkpoint_dir, destination):
         shutil.copy2(file, destination)
 
 def is_baseline(alg_dir):
-    return alg_dir.endswith("powell") or alg_dir.endswith("nelder-mead") \
-           or alg_dir.endswith("random_search") or alg_dir.endswith("grid_search") \
-           or alg_dir.endswith("random_search_200")
+    return False
 
 
 if __name__ == "__main__":

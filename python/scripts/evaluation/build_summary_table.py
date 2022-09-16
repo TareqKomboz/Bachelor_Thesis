@@ -8,7 +8,7 @@ from definitons import RUNS_DIR
 import pandas as pd
 
 START_COLUMNS = ['algorithm', 'trained_on', 'run_id']
-EVAL_CATEGORIES = ["control", "translation", "rotation", "input_noise", "output_noise"]
+EVAL_CATEGORIES = ["control"]
 
 def scan_summary_txt(file, value_name):
     performances = []
@@ -102,9 +102,7 @@ def find_evaluation_folders():
 
 
 def is_not_learned(alg_dir):
-    return alg_dir.endswith("powell") or alg_dir.endswith("nelder-mead") \
-           or alg_dir.endswith("random_search") or alg_dir.endswith("grid_search") \
-           or alg_dir.endswith("random_search_200")
+    return False
 
 
 def find_summaries_and_write_to_file(file, value_name="train_final"):
@@ -122,7 +120,7 @@ def find_summaries_and_write_to_file(file, value_name="train_final"):
         data.append(scan_evaluation_folder(folder, value_name))
     data = [[algorithms[i]] + [trained_ons[i]] + [run_ids[i]] + data[i] for i in range(len(data))]
     df = pd.DataFrame(data=data, columns=columns)
-    df.loc[(df.trained_on == "ackley,himmelblau,cross-in-tray,rastrigin,sphere,camel,rosenbrock,michalewicz"),
+    df.loc[(df.trained_on == "ackley,langermann,michalewicz,rastrigin,rosenbrock,sumsquares"),
            'trained_on'] = 'all'
     df['overall'] = 0
     for function_name in FUNCTIONS.keys():
@@ -138,58 +136,21 @@ def find_summaries_and_write_to_file(file, value_name="train_final"):
         elif trained_on == 'all':
             for name in FUNCTIONS.keys():
                 df['in_distribution'][i] += df['{}_control'.format(name)][i]
-                df['out_of_distribution'][i] += df['{}_rotation'.format(name)][i]
-                df['out_of_distribution'][i] += df['{}_input_noise'.format(name)][i]
-                df['out_of_distribution'][i] += df['{}_output_noise'.format(name)][i]
-                if translation:
-                    df['in_distribution'][i] += df['{}_translation'.format(name)][i]
-                else:
-                    df['out_of_distribution'][i] += df['{}_translation'.format(name)][i]
-            if translation:
-                df['in_distribution'][i] /= 2 * len(FUNCTIONS)
-                df['out_of_distribution'][i] /= 3 * len(FUNCTIONS)
-            else:
-                df['in_distribution'][i] /= 1 * len(FUNCTIONS)
-                df['out_of_distribution'][i] /= 4 * len(FUNCTIONS)
         elif len(trained_on.split(",")) >= 4:
             function_names = get_functions_from_formatted_function_names(trained_on)
             for name in function_names:
                 df['in_distribution'][i] += df['{}_control'.format(name)][i]
-                df['out_of_distribution'][i] += df['{}_rotation'.format(name)][i]
-                df['out_of_distribution'][i] += df['{}_input_noise'.format(name)][i]
-                df['out_of_distribution'][i] += df['{}_output_noise'.format(name)][i]
-                if translation:
-                    df['in_distribution'][i] += df['{}_translation'.format(name)][i]
-                else:
-                    df['out_of_distribution'][i] += df['{}_translation'.format(name)][i]
         elif len(trained_on.split(",")) > 1:
             function_names = trained_on.split(",")
             for name in function_names:
                 df['in_distribution'][i] += df['{}_control'.format(name)][i]
-                df['out_of_distribution'][i] += df['{}_rotation'.format(name)][i]
-                df['out_of_distribution'][i] += df['{}_input_noise'.format(name)][i]
-                df['out_of_distribution'][i] += df['{}_output_noise'.format(name)][i]
-                if translation:
-                    df['in_distribution'][i] += df['{}_translation'.format(name)][i]
-                else:
-                    df['out_of_distribution'][i] += df['{}_translation'.format(name)][i]
 
         else:
             df['in_distribution'][i] += df['{}_control'.format(trained_on)][i]
-            df['out_of_distribution'][i] += df['{}_rotation'.format(trained_on)][i]
-            df['out_of_distribution'][i] += df['{}_input_noise'.format(trained_on)][i]
-            df['out_of_distribution'][i] += df['{}_output_noise'.format(trained_on)][i]
             for name in FUNCTIONS.keys():
                 if name == trained_on:
                     continue
                 df['out_of_distribution'][i] += 5 * df[name][i]
-            if translation:
-                df['in_distribution'][i] += df['{}_translation'.format(trained_on)][i]
-                df['in_distribution'][i] /= 2
-                df['out_of_distribution'][i] /= 5 * (len(FUNCTIONS) - 1) + 3
-            else:
-                df['out_of_distribution'][i] += df['{}_translation'.format(trained_on)][i]
-                df['out_of_distribution'][i] /= 5 * (len(FUNCTIONS) - 1) + 4
 
     for category in EVAL_CATEGORIES:
         df[category] = 0
@@ -222,5 +183,3 @@ if __name__ == "__main__":
     file = os.path.join(RUNS_DIR, "{}.csv".format("final summary"))
     find_summaries_and_write_to_file(file, "train_final")
     insert_into_postgres(file)
-
-

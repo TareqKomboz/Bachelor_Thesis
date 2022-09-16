@@ -10,4 +10,3 @@ Args.subplots           = True
 Args.barplots           = False
 Args.same_as_trained    = False
 Args.non_learned        = True
-Args.labels             = ["Grid search", "Nelder-Mead", "Powell", "Random search"]

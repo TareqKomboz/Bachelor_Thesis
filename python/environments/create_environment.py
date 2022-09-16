@@ -15,10 +15,3 @@ def create_environment(type,
                                    episode_length,
                                    num_observations,
                                    batch_size)
-    else:
-        return TfEnv2DRelObsRelAct(function_names,
-                                   obj_fcts,
-                                   start_point,
-                                   episode_length,
-                                   num_observations,
-                                   batch_size)

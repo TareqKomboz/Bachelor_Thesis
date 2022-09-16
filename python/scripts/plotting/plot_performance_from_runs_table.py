@@ -15,7 +15,7 @@ from definitons import ROOT_DIR
 
 PLOT_DIR = os.path.join(ROOT_DIR, "comparison_plots")
 COLORS = [color for color in mcolors.TABLEAU_COLORS.values()]
-OPERATORS = ['overall', 'control', 'translation', 'rotation', 'input_noise', 'output_noise']
+OPERATORS = ['overall', 'control']
 
 
 @gin.configurable
@@ -54,8 +54,6 @@ def main(args):
         if args.plotby == "run_on":
             if "all" in args.run_ons:
                 plot_by_run_on(args, df)
-        elif args.plotby == "operation":
-            plot_by_operation(args, df)
         else:
             raise NotImplementedError("Plot by {} has not been implemented yet".format(args.plotby))
     else:
@@ -80,30 +78,6 @@ def main(args):
 
     plt.savefig(os.path.join(PLOT_DIR, name), dpi=400, transparent=True)
     plt.show()
-
-
-def plot_by_operation(args, df):
-    fig, axs = plt.subplots(2, 3)
-    fig.set_size_inches(10, 6)
-    for i, (operator, ax) in enumerate(zip(OPERATORS, axs.flatten())):
-        means = df[df['operation'] == operator]['mean_perf_over_time']
-        stds = df[df['operation'] == operator]['std_perf_over_time']
-
-        if args.barplots:
-            plt.grid(axis='y')
-            means = [mean[args.episode_length - 1] for mean in means]
-            h = plot_performance_by_labels(ax, args.labels, means, width=0.25)
-            ax.set_ylim(0, 1)
-            ax.title.set_text(operator.capitalize().replace('_', ' '))
-            if i != 0 and i != 3:
-                ax.set_yticklabels([])
-            if i < 6:
-                ax.set_xticklabels([])
-            ax.grid(axis='y')
-
-    plt.figlegend(labels=[name for name in args.labels], handles=h, loc='lower center',
-                  fancybox=True, shadow=True, ncol=4)
-
 
 def plot_by_run_on(args, df):
     fig, axs = plt.subplots(2, 4)

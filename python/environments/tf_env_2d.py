@@ -6,7 +6,6 @@ from tf_agents.utils import common
 
 from tf_agents.environments import TFEnvironment
 
-from common.utils import create_rotation_matrix
 
 FIRST = ts.StepType.FIRST
 MID = ts.StepType.MID
@@ -122,7 +121,6 @@ class TfEnv2d(TFEnvironment):
         for i in range(len(x)):
             reward.append(self.objective_functions[i](tf.transpose(x[i])))
         reward = tf.reshape(reward, (self.batch_size,))
-        reward += tf.random.normal([1], mean=0, stddev=self._output_noise, dtype=self._dtype)[:, 0]
         return reward
 
     def set_starting_positions(self, starting_positions):

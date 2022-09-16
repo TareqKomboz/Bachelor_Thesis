@@ -2,7 +2,7 @@ import os.path
 
 import gin
 
-EVAL_CATEGORIES = ["control", "translation", "rotation", "input_noise", "output_noise"]
+EVAL_CATEGORIES = ["control"]
 
 @gin.configurable
 class DBEngine:
@@ -21,4 +21,3 @@ def initialize_db():
     gin.parse_config_file(os.path.join(
         os.path.dirname(os.path.realpath(os.path.realpath(__file__))),
         "db_connection.gin"))
-

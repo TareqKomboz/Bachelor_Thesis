@@ -7,7 +7,7 @@ from db.postgres import initialize_db, DBEngine
 COLUMNS = ["algorithm", "trained_on", "run_id", "step_counter", "run_on",
            "operation", "mean_perf_over_time", "std_perf_over_time"]
 
-OPERATIONS = ["control", "translation", "rotation", "input_noise", "output_noise"]
+OPERATIONS = ["control"]
 TABLE_NAME = 'runs'
 
 
@@ -37,10 +37,6 @@ def read_from_sql(non_learned, algorithms, trained_ons, run_ids, operations, run
 
     sql_query = "SELECT * FROM {} WHERE ".format(TABLE_NAME)
     if non_learned:
-        algorithms.append("random_search")
-        algorithms.append("grid_search")
-        algorithms.append("nelder-mead")
-        algorithms.append("powell")
         trained_ons.append("")
         run_ids.append("")
     if 'all' in operations:

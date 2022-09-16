@@ -32,11 +32,6 @@ def plot_function(domain, function):
     return Z
 
 
-def create_rotation_matrix(radians):
-    c, s = tf.cos(radians), tf.sin(radians)
-    return tf.transpose(tf.convert_to_tensor(((c, -s), (s, c))))
-
-
 def format_function_names(function_names):
     if len(function_names) < 4:
         return ",".join(function_names)
@@ -51,20 +46,16 @@ def get_functions_from_formatted_function_names(formatted_function_names):
     for formatted_name in formatted_function_names.split(","):
         if formatted_name == "ack":
             names.append("ackley")
-        elif formatted_name == "cam":
-            names.append("camel")
-        elif formatted_name == "cro":
-            names.append("cross-in-tray")
-        elif formatted_name == "him":
-            names.append("himmelblau")
+        elif formatted_name == "lan":
+            names.append("langermann")
         elif formatted_name == "mic":
             names.append("michalewicz")
         elif formatted_name == "ras":
             names.append("rastrigin")
         elif formatted_name == "ros":
             names.append("rosenbrock")
-        elif formatted_name == "sph":
-            names.append("sphere")
+        elif formatted_name == "squ":
+            names.append("sumsquares")
         else:
             raise NotImplementedError("unknown function name encountered: " + formatted_name)
     return names

@@ -25,18 +25,19 @@ def norm_ackley2d(x):
     return tf.divide(value, 10.85)
 
 
+# @tf.function
 def langermann(x):
     dtype = tf.float32
-    m = tf.constant(5, dtype=dtype)
+    m = 5
     c = tf.constant([1, 2, 5, 2, 3], dtype=dtype)
     a = tf.constant([[3, 5, 2, 1, 7], [5, 2, 1, 4, 9]], dtype=dtype)
     d = x.shape[0]
 
-    f = tf.constant(0.0, dtype=dtype)
-    for i in range(int(m)):
-        summe = tf.constant(0.0, dtype=dtype)
-        for j in range(int(d)):
-            summe += tf.pow((x[j] - a[j][i]), 2)
+    f = 0.0
+    for i in tf.range(m):
+        summe = 0.0
+        for j in tf.range(d):
+            summe += tf.pow(tf.subtract(x[j], a[j][i]), 2)
 
         f += c[i] * tf.multiply(tf.exp(-(1.0 / math.pi) * summe), tf.cos(math.pi * summe))
 
@@ -44,9 +45,9 @@ def langermann(x):
 
 
 # local minimum (1, 1)
-@tf.function
+# @tf.function
 def norm_langermann(x):
-    return langermann(x)
+    return langermann(x) / 5.0
 
 
 @tf.function
@@ -85,9 +86,8 @@ def norm_rastrigin2d(x):
 
 @tf.function
 def rosenbrock(x):
-    a = 100.0
     x *= 2.0
-    return a * (x[1] - x[0] ** 2) ** 2 + (1 - x[0]) ** 2
+    return 100.0 * ((x[1] - (x[0] ** 2)) ** 2) + ((x[0] - 1) ** 2)
 
 
 @tf.function
@@ -113,26 +113,23 @@ def norm_rosenbrock(x):
 
 
 @tf.function
-def sum_squares(x):
+def sumsquares(x):
     x = tf.pow(x, 2)
-    return -(x[0] + x[1])
+    return tf.math.reduce_sum(x, axis=0)
 
 
 @tf.function
-def norm_sum_squares(x):
-    value = 0.66666 - sum_squares(x)
-    value = tf.multiply(value, 1.500150015)
-    value = tf.clip_by_value(value, clip_value_min=-1.0, clip_value_max=1.0)
-    return value / 1.5
+def norm_sumsquares(x):
+    return -sumsquares(x)
 
 
 FUNCTIONS = {
     "ackley": (norm_ackley2d, norm_ackley2d, ackley2d),
-    # "langermann": (norm_langermann, norm_langermann, langermann),
+    "langermann": (norm_langermann, norm_langermann, langermann),
     "michalewicz": (norm_michalewicz, norm_michalewicz, michalewicz),
     "rastrigin": (norm_rastrigin2d, norm_rastrigin2d, rastrigin2d),
     "rosenbrock": (lognorm_rosenbrock, lognorm_rosenbrock, rosenbrock),
-    "sum_squares": (norm_sum_squares, norm_sum_squares, sum_squares)
+    "sumsquares": (norm_sumsquares, norm_sumsquares, sumsquares)
 }
 """
 FUNCTIONS = {

@@ -16,34 +16,27 @@ type = "overall"
 
 if type == "single":
     TOP_PERFORMERS = (("reinforce", "ackley", "10_obs_0.9_gamma_1.0_trans_abs_env", "ackley"),
-                      ("reinforce", "himmelblau", "10_obs_0.9_gamma_100_episodes_1.0_trans_abs_env", "himmelblau"),
-                      ("reinforce", "cross-in-tray", "25_obs_0.9_gamma_1.0_trans_abs_env", "cross-in-tray"),
                       ("reinforce", "rastrigin", "10_obs_0.5_gamma_100_episodes_1.0_trans_abs_env", "rastrigin"),
                       ("reinforce", "sphere", "10_obs_0.9_gamma_100_episodes_1.0_trans_abs_env", "sphere"),
-                      ("reinforce", "camel", "10_obs_0.9_gamma_100_episodes_1.0_trans_abs_env", "camel"),
                       ("reinforce", "rosenbrock", "10_obs_0.9_gamma_1.0_trans_abs_env", "rosenbrock"),
                       ("reinforce", "michalewicz", "10_obs_1.0_gamma_1.0_trans_abs_env", "michalewicz"))
 elif type == "overall":
     TOP_PERFORMERS = (("reinforce", "all", "10_obs_0.9_gamma_100_episodes_1.0_trans_abs_env"),
-                      ("reinforce", "himmelblau", "10_obs_0.9_gamma_100_episodes_1.0_trans_abs_env"),
-                      ("reinforce", "all", "25_obs_giant_vnet_deep_pnet_rel_env"),
-                      ("reinforce", "cross-in-tray", "25_obs_1.0_gamma_1.0_trans_rel_env"))
+                      ("reinforce", "all", "25_obs_giant_vnet_deep_pnet_rel_env"))
 
 elif type == "single_rel":
 
     FIG_NAME += "_rel"
     TOP_PERFORMERS = (("reinforce", "ackley", "10_obs_rel_env", "ackley"),
-                      ("reinforce", "himmelblau", "25_obs_1.0_trans_rel_env", "himmelblau"),
-                      ("reinforce", "cross-in-tray", "25_obs_1.0_gamma_1.0_trans_rel_env", "cross-in-tray"),
                       ("reinforce", "rastrigin", "25_obs_double_pnet_rel_env", "rastrigin"),
                       ("reinforce", "sphere", "25_obs_1.0_trans_rel_env", "sphere"),
-                      ("reinforce", "camel", "25_obs_1.0_gamma_1.0_trans_rel_env", "camel"),
                       ("reinforce", "rosenbrock", "25_obs_1.0_gamma_rel_env", "rosenbrock"),
                       ("reinforce", "michalewicz", "25_obs_1.0_trans_rel_env", "michalewicz"))
 else:
     raise NotImplementedError
 
-OPERATORS = ("control", "translation", "rotation", "input_noise", "output_noise")
+
+OPERATORS = ("control")
 PLOT_DIR = os.path.join(ROOT_DIR, "comparison_plots")
 COLORS = [color for color in mcolors.TABLEAU_COLORS.values()]
 
@@ -51,10 +44,10 @@ COLORS = [color for color in mcolors.TABLEAU_COLORS.values()]
 def main():
     if PLOT_BY == "run_on" and type.startswith("single"):
         means, stds = get_data_by_run_on()
-        plot_by_run_on(means, stds, ("Grid search", "Nelder-Mead", "Powell", "Random search", "Single", "All"))
+        plot_by_run_on(means, stds, ("Single", "All"))
     elif PLOT_BY == "run_on" and type.startswith("overall"):
         means, stds = get_data_by_run_on_overall()
-        plot_by_run_on(means, stds, ("Powell", "Random", "Abs All", "Himmelblau", "Rel All", "Cross-in-tray"))
+        plot_by_run_on(means, stds, ("Abs All", "Rel All"))
     elif PLOT_BY == "operator":
         means, stds = get_data_by_operator()
         plot_by_operator(means, stds)
@@ -72,7 +65,7 @@ def plot_by_operator(all_means, all_stds):
     fig, axss = plt.subplots(8, 4)
     fig.set_size_inches(10, 15)
     plt.subplots_adjust(right=0.95, left=0.1, bottom=0.05, top=0.95, wspace=0.1, hspace=0.15)
-    labels = ("Absolute All", "Absolute Himmelblau", "Relative All", "Relative Cross-in-tray")
+    labels = ("Absolute All", "Relative All")
 
     for j, (axs, function_name) in enumerate(zip(axss, FUNCTIONS.keys())):
         for i, (ax, label) in enumerate(zip(axs, labels)):
