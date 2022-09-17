@@ -37,5 +37,3 @@ def main():
 if __name__ == "__main__":
     print("{} configfiles found, building their unified run-ids".format(len(CONFIGFILES)))
     main()
-
-

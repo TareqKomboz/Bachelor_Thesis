@@ -52,6 +52,7 @@ def main():
     with open("property_score.csv", 'w') as writer:
         writer.write(line)
 
+
 def build_property_scores(matrix):
     scores = []
     for relation in property_relations:
@@ -65,6 +66,7 @@ def build_property_scores(matrix):
         avg_score = score / (len(indices)**2 - len(indices))
         scores.append(avg_score)
     return scores
+
 
 def build_corr_matrix(df):
     n = len(FUNCTIONS)
@@ -90,6 +92,7 @@ def build_corr_matrix(df):
     plt.savefig(os.path.join(PLOT_DIR, PLOT_NAME), dpi=400, transparent=True)
     plt.show()
     return rel_matrix
+
 
 def get_data():
     return read_from_sql_for_correlation_matrix(0.2)

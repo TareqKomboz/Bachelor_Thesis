@@ -5,7 +5,6 @@ main.function_names                                 = ("ackley",)
 # environment config
 main.num_observations                               = 5  # 10
 train.batch_size                                    = 512
-train.action_scaling                                = 5.0
 train.episode_length                                = 50
 train.input_dimension                               = 2
 train.number_optimization_parameters                = 2

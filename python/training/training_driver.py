@@ -67,4 +67,3 @@ class TrainingDriver:
 
     def get_summary(self):
         return self.train_returns[:self.step], self.train_losses[:self.step], self.eval_performance[:self.step_eval]
-

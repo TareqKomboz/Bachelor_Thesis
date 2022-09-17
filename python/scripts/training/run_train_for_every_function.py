@@ -29,6 +29,7 @@ def create_configfiles(configfile):
             writer.writelines(lines)
     return new_configfiles
 
+
 def main(arguments):
     main_script = os.path.join(PYTHON_DIR, "main.py")
     configfiles = create_configfiles(arguments.configfile)

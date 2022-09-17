@@ -53,11 +53,13 @@ def main(environment_type,
     logging.info("Starting run with {} agent, {} function and id {}"
                  .format(agent_name, format_function_names(function_names), run_id))
     if not arguments.evaluate:
-        final_performance, duration = train(agent_name,
-                                            function_names,
-                                            run_dir,
-                                            num_observations,
-                                            environment_type)
+        final_performance, duration = train(
+            agent_name,
+            function_names,
+            run_dir,
+            num_observations,
+            environment_type
+        )
         logging.info("{}-{}-{} training finished in {}, final performance = {:.2f}"
                      .format(run_id,
                              agent_name,

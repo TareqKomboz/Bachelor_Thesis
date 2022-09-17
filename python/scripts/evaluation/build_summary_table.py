@@ -10,6 +10,7 @@ import pandas as pd
 START_COLUMNS = ['algorithm', 'trained_on', 'run_id']
 EVAL_CATEGORIES = ["control"]
 
+
 def scan_summary_txt(file, value_name):
     performances = []
     with open(file) as reader:
@@ -19,6 +20,7 @@ def scan_summary_txt(file, value_name):
             line = line.strip("=")
             performances.append(float(line))
     return performances
+
 
 def scan_evaluation_folder(folder, value_name):
     performances = []
@@ -170,6 +172,7 @@ def plot_table_by_function_values(file):
 
     file2 = os.path.join(RUNS_DIR, "{}.csv".format("small summary"))
     df_by_function.to_csv(file2)
+
 
 def insert_into_postgres(file):
     initialize_db()

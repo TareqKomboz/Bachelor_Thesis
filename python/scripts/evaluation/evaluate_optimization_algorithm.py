@@ -1,17 +1,13 @@
 import argparse
-import math
 import os
 import time
 
 import numpy as np
 import tensorflow as tf
-from scipy import optimize
 
 from objective_functions.tf_objective_functions import FUNCTIONS
 from definitons import RUNS_DIR
-from evaluation.evaluation_utils import build_eval_params
 from evaluation.plot_utils import plot_performance_over_time_with_stds, plot, plot_performance_by_function
-from db.runs import save_to_sql
 
 episode_length = 200
 

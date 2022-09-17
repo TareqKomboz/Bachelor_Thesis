@@ -79,6 +79,7 @@ def main(args):
     plt.savefig(os.path.join(PLOT_DIR, name), dpi=400, transparent=True)
     plt.show()
 
+
 def plot_by_run_on(args, df):
     fig, axs = plt.subplots(2, 4)
     fig.set_size_inches(10, 6)

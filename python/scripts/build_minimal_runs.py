@@ -6,12 +6,11 @@ from definitons import RUNS_DIR, ROOT_DIR
 
 MIN_RUNS_DIR = os.path.join("D:", "runs")
 
+
 def main():
     alg_dirs = os.listdir(RUNS_DIR)
     alg_dirs = [x for x in alg_dirs if os.path.isdir(os.path.join(RUNS_DIR, x))]
     for alg_dir in alg_dirs:
-        if is_baseline(alg_dir):
-            continue
         full_alg_dir = os.path.join(RUNS_DIR, alg_dir)
         fct_dirs = os.listdir(full_alg_dir)
         for fct_dir in fct_dirs:
@@ -46,9 +45,6 @@ def copy(files, checkpoint_dir, destination):
     shutil.copytree(checkpoint_dir, os.path.join(destination, 'checkpoint'), dirs_exist_ok=True)
     for file in files:
         shutil.copy2(file, destination)
-
-def is_baseline(alg_dir):
-    return False
 
 
 if __name__ == "__main__":

@@ -71,13 +71,17 @@ def plot_returns_and_losses(returns,
     plt.clf()
 
 
-def build_eval_params(n_start_pos, domain):
-    N_start_pos = (n_start_pos + 1) ** 2
+def build_eval_params(n_start_pos, input_dimension):
+    N_start_pos = (n_start_pos + 1) ** input_dimension
 
-    mesh_domain = domain * 0.9
-    x = tf.range(mesh_domain[0][0], mesh_domain[1][0] + 0.05, (mesh_domain[1][0] - mesh_domain[0][0]) / n_start_pos)
-    y = tf.range(mesh_domain[0][1], mesh_domain[1][1] + 0.05, (mesh_domain[1][1] - mesh_domain[0][1]) / n_start_pos)
-    start_mesh = tf.reshape(tf.transpose(tf.meshgrid(x, y)), (N_start_pos, 2))
+    my_list = []
+    for i in range(input_dimension):
+        my_list.append(tf.range(-0.9, 0.95, 1.8 / n_start_pos))
+    start_mesh = tf.reshape(tf.transpose(tf.meshgrid(*tuple(my_list))), (N_start_pos, input_dimension))
+
+    # x = tf.range(-0.9, 0.95, 1.8 / n_start_pos)
+    # y = tf.range(-0.9, 0.95, 1.8 / n_start_pos)
+    # start_mesh = tf.reshape(tf.transpose(tf.meshgrid(x, y)), (N_start_pos, 2))
 
     # Starting positions
     starting_positions = start_mesh

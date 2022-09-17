@@ -31,10 +31,7 @@ class EvaluationDriver:
         self.train_episode_length = train_episode_length
 
         self.n_start_pos = 3
-        self.domain = tf.constant([[-1, -1], [1, 1]], dtype=self.dtype)  # Todo: Tareq higher dim
-        self.starting_positions = build_eval_params(
-            self.n_start_pos,
-            self.domain)
+        self.starting_positions = build_eval_params(self.n_start_pos, input_dimension)
         self.plot_all = plot_all
         self.batch_size = len(self.starting_positions)
 
@@ -70,19 +67,16 @@ class EvaluationDriver:
                 time_step = env.step(action_step.action)
                 rewards.append(time_step.reward)
 
-            performance, means, stds = plot(step_counter,
-                                            self.dtype,
-                                            FUNCTIONS[env.name][1],
-                                            plot_dir,
-                                            self.n_start_pos,
-                                            self.domain,
-                                            function_values=tf.transpose(FUNCTIONS["ackley"][0](tf.transpose(env.get_states()))),
-                                            states=env.get_states(),
-                                            episode_length=env.episode_length,
-                                            name=env.name,
-                                            train_episode_length=self.train_episode_length,
-                                            plot_all=self.plot_all,
-                                            log_summary=log_summary)
+            performance, means, stds = plot(
+                step_counter,
+                plot_dir,
+                self.n_start_pos,
+                function_values=tf.transpose(FUNCTIONS["ackley"][0](tf.transpose(env.get_states()))),
+                states=env.get_states(),
+                name=env.name,
+                train_episode_length=self.train_episode_length,
+                log_summary=log_summary
+            )
 
             env.reset()
 

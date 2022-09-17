@@ -1,4 +1,3 @@
-import math
 import os
 import time
 
@@ -31,7 +30,6 @@ def train(agent_name,
           num_observations,
           environment_type,
           batch_size,
-          action_scaling,
           episode_length,
           input_dimension,
           number_optimization_parameters,

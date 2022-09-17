@@ -20,11 +20,13 @@ MAIN_SCRIPT = os.path.join(PYTHON_DIR, "main.py")
 CONFIGFILES = glob.glob(os.path.join(RUNS_DIR, '*/*/*/config.gin'))
 COMPLETED_FILE = os.path.join(RUNS_DIR, "completed.csv")
 
+
 class Args:
     def __init__(self, configfile, debug, evaluate):
         self.evaluate = evaluate
         self.configfile = configfile
         self.debug = debug
+
 
 def filter_configfiles(args):
     with open(COMPLETED_FILE) as reader:
@@ -54,6 +56,7 @@ def filter_configfiles(args):
 
         with open(COMPLETED_FILE, 'w') as writer:
             writer.writelines([line + "\n" for line in completed_identifiers])
+
 
 def run_evaluations(configfiles, n):
     start = time.time()

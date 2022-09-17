@@ -65,34 +65,24 @@ def plot_performance_over_time_with_stds(x, means, stds, labels, title, plot_dir
 
 
 def plot(step_counter,
-         dtype,
-         plotting_function,
          plot_dir,
          n_start_pos,
-         domain,
          function_values,
          states,
-         episode_length,
          name,
          train_episode_length,
-         plot_all=False,
          log_summary=False
          ):
     plot_dir = os.path.join(plot_dir, name)
 
     n_start_pos = (n_start_pos + 1) ** 2
 
-    x = tf.range(domain[0, 0], domain[1, 0], (domain[1, 0] - domain[0, 0]) / 640)
-    y = tf.range(domain[0, 1], domain[1, 1], (domain[1, 1] - domain[0, 1]) / 640)
-    meshgrid = tf.convert_to_tensor(tf.meshgrid(x, y))
 
     # control
     if not os.path.isdir(plot_dir):
         os.makedirs(plot_dir)
 
     control_rewards = function_values[:n_start_pos]
-    control_states = states[:n_start_pos]
-    image = plotting_function(meshgrid)
 
     avg_control_reward = tf.reduce_mean(control_rewards)
     rewards = [avg_control_reward]
@@ -105,10 +95,6 @@ def plot(step_counter,
 
     avg_control_max = tf.reduce_mean(tf.reduce_max(control_rewards, axis=1))
     maxs = [avg_control_max]
-
-    labels = ['control']
-    x = np.arange(len(labels))
-    width = 0.2
 
     overall_avg_performance = tf.reduce_mean(tf.convert_to_tensor(rewards))
     overall_final_performance = tf.reduce_mean(tf.convert_to_tensor(finals))
@@ -153,5 +139,3 @@ def plot(step_counter,
                                          std_scale=0.25)
 
     return overall_final_performance, means, stds
-
-

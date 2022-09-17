@@ -25,11 +25,11 @@ def is_valid_filename(parser, arg):
 
 
 def plot_function(domain, function):
-    X = tf.range(domain[0, 0], domain[1, 0], 0.1)
-    Y = tf.range(domain[0, 1], domain[1, 1], 0.1)
-    XY = tf.meshgrid(X, Y)
-    Z = [function(x) for x in XY]
-    return Z
+    x = tf.range(domain[0, 0], domain[1, 0], 0.1)
+    y = tf.range(domain[0, 1], domain[1, 1], 0.1)
+    xy = tf.meshgrid(x, y)
+    z = [function(x) for x in xy]
+    return z
 
 
 def format_function_names(function_names):
@@ -40,6 +40,7 @@ def format_function_names(function_names):
     else:
         function_names = [name[:3] for name in function_names]
         return ",".join(function_names)
+
 
 def get_functions_from_formatted_function_names(formatted_function_names):
     names = []
@@ -59,6 +60,7 @@ def get_functions_from_formatted_function_names(formatted_function_names):
         else:
             raise NotImplementedError("unknown function name encountered: " + formatted_name)
     return names
+
 
 def get_run_identifiers_from_folder(folder):
     relpath = os.path.relpath(folder, RUNS_DIR)

@@ -167,8 +167,6 @@ FUNCTIONS = {
 }
 """
 FUNCTIONS = {
-
     "rosenbrock": (lognorm_rosenbrock, lognorm_rosenbrock, rosenbrock)
-
 }
 """

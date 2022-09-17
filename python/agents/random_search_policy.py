@@ -1,5 +1,3 @@
-from typing import NamedTuple
-
 import tensorflow as tf
 from tf_agents import specs
 from tf_agents.policies import TFPolicy

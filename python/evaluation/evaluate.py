@@ -11,10 +11,12 @@ from objective_functions.tf_objective_functions import FUNCTIONS
 
 from evaluation.evaluation_driver import EvaluationDriver
 
-def evaluate(agent_name,
-             num_observations,
-             plot_dir,
-             environment_type):
+
+def evaluate(
+        agent_name,
+        num_observations,
+        plot_dir,
+        environment_type):
     start_time = time.time_ns()
 
     policy_checkpoint_dir = os.path.join(plot_dir, "checkpoint", "policy")
@@ -28,16 +30,19 @@ def evaluate(agent_name,
 
     env = eval_driver.envs[0]
 
-    agent = create_agent(agent_name,
-                         env.observation_spec(),
-                         env.action_spec(),
-                         env.time_step_spec(),
-                         step_counter=global_step)
+    agent = create_agent(
+        agent_name,
+        env.observation_spec(),
+        env.action_spec(),
+        env.time_step_spec(),
+        step_counter=global_step
+    )
 
     policy_checkpointer = common.Checkpointer(
         ckpt_dir=policy_checkpoint_dir,
         policy=agent.policy,
-        global_step=global_step)
+        global_step=global_step
+    )
 
     load_status = policy_checkpointer.initialize_or_restore().expect_partial()
     load_status.assert_consumed()
@@ -53,4 +58,3 @@ def evaluate(agent_name,
     logging.info("{}: performances by function: {}".format(global_step.numpy(), perf_str))
 
     return avg_performance, (time.time_ns() - start_time) * 1e-9
-
