@@ -17,6 +17,8 @@ from evaluation.evaluation_driver import EvaluationDriver
 from evaluation.evaluation_utils import plot_returns_and_losses
 from training.training_driver import TrainingDriver
 
+from numpy import ones
+
 
 @gin.configurable
 def train(agent_name,
@@ -31,6 +33,8 @@ def train(agent_name,
           batch_size,
           action_scaling,
           episode_length,
+          input_dimension,
+          number_optimization_parameters,
           replay_buffer_capacity,
           randomize_start,
           randomization_interval,
@@ -56,9 +60,14 @@ def train(agent_name,
 
     # create train environment
     if randomize_start:
-        start_point = tf.random.uniform(shape=(batch_size, 2), minval=(-1, -1), maxval=(1, 1), dtype=tf.float32)
+        start_point = tf.random.uniform(
+            shape=(batch_size, number_optimization_parameters),
+            minval=tuple((-1 * ones((number_optimization_parameters,), dtype=int)).tolist()),
+            maxval=tuple((ones((number_optimization_parameters,), dtype=int)).tolist()),
+            dtype=tf.float32
+        )
     else:
-        start_point = tf.constant(0.8, shape=(batch_size, 2), dtype=tf.float32)
+        start_point = tf.constant(0.8, shape=(batch_size, number_optimization_parameters), dtype=tf.float32)
 
     obj_fcts = [FUNCTIONS[function_name][0] for function_name in function_names]
 
@@ -69,11 +78,19 @@ def train(agent_name,
         start_point,
         episode_length,
         num_observations,
-        batch_size
+        batch_size,
+        input_dimension,
+        number_optimization_parameters
     )
 
     # Create evaluation and plotting environments
-    eval_driver = EvaluationDriver(run_dir, num_observations, environment_type)
+    eval_driver = EvaluationDriver(
+        run_dir,
+        num_observations,
+        environment_type,
+        input_dimension=input_dimension,
+        number_optimization_parameters=number_optimization_parameters
+    )
 
     agent = create_agent(
         agent_name,
@@ -174,7 +191,7 @@ def train(agent_name,
             rb_checkpointer.save(global_step=global_step)
 
         if global_step % eval_interval == 0 or is_last_iteration:
-            performances = eval_driver.run(agent.policy, global_step.numpy(), plot_trajectories=is_last_iteration)
+            performances = eval_driver.run(agent.policy, global_step.numpy())
 
             avg_performance = tf.reduce_mean(performances)
 

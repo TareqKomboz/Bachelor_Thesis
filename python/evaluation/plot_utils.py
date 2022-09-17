@@ -30,6 +30,7 @@ def plot_performance_by_function(labels, performances, plot_dir, name):
     plt.clf()
     plt.subplots_adjust(top=0.9, bottom=0.1, right=0.9, left=0.125)
 
+
 def plot_performance_over_time(x, performances, labels, title, plot_dir):
     plt.ylim(0, 1)
     plt.plot(x, performances)
@@ -74,7 +75,6 @@ def plot(step_counter,
          episode_length,
          name,
          train_episode_length,
-         plot_trajectories=False,
          plot_all=False,
          log_summary=False
          ):

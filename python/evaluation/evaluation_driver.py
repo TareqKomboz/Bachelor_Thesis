@@ -13,23 +13,25 @@ from evaluation.plot_utils import plot, plot_performance_over_time_with_stds, pl
 
 @gin.configurable
 class EvaluationDriver:
-    def __init__(self, run_dir,
-                 num_observations,
-                 environment_type,
+    def __init__(
+            self,
+            run_dir,
+            num_observations,
+            environment_type,
 
-                 # optional gin parameters
-                 train_episode_length=50,
-                 episode_length=200,
-                 plot_trajectories=True,
-                 plot_all=True):
+            # optional gin parameters
+            train_episode_length=50,
+            episode_length=200,
+            input_dimension=2,
+            number_optimization_parameters=2,
+            plot_all=True):
 
         self.dtype = tf.float32
         self.run_dir = run_dir
-        self.plot_trajectories = plot_trajectories
         self.train_episode_length = train_episode_length
 
         self.n_start_pos = 3
-        self.domain = tf.constant([[-1, -1], [1, 1]], dtype=self.dtype)
+        self.domain = tf.constant([[-1, -1], [1, 1]], dtype=self.dtype)  # Todo: Tareq higher dim
         self.starting_positions = build_eval_params(
             self.n_start_pos,
             self.domain)
@@ -38,15 +40,19 @@ class EvaluationDriver:
 
         self.envs = []
         for label, functions in FUNCTIONS.items():
-            self.envs.append(create_environment(environment_type,
-                                                label,
-                                                (functions[0],),
-                                                self.starting_positions,
-                                                episode_length,
-                                                num_observations,
-                                                self.batch_size))
+            self.envs.append(create_environment(
+                environment_type,
+                label,
+                (functions[0],),
+                self.starting_positions,
+                episode_length,
+                num_observations,
+                self.batch_size,
+                input_dimension,
+                number_optimization_parameters
+            ))
 
-    def run(self, policy, step_counter, plot_trajectories, log_summary=False):
+    def run(self, policy, step_counter, log_summary=False):
         plot_dir = os.path.join(self.run_dir, "Step_{}".format(step_counter))
         performances = []
         names = []
@@ -75,7 +81,6 @@ class EvaluationDriver:
                                             episode_length=env.episode_length,
                                             name=env.name,
                                             train_episode_length=self.train_episode_length,
-                                            plot_trajectories=plot_trajectories and self.plot_trajectories,
                                             plot_all=self.plot_all,
                                             log_summary=log_summary)
 

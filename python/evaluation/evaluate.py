@@ -14,7 +14,6 @@ from evaluation.evaluation_driver import EvaluationDriver
 def evaluate(agent_name,
              num_observations,
              plot_dir,
-             plot_trajectories,
              environment_type):
     start_time = time.time_ns()
 
@@ -45,7 +44,7 @@ def evaluate(agent_name,
 
     logging.info("Checkpoint at step {} loaded, commencing evaluation, this might take a while..."
                  .format(global_step.numpy()))
-    performances = eval_driver.run(agent.policy, global_step.numpy(), plot_trajectories=plot_trajectories)
+    performances = eval_driver.run(agent.policy, global_step.numpy())
     avg_performance = tf.reduce_sum(performances) / len(performances)
 
     perf_str = ""
