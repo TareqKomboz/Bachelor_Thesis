@@ -6,7 +6,7 @@ main.env_type                                           = "absolute"
 train.function_names                                    = ("ackley",)  # ("ackley",) # ("ackley", "langermann", "michalewicz", "rastrigin", "rosenbrock", "sumsquares",)
 train.agent_name                                        = "reinforce"
 train.batch_size                                        = 540  # 512
-train.input_dimension                                   = 3  # ---------------------------------------------------------
+train.input_dimension                                   = 5  # ---------------------------------------------------------
 train.randomize_start                                   = True
 train.randomization_interval                            = 1  # 100
 train.replay_buffer_capacity                            = 50  # ----------------------------
@@ -36,9 +36,9 @@ create_agent.decay_rate                                 = 0.9
 # environment
 env_constructor.episode_length                          = 50  # ----------------------------
 env_constructor.number_observations                     = 5
-env_constructor.input_dimension                         = 3  # ---------------------------------------------------------
+env_constructor.input_dimension                         = 5  # ---------------------------------------------------------
 env_constructor.number_optimization_parameters          = 3  # ---------------------------------------------------------
 
 evaluation_driver_init.train_episode_length             = 50  # ----------------------------
-evaluation_driver_init.input_dimension                  = 3  # ---------------------------------------------------------
-evaluation_driver_init.n_start_pos                      = 5
+evaluation_driver_init.input_dimension                  = 5  # ---------------------------------------------------------
+evaluation_driver_init.n_start_pos                      = 5 # 180 # 5

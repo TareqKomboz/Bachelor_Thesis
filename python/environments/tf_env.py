@@ -40,6 +40,7 @@ class TfEnv(TFEnvironment):
         self.input_dimension = tf.constant(input_dimension, dtype=tf.int64)
         self.number_optimization_parameters = number_optimization_parameters
         self.number_free_parameters = input_dimension - number_optimization_parameters
+        self.free_values = self._initial_state[:, :self.number_free_parameters]
 
         self._dtype = tf.float32
         self._steps = common.create_variable('step', 0)
@@ -92,24 +93,6 @@ class TfEnv(TFEnvironment):
             shape=(batch_size, episode_length, self.observation_shape),
             dtype=self._dtype
         )
-
-    # Todo: FREE 2: Tareq
-    # def initialize_input(self):
-    #     # initial values of optimization parameters -> in each step() new value(s) for optimization parameters
-    #     initial_state = array((random.uniform(
-    #         low=-1.0,
-    #         high=1.0,
-    #         size=self.number_optimization_parameters
-    #     )), dtype=float32)
-    #
-    #     # random values for non optimization parameters -> fixed value(s) until next reset()
-    #     random_parameter_values = array(random.uniform(
-    #         low=-1.0,
-    #         high=1.0,
-    #         size=self.number_free_parameters
-    #     ), dtype=float32)
-    #
-    #     return current_action, random_parameter_values
 
     def _current_time_step(self):
         reward = self._function_values[:, self._steps]
@@ -187,8 +170,9 @@ class TfEnv(TFEnvironment):
         reward = tf.reshape(reward, (self.batch_size,))
         return reward
 
-    def set_starting_positions(self, starting_positions):
+    def set_starting_positions_and_free_values(self, starting_positions):
         self._initial_state = starting_positions
+        self.free_values = self._initial_state[:, :self.number_free_parameters]
 
     def get_states(self):
         return self._states

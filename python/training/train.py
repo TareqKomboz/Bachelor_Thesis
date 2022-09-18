@@ -144,7 +144,7 @@ def train(run_dir,
                     maxval=tuple((ones((input_dimension,), dtype=int)).tolist()),
                     dtype=tf.float32
                 )
-                train_env.set_starting_positions(start_point)
+                train_env.set_starting_positions_and_free_values(start_point)
 
         if global_step % log_interval == 0:
             rewards, losses, performances = driver.get_summary()
