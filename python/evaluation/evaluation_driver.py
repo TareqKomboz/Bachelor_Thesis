@@ -11,42 +11,32 @@ import tensorflow as tf
 from evaluation.plot_utils import plot, plot_performance_over_time_with_stds, plot_performance_by_function
 
 
-@gin.configurable
 class EvaluationDriver:
+    @gin.configurable("evaluation_driver_init")
     def __init__(
             self,
             run_dir,
-            number_observations,
-            environment_type,
 
             # optional gin parameters
-            train_episode_length=50,
-            episode_length=200,
-            input_dimension=2,
-            number_optimization_parameters=2,
-            plot_all=True):
+            train_episode_length,
+            input_dimension,
+            n_start_pos):
 
         self.dtype = tf.float32
         self.run_dir = run_dir
         self.train_episode_length = train_episode_length
 
-        self.n_start_pos = 5
+        self.n_start_pos = n_start_pos
         self.starting_positions = build_eval_params(self.n_start_pos, input_dimension)
-        self.plot_all = plot_all
         self.batch_size = len(self.starting_positions)
 
         self.envs = []
         for label, functions in FUNCTIONS.items():
             self.envs.append(create_environment(
-                environment_type,
-                label,
-                (functions[0],),
-                self.starting_positions,
-                episode_length,
-                number_observations,
-                self.batch_size,
-                input_dimension,
-                number_optimization_parameters
+                function_names=label,
+                objective_functions=(functions[0],),
+                start_point=self.starting_positions,
+                batch_size=self.batch_size
             ))
 
     def run(self, policy, step_counter, log_summary=False):

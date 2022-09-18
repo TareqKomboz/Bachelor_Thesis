@@ -10,20 +10,12 @@ class TfEnvAbsObsAbsAct(TfEnv):
             name,
             objective_functions,
             starting_position,
-            episode_length,
-            number_observations,
-            batch_size,
-            input_dimension,
-            number_optimization_parameters):
+            batch_size):
         super(TfEnvAbsObsAbsAct, self).__init__(
-            name,
-            objective_functions,
-            starting_position,
-            episode_length,
-            number_observations,
-            batch_size,
-            input_dimension,
-            number_optimization_parameters
+            name=name,
+            objective_functions=objective_functions,
+            starting_position=starting_position,
+            batch_size=batch_size
         )
 
     def _reset_observations(self):

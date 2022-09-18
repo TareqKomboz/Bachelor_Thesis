@@ -20,28 +20,24 @@ from numpy import ones
 
 
 @gin.configurable
-def train(agent_name,
-          function_names,
-          # output parameters
-          run_dir,
+def train(run_dir,
 
           # gin parameter
+          function_names,
+          agent_name,
           # environment parameters
-          number_observations,
-          environment_type,
           batch_size,
-          episode_length,
           input_dimension,
-          number_optimization_parameters,
-          replay_buffer_capacity,
           randomize_start,
           randomization_interval,
+          replay_buffer_capacity,
+
           # training parameters
           number_iterations,
-          eval_interval,
-          checkpoint_interval,
           log_interval,
-          quick_eval_interval):
+          eval_interval,
+          quick_eval_interval,
+          checkpoint_interval):
     start_time = time.time_ns()
     logging.info("Starting training setup")
 
@@ -70,25 +66,14 @@ def train(agent_name,
     objective_functions = [FUNCTIONS[function_name][0] for function_name in function_names]
 
     train_env = create_environment(
-        environment_type,
-        format_function_names(function_names),
-        objective_functions,
-        start_point,
-        episode_length,
-        number_observations,
-        batch_size,
-        input_dimension,
-        number_optimization_parameters
+        function_names=format_function_names(function_names),
+        objective_functions=objective_functions,
+        start_point=start_point,
+        batch_size=batch_size
     )
 
     # Create evaluation and plotting environments
-    eval_driver = EvaluationDriver(
-        run_dir=run_dir,
-        number_observations=number_observations,
-        environment_type=environment_type,
-        input_dimension=input_dimension,
-        number_optimization_parameters=number_optimization_parameters
-    )
+    eval_driver = EvaluationDriver(run_dir=run_dir)
 
     agent = create_agent(
         agent_name,

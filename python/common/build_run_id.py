@@ -1,13 +1,13 @@
 class Params:
     def __init__(self, rnn, n_obs, gamma, n_depth, vnet, net_size, n_episode, schedule, env_type):
         self.rnn = rnn
-        self.gamma = gamma
-        self.schedule = schedule
-        self.n_episode = n_episode
-        self.net_size = net_size
-        self.vnet = vnet
-        self.n_depth = n_depth
         self.n_obs = n_obs
+        self.gamma = gamma
+        self.n_depth = n_depth
+        self.vnet = vnet
+        self.net_size = net_size
+        self.n_episode = n_episode
+        self.schedule = schedule
         self.env_type = env_type
 
 
@@ -19,27 +19,27 @@ def read_parameters(configfile):
     with open(configfile) as reader:
         lines = reader.readlines()
     for line in lines:
-        if line.startswith("main.number_observations"):
-            n_obs = parse_value(line)
-        elif line.startswith("main.agent_name"):
+        if line.startswith("main.agent_name"):
             rnn = parse_value(line).startswith("rnn")
-        elif line.startswith("train.episode_length"):
-            n_episode = parse_value(line)
+        elif line.startswith("env_constructor.number_observations"):
+            n_obs = parse_value(line)
         elif line.startswith("create_agent.gamma"):
             gamma = parse_value(line)
-        elif line.startswith("create_agent.fc_layer_params"):
-            pnet_layers = parse_value(line)
-        elif line.startswith("create_agent.value_fc_layer_params"):
-            vnet_layers = parse_value(line)
         elif line.startswith("create_agent.lstm_size"):
             n_depth = parse_value(line)[0]
+        elif line.startswith("create_agent.value_fc_layer_params"):
+            vnet_layers = parse_value(line)
+        elif line.startswith("create_agent.fc_layer_params"):
+            pnet_layers = parse_value(line)
+        elif line.startswith("env_constructor.episode_length"):
+            n_episode = parse_value(line)
         elif line.startswith("create_agent.use_learning_schedule"):
             schedule = parse_value(line)
         elif line.startswith("create_agent.decay_steps"):
             decay_steps = parse_value(line)
         elif line.startswith("create_agent.decay_rate"):
             decay_rate = parse_value(line)
-        elif line.startswith("main.environment_type"):
+        elif line.startswith("main.env_type"):
             env_type = parse_value(line)
 
     if pnet_layers == (100, 50):
@@ -73,7 +73,17 @@ def read_parameters(configfile):
     else:
         schedule = "fast"
     try:
-        return Params(rnn, n_obs, gamma, n_depth, vnet, net_size, n_episode, schedule, env_type)
+        return Params(
+            rnn=rnn,
+            n_obs=n_obs,
+            gamma=gamma,
+            n_depth=n_depth,
+            vnet=vnet,
+            net_size=net_size,
+            n_episode=n_episode,
+            schedule=schedule,
+            env_type=env_type
+        )
     except UnboundLocalError as e:
         print("this config file is incomplete: " + configfile)
         print(e)

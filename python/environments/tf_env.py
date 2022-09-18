@@ -1,3 +1,4 @@
+import gin
 import tensorflow as tf
 from tf_agents import specs
 from tf_agents.trajectories import time_step as ts
@@ -12,16 +13,20 @@ LAST = ts.StepType.LAST
 
 
 class TfEnv(TFEnvironment):
+    @gin.configurable("env_constructor")
     def __init__(
             self,
             name,
             objective_functions,
             starting_position,
+            batch_size,
+
+            # gin
             episode_length,
             number_observations,
-            batch_size,
             input_dimension,
             number_optimization_parameters):
+
         self.name = name
         self.objective_functions = objective_functions
         if len(objective_functions) == 1:

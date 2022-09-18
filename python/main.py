@@ -16,11 +16,7 @@ from training.train import train
 
 
 @gin.configurable
-def main(environment_type,
-         agent_name,
-         function_names,
-         number_observations,
-         arguments):
+def main(arguments, agent_name, function_names, env_type):
     if function_names == 'all':
         function_names = [name for name in FUNCTIONS.keys()]
 
@@ -53,13 +49,7 @@ def main(environment_type,
     logging.info("Starting run with {} agent, {} function and id {}"
                  .format(agent_name, format_function_names(function_names), run_id))
     if not arguments.evaluate:
-        final_performance, duration = train(
-            agent_name,
-            function_names,
-            run_dir,
-            number_observations,
-            environment_type
-        )
+        final_performance, duration = train(run_dir=run_dir)
         logging.info("{}-{}-{} training finished in {}, final performance = {:.2f}"
                      .format(run_id,
                              agent_name,
@@ -68,7 +58,7 @@ def main(environment_type,
                              final_performance))
     else:
         logging.info("Skipping training, evaluation only")
-        final_performance, duration = evaluate(agent_name, number_observations, run_dir, True, environment_type)
+        final_performance, duration = evaluate(agent_name=agent_name, plot_dir=run_dir)
 
         logging.info("{}-{}-{} evaluation finished, final performance = {:.2f}, {}"
                      .format(run_id,
