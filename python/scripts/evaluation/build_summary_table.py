@@ -8,7 +8,6 @@ from definitons import RUNS_DIR
 import pandas as pd
 
 START_COLUMNS = ['algorithm', 'trained_on', 'run_id']
-EVAL_CATEGORIES = ["control"]
 
 
 def scan_summary_txt(file, value_name):
@@ -112,8 +111,6 @@ def find_summaries_and_write_to_file(file, value_name="train_final"):
     columns = START_COLUMNS
     for function_name in FUNCTIONS.keys():
         columns.append("{}".format(function_name))
-        for category in EVAL_CATEGORIES:
-            columns.append("{}_{}".format(function_name, category))
 
     evaluation_folders, algorithms, trained_ons, run_ids, translations = find_evaluation_folders()
     print("Found {} runs to summarize".format(len(evaluation_folders)))
@@ -154,11 +151,6 @@ def find_summaries_and_write_to_file(file, value_name="train_final"):
                     continue
                 df['out_of_distribution'][i] += 5 * df[name][i]
 
-    for category in EVAL_CATEGORIES:
-        df[category] = 0
-        for function_name in FUNCTIONS.keys():
-            df[category] += df["{}_{}".format(function_name, category)]
-        df[category] /= len(FUNCTIONS.keys())
     df.to_csv(file)
     print("Summary written to: {}".format(file))
 

@@ -39,9 +39,11 @@ def create_agent(name,
                                                                  decay_rate=decay_rate)
     learning_rate = lr_schedule if use_learning_schedule else learning_rate
     optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
-    actor_net = ActorDistributionNetwork(obs_spec,
-                                         act_spec,
-                                         fc_layer_params=fc_layer_params)
+    actor_net = ActorDistributionNetwork(
+        obs_spec,
+        act_spec,
+        fc_layer_params=fc_layer_params
+    )
 
     if name == "reinforce":
         agent = ReinforceAgent(ts_spec,
@@ -56,11 +58,13 @@ def create_agent(name,
                                value_estimation_loss_coef=value_estimation_loss_coef,
                                gradient_clipping=gradient_clipping)
     elif name == "rnn_reinforce":
-        actor_net = ActorDistributionRnnNetwork(obs_spec,
-                                                act_spec,
-                                                lstm_size=lstm_size,
-                                                input_fc_layer_params=fc_layer_params,
-                                                output_fc_layer_params=fc_layer_params)
+        actor_net = ActorDistributionRnnNetwork(
+            obs_spec,
+            act_spec,
+            lstm_size=lstm_size,
+            input_fc_layer_params=fc_layer_params,
+            output_fc_layer_params=fc_layer_params
+        )
         agent = ReinforceAgent(ts_spec,
                                act_spec,
                                actor_network=actor_net,
@@ -82,13 +86,15 @@ def create_agent(name,
                          greedy_eval=True,
                          discount_factor=gamma,
                          entropy_regularization=entropy_coefficient,
-                         num_epochs=10)
+                         number_epochs=10)
     elif name == "rnn_ppo":
-        actor_net = ActorDistributionRnnNetwork(obs_spec,
-                                                act_spec,
-                                                lstm_size=lstm_size,
-                                                input_fc_layer_params=fc_layer_params,
-                                                output_fc_layer_params=fc_layer_params)
+        actor_net = ActorDistributionRnnNetwork(
+            obs_spec,
+            act_spec,
+            lstm_size=lstm_size,
+            input_fc_layer_params=fc_layer_params,
+            output_fc_layer_params=fc_layer_params
+        )
         agent = PPOAgent(ts_spec,
                          act_spec,
                          actor_net=actor_net,
@@ -98,7 +104,7 @@ def create_agent(name,
                          greedy_eval=True,
                          discount_factor=gamma,
                          entropy_regularization=entropy_coefficient,
-                         num_epochs=10)
+                         number_epochs=10)
     else:
         raise NotImplementedError("{} agent is not implemented".format(name))
 

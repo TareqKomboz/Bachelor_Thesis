@@ -30,10 +30,12 @@ def main():
     if SINGLE_PLOT:
         for function_name in FUNCTIONS.keys():
             image = FUNCTIONS[function_name][function_idx](MESHGRID)
-            print("plotting {}, max={}, min={}, area={}".format(function_name,
-                                                                tf.reduce_max(image),
-                                                                tf.reduce_min(image),
-                                                                tf.reduce_mean(image)))
+            print("plotting {}, max={}, min={}, area={}".format(
+                function_name,
+                tf.reduce_max(image),
+                tf.reduce_min(image),
+                tf.reduce_mean(image)
+            ))
             fig, ax = plt.subplots(1, 1)
             p = plot(image, ax)
             plt.colorbar(p)
@@ -45,8 +47,7 @@ def main():
         for function_name in FUNCTIONS.keys():
             images.append(FUNCTIONS[function_name][function_idx](MESHGRID))
         sub_plots(images)
-        plt.savefig(os.path.join(PLOT_DIR, "{}All_{}D".format(fig_name, DIMENSIONS)),
-                    dpi=400, transparent=True)
+        plt.savefig(os.path.join(PLOT_DIR, "{}All_{}D".format(fig_name, DIMENSIONS)), dpi=400, transparent=True)
         plt.show()
 
 

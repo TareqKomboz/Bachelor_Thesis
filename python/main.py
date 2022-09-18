@@ -19,7 +19,7 @@ from training.train import train
 def main(environment_type,
          agent_name,
          function_names,
-         num_observations,
+         number_observations,
          arguments):
     if function_names == 'all':
         function_names = [name for name in FUNCTIONS.keys()]
@@ -57,7 +57,7 @@ def main(environment_type,
             agent_name,
             function_names,
             run_dir,
-            num_observations,
+            number_observations,
             environment_type
         )
         logging.info("{}-{}-{} training finished in {}, final performance = {:.2f}"
@@ -68,7 +68,7 @@ def main(environment_type,
                              final_performance))
     else:
         logging.info("Skipping training, evaluation only")
-        final_performance, duration = evaluate(agent_name, num_observations, run_dir, True, environment_type)
+        final_performance, duration = evaluate(agent_name, number_observations, run_dir, True, environment_type)
 
         logging.info("{}-{}-{} evaluation finished, final performance = {:.2f}, {}"
                      .format(run_id,

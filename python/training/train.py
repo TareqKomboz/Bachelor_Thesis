@@ -27,7 +27,7 @@ def train(agent_name,
 
           # gin parameter
           # environment parameters
-          num_observations,
+          number_observations,
           environment_type,
           batch_size,
           episode_length,
@@ -37,7 +37,7 @@ def train(agent_name,
           randomize_start,
           randomization_interval,
           # training parameters
-          num_iterations,
+          number_iterations,
           eval_interval,
           checkpoint_interval,
           log_interval,
@@ -59,23 +59,23 @@ def train(agent_name,
     # create train environment
     if randomize_start:
         start_point = tf.random.uniform(
-            shape=(batch_size, number_optimization_parameters),
-            minval=tuple((-1 * ones((number_optimization_parameters,), dtype=int)).tolist()),
-            maxval=tuple((ones((number_optimization_parameters,), dtype=int)).tolist()),
+            shape=(batch_size, input_dimension),
+            minval=tuple((-1 * ones((input_dimension,), dtype=int)).tolist()),
+            maxval=tuple((ones((input_dimension,), dtype=int)).tolist()),
             dtype=tf.float32
         )
     else:
-        start_point = tf.constant(0.8, shape=(batch_size, number_optimization_parameters), dtype=tf.float32)
+        start_point = tf.constant(0.8, shape=(batch_size, input_dimension), dtype=tf.float32)
 
-    obj_fcts = [FUNCTIONS[function_name][0] for function_name in function_names]
+    objective_functions = [FUNCTIONS[function_name][0] for function_name in function_names]
 
     train_env = create_environment(
         environment_type,
         format_function_names(function_names),
-        obj_fcts,
+        objective_functions,
         start_point,
         episode_length,
-        num_observations,
+        number_observations,
         batch_size,
         input_dimension,
         number_optimization_parameters
@@ -83,9 +83,9 @@ def train(agent_name,
 
     # Create evaluation and plotting environments
     eval_driver = EvaluationDriver(
-        run_dir,
-        num_observations,
-        environment_type,
+        run_dir=run_dir,
+        number_observations=number_observations,
+        environment_type=environment_type,
         input_dimension=input_dimension,
         number_optimization_parameters=number_optimization_parameters
     )
@@ -133,13 +133,13 @@ def train(agent_name,
 
     # training loop
     onpolicy = agent_name != "sac"
-    driver = TrainingDriver(agent, train_env, replay_buffer, replay_observer, num_iterations, onpolicy)
+    driver = TrainingDriver(agent, train_env, replay_buffer, replay_observer, number_iterations, onpolicy)
 
     logging.info("Starting training loop, initial graph construction might take a bit")
     log_timestamp = time.time_ns()
     latest_eval_step = 0
     latest_quick_eval_step = 0
-    for i in range(num_iterations):
+    for i in range(number_iterations):
 
         timestamp = time.strftime('%H:%M:%S', time.gmtime((time.time_ns() - start_time) * 1e-9))
         print("{}: {} ({}) train loops completed, {}"
@@ -153,7 +153,12 @@ def train(agent_name,
 
         if global_step % randomization_interval == 0:
             if randomize_start:
-                start_point = tf.random.uniform(shape=(batch_size, 2), minval=(-1, -1), maxval=(1, 1), dtype=tf.float32)
+                start_point = tf.random.uniform(
+                    shape=(batch_size, input_dimension),
+                    minval=tuple((-1 * ones((input_dimension,), dtype=int)).tolist()),
+                    maxval=tuple((ones((input_dimension,), dtype=int)).tolist()),
+                    dtype=tf.float32
+                )
                 train_env.set_starting_positions(start_point)
 
         if global_step % log_interval == 0:
@@ -181,7 +186,7 @@ def train(agent_name,
                                  time.strftime('%H:%M:%S', timestamp)))
             log_timestamp = time.time_ns()
 
-        is_last_iteration = i == (num_iterations - 1)
+        is_last_iteration = i == (number_iterations - 1)
         
         if global_step % checkpoint_interval == 0 or is_last_iteration:
             train_checkpointer.save(global_step=global_step)

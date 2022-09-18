@@ -77,7 +77,6 @@ def plot(step_counter,
 
     n_start_pos = (n_start_pos + 1) ** 2
 
-
     # control
     if not os.path.isdir(plot_dir):
         os.makedirs(plot_dir)
@@ -120,22 +119,26 @@ def plot(step_counter,
     means = tf.convert_to_tensor([tf.reduce_mean(category, axis=0) for category in function_values])
     stds = tf.convert_to_tensor([tf.math.reduce_std(category, axis=0) for category in function_values])
 
-    plot_performance_over_time_with_stds(range(len(means[0])),
-                                         means,
-                                         stds,
-                                         ["control"],
-                                         "convergence by category",
-                                         plot_dir,
-                                         "performance over time",
-                                         std_scale=0.25)
+    plot_performance_over_time_with_stds(
+        range(len(means[0])),
+        means,
+        stds,
+        ["control"],
+        "convergence by category",
+        plot_dir,
+        "performance over time",
+        std_scale=0.25
+    )
 
-    plot_performance_over_time_with_stds(range(train_episode_length),
-                                         means[:, :train_episode_length],
-                                         stds[:, :train_episode_length],
-                                         ["control"],
-                                         "convergence by category",
-                                         plot_dir,
-                                         "performance over time {} steps".format(train_episode_length),
-                                         std_scale=0.25)
+    plot_performance_over_time_with_stds(
+        range(train_episode_length),
+        means[:, :train_episode_length],
+        stds[:, :train_episode_length],
+        ["control"],
+        "convergence by category",
+        plot_dir,
+        "performance over time {} steps".format(train_episode_length),
+        std_scale=0.25
+    )
 
     return overall_final_performance, means, stds

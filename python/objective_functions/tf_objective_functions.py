@@ -37,7 +37,7 @@ def norm_ackley(x):
     return value
 
 
-# @tf.function
+@tf.function
 def langermann(x):
     x += 1
     x *= 5.0
@@ -46,10 +46,11 @@ def langermann(x):
     c = tf.constant([1, 2, 5, 2, 3], dtype=dtype)
     a = tf.constant([[3, 5, 2, 1, 7], [5, 2, 1, 4, 9]], dtype=dtype)
     d = x.shape[0]
+    batch_size = x.shape[1]
 
-    f = 0.0
+    f = tf.zeros(shape=(batch_size,))
     for i in tf.range(m):
-        summe = 0.0
+        summe = tf.zeros(shape=(batch_size,))
         for j in tf.range(d):
             summe += tf.pow(tf.subtract(x[j], a[j][i]), 2)
 
@@ -59,7 +60,7 @@ def langermann(x):
 
 
 # local minimum (1, 1)
-# @tf.function
+@tf.function
 def norm_langermann(x):
     value = 5.0 - langermann(x)
     value /= 10.0
@@ -159,7 +160,7 @@ def norm_sumsquares(x):
 
 FUNCTIONS = {
     "ackley": (norm_ackley, norm_ackley, ackley),
-    "langermann": (norm_langermann, norm_langermann, langermann),
+    # "langermann": (norm_langermann, norm_langermann, langermann),
     "michalewicz": (norm_michalewicz, norm_michalewicz, michalewicz),
     "rastrigin": (norm_rastrigin, norm_rastrigin, rastrigin),
     "rosenbrock": (lognorm_rosenbrock, lognorm_rosenbrock, rosenbrock),

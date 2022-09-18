@@ -1,19 +1,19 @@
 # basic config
 main.environment_type                               = "absolute"
 main.agent_name                                     = "reinforce"
-main.function_names                                 = ("ackley",)
+main.function_names                                 = ("ackley",) # ("ackley",) # ("ackley", "langermann", "michalewicz", "rastrigin", "rosenbrock", "sumsquares",)
 # environment config
-main.num_observations                               = 5  # 10
-train.batch_size                                    = 512
+main.number_observations                            = 5  # 10
+train.batch_size                                    = 540 # 512
 train.episode_length                                = 50
-train.input_dimension                               = 2
-train.number_optimization_parameters                = 2
+train.input_dimension                               = 5
+train.number_optimization_parameters                = 5
 train.randomize_start                               = True
 train.randomization_interval                        = 100
 train.replay_buffer_capacity                        = 50
 
 # training loop config
-train.num_iterations                                = 100  # 50000
+train.number_iterations                             = 100  # 50000
 train.log_interval                                  = 1
 train.eval_interval                                 = 20   # 10
 train.quick_eval_interval                           = 1
@@ -32,3 +32,5 @@ create_agent.learning_rate                          = 1e-3
 create_agent.use_learning_schedule                  = True
 create_agent.decay_steps                            = 1000
 create_agent.decay_rate                             = 0.9
+
+

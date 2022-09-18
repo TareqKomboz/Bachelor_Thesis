@@ -1,9 +1,7 @@
 import tensorflow as tf
-
 from tf_agents import specs
 from tf_agents.trajectories import time_step as ts
 from tf_agents.utils import common
-
 from tf_agents.environments import TFEnvironment
 
 from numpy import ones
@@ -20,7 +18,7 @@ class TfEnv(TFEnvironment):
             objective_functions,
             starting_position,
             episode_length,
-            num_observations,
+            number_observations,
             batch_size,
             input_dimension,
             number_optimization_parameters):
@@ -32,7 +30,7 @@ class TfEnv(TFEnvironment):
             self.evaluate_objective_function = self._evaluate_objective_functions
         self._initial_state = starting_position
         self.episode_length = tf.constant(episode_length, dtype=tf.int64)
-        self._num_observations = tf.constant(num_observations, dtype=tf.int64)
+        self._number_observations = tf.constant(number_observations, dtype=tf.int64)
         self._batch_size = batch_size
         self.input_dimension = tf.constant(input_dimension, dtype=tf.int64)
         self.number_optimization_parameters = number_optimization_parameters
@@ -44,7 +42,7 @@ class TfEnv(TFEnvironment):
 
         self.observation_shape = self.input_dimension + 1
         observation_spec = specs.BoundedTensorSpec(
-            [num_observations, self.observation_shape],
+            [number_observations, self.observation_shape],
             self._dtype,
             minimum=tuple((-1 * ones((self.observation_shape,), dtype=int)).tolist()),
             maximum=tuple((ones((self.observation_shape,), dtype=int)).tolist())
@@ -111,13 +109,13 @@ class TfEnv(TFEnvironment):
     def _current_time_step(self):
         reward = self._function_values[:, self._steps]
 
-        if tf.less(self._steps, self._num_observations):
+        if tf.less(self._steps, self._number_observations):
             observation = tf.pad(
                 self._observations[:, self._steps:: -1],
-                [[0, 0], [0, self._num_observations - self._steps - 1], [0, 0]]
+                [[0, 0], [0, self._number_observations - self._steps - 1], [0, 0]]
             )
         else:
-            observation = self._observations[:, self._steps:self._steps - self._num_observations:-1]
+            observation = self._observations[:, self._steps:self._steps - self._number_observations:-1]
 
         def first():
             return tf.constant(FIRST, dtype=tf.int32)
@@ -173,12 +171,13 @@ class TfEnv(TFEnvironment):
         return reward
 
     def _evaluate_objective_functions(self, x):
+        number_objective_functions = len(self.objective_functions)
         x = tf.reshape(
             x,
-            (len(self.objective_functions), int(self.batch_size / len(self.objective_functions)), self.input_dimension)
+            (number_objective_functions, int(self.batch_size / number_objective_functions), self.input_dimension)
         )
         reward = []
-        for i in range(len(x)):
+        for i in range(number_objective_functions):
             reward.append(self.objective_functions[i](tf.transpose(x[i])))
         reward = tf.reshape(reward, (self.batch_size,))
         return reward

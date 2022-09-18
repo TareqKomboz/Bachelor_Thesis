@@ -4,10 +4,10 @@ from tf_agents.utils import common
 
 
 class TrainingDriver:
-    def __init__(self, agent, environment, replay_buffer, replay_observer, num_iterations, clear_buffer):
-        self.train_losses = common.create_variable('train_losses', shape=(num_iterations,), dtype=tf.float32)
-        self.train_returns = common.create_variable('returns', shape=(num_iterations,), dtype=tf.float32)
-        self.eval_performance = common.create_variable('performance', shape=(num_iterations, 2), dtype=tf.float32)
+    def __init__(self, agent, environment, replay_buffer, replay_observer, number_iterations, clear_buffer):
+        self.train_losses = common.create_variable('train_losses', shape=(number_iterations,), dtype=tf.float32)
+        self.train_returns = common.create_variable('returns', shape=(number_iterations,), dtype=tf.float32)
+        self.eval_performance = common.create_variable('performance', shape=(number_iterations, 2), dtype=tf.float32)
         self.eval_rewards = common.create_variable(
             'eval_rewards',
             shape=(environment.batch_size, environment.episode_length),

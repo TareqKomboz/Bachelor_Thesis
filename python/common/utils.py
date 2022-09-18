@@ -7,12 +7,12 @@ from objective_functions.tf_objective_functions import FUNCTIONS
 from definitons import ROOT_DIR, RUNS_DIR
 
 
-def collect_episode(environment, policy, observers, num_episodes):
+def collect_episode(environment, policy, observers, number_episodes):
     driver = DynamicEpisodeDriver(
         environment,
         policy,
         observers,
-        num_episodes=num_episodes)
+        number_episodes=number_episodes)
     driver.run()
 
 

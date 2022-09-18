@@ -8,19 +8,19 @@ class TfEnvAbsObsAbsAct(TfEnv):
     def __init__(
             self,
             name,
-            obj_fcts,
+            objective_functions,
             starting_position,
             episode_length,
-            num_observations,
+            number_observations,
             batch_size,
             input_dimension,
             number_optimization_parameters):
         super(TfEnvAbsObsAbsAct, self).__init__(
             name,
-            obj_fcts,
+            objective_functions,
             starting_position,
             episode_length,
-            num_observations,
+            number_observations,
             batch_size,
             input_dimension,
             number_optimization_parameters

@@ -79,10 +79,6 @@ def build_eval_params(n_start_pos, input_dimension):
         my_list.append(tf.range(-0.9, 0.95, 1.8 / n_start_pos))
     start_mesh = tf.reshape(tf.transpose(tf.meshgrid(*tuple(my_list))), (N_start_pos, input_dimension))
 
-    # x = tf.range(-0.9, 0.95, 1.8 / n_start_pos)
-    # y = tf.range(-0.9, 0.95, 1.8 / n_start_pos)
-    # start_mesh = tf.reshape(tf.transpose(tf.meshgrid(x, y)), (N_start_pos, 2))
-
     # Starting positions
     starting_positions = start_mesh
 

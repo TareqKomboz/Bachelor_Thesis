@@ -14,7 +14,7 @@ from evaluation.evaluation_driver import EvaluationDriver
 
 def evaluate(
         agent_name,
-        num_observations,
+        number_observations,
         plot_dir,
         environment_type):
     start_time = time.time_ns()
@@ -26,7 +26,11 @@ def evaluate(
 
     global_step = tf.compat.v1.train.get_or_create_global_step()
 
-    eval_driver = EvaluationDriver(plot_dir, num_observations, environment_type)
+    eval_driver = EvaluationDriver(
+        run_dir=plot_dir,
+        number_observations=number_observations,
+        environment_type=environment_type
+    )
 
     env = eval_driver.envs[0]
 

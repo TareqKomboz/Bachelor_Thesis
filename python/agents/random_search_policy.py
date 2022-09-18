@@ -10,6 +10,8 @@ class RandomSearchPolicy(TFPolicy):
                  action_spec: types.NestedTensorSpec,
                  batch_size,
                  episode_length,
+                 input_dimension,
+                 number_optimization_parameters,
                  info_spec: types.NestedTensorSpec = (),):
         policy_state_spec = specs.BoundedTensorSpec((4,), tf.float32, minimum=(0, -1, -1, -1), maximum=(1e38, 1, 1, 1))
         super().__init__(time_step_spec, action_spec, policy_state_spec, info_spec)
@@ -18,6 +20,8 @@ class RandomSearchPolicy(TFPolicy):
         self.max = tf.Variable(name="max", initial_value=tf.zeros((batch_size, 3)), shape=(batch_size, 3),
                                dtype=tf.float32)
         self.batch_size = batch_size
+        self.input_dimension = input_dimension
+        self.number_optimization_parameters = number_optimization_parameters
 
     def _action(self, time_step: ts.TimeStep, policy_state: types.NestedTensorSpec, **kwargs) -> policy_step.PolicyStep:
         reward = time_step.reward
@@ -27,8 +31,9 @@ class RandomSearchPolicy(TFPolicy):
 
         is_normal = counter < self.episode_length - 1
         is_normal_mask = tf.cast(is_normal, tf.float32)
-        normal_action = tf.random.uniform([self.batch_size, 2], minval=-1, maxval=1) * tf.stack(
-            (is_normal_mask, is_normal_mask), 1)
+        normal_action = tf.random.uniform([self.batch_size, self.number_optimization_parameters], minval=-1, maxval=1) \
+                        * tf.stack((is_normal_mask, is_normal_mask), 1)
+
         is_last = counter >= self.episode_length - 1
         is_last_mask = tf.cast(is_last, tf.float32)
         last_action = max_coords * tf.stack((is_last_mask, is_last_mask), 1)

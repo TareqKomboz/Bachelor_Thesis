@@ -16,7 +16,7 @@ class EvaluationDriver:
     def __init__(
             self,
             run_dir,
-            num_observations,
+            number_observations,
             environment_type,
 
             # optional gin parameters
@@ -30,7 +30,7 @@ class EvaluationDriver:
         self.run_dir = run_dir
         self.train_episode_length = train_episode_length
 
-        self.n_start_pos = 3
+        self.n_start_pos = 5
         self.starting_positions = build_eval_params(self.n_start_pos, input_dimension)
         self.plot_all = plot_all
         self.batch_size = len(self.starting_positions)
@@ -43,7 +43,7 @@ class EvaluationDriver:
                 (functions[0],),
                 self.starting_positions,
                 episode_length,
-                num_observations,
+                number_observations,
                 self.batch_size,
                 input_dimension,
                 number_optimization_parameters
@@ -71,7 +71,7 @@ class EvaluationDriver:
                 step_counter,
                 plot_dir,
                 self.n_start_pos,
-                function_values=tf.transpose(FUNCTIONS["ackley"][0](tf.transpose(env.get_states()))),
+                function_values=tf.transpose(FUNCTIONS["ackley"][0](tf.transpose(env.get_states()))),  # Todo: understand
                 states=env.get_states(),
                 name=env.name,
                 train_episode_length=self.train_episode_length,
@@ -93,30 +93,35 @@ class EvaluationDriver:
         run_id = os.path.split(self.run_dir)[1]
         train_function_name = os.path.split(os.path.split(self.run_dir)[0])[1]
         algorithm_name = os.path.split(os.path.split(os.path.split(self.run_dir)[0])[0])[1]
-        plot_performance_over_time_with_stds(range(self.envs[0].episode_length),
-                                             np.array(mean_performance_over_time),
-                                             np.array(std_performance_over_time),
-                                             FUNCTIONS.keys(),
-                                             "{}-{}-{}-agent"
-                                             .format(run_id, algorithm_name, train_function_name),
-                                             plot_dir,
-                                             "performance over time",
-                                             std_scale=0.25)
+        plot_performance_over_time_with_stds(
+            range(self.envs[0].episode_length),
+            np.array(mean_performance_over_time),
+            np.array(std_performance_over_time),
+            FUNCTIONS.keys(),
+            "{}-{}-{}-agent".format(run_id, algorithm_name, train_function_name),
+            plot_dir,
+            "performance over time",
+            std_scale=0.25
+        )
 
-        plot_performance_over_time_with_stds(range(self.train_episode_length),
-                                             np.array(mean_performance_over_time)[:, :self.train_episode_length],
-                                             np.array(std_performance_over_time)[:, :self.train_episode_length],
-                                             FUNCTIONS.keys(),
-                                             "{}-{}-{}-agent"
-                                             .format(run_id, algorithm_name, train_function_name),
-                                             plot_dir,
-                                             "performance over time {} steps".format(self.train_episode_length),
-                                             std_scale=0.25)
+        plot_performance_over_time_with_stds(
+            range(self.train_episode_length),
+            np.array(mean_performance_over_time)[:, :self.train_episode_length],
+            np.array(std_performance_over_time)[:, :self.train_episode_length],
+            FUNCTIONS.keys(),
+            "{}-{}-{}-agent".format(run_id, algorithm_name, train_function_name),
+            plot_dir,
+            "performance over time {} steps".format(self.train_episode_length),
+            std_scale=0.25
+        )
 
         plot_performance_by_function(FUNCTIONS.keys(), performances, plot_dir, "final performance")
-        plot_performance_by_function(FUNCTIONS.keys(),
-                                     np.array(mean_performance_over_time)[:, self.train_episode_length - 1],
-                                     plot_dir, "final performance at {} steps".format(self.train_episode_length))
+        plot_performance_by_function(
+            FUNCTIONS.keys(),
+            np.array(mean_performance_over_time)[:, self.train_episode_length - 1],
+            plot_dir,
+            "final performance at {} steps".format(self.train_episode_length)
+        )
 
         summary = ["average performances by function at step {} \n".format(step_counter)]
         for label, performance in zip(FUNCTIONS.keys(), performances):

@@ -19,7 +19,7 @@ def read_parameters(configfile):
     with open(configfile) as reader:
         lines = reader.readlines()
     for line in lines:
-        if line.startswith("main.num_observations"):
+        if line.startswith("main.number_observations"):
             n_obs = parse_value(line)
         elif line.startswith("main.agent_name"):
             rnn = parse_value(line).startswith("rnn")

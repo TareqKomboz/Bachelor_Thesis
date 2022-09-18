@@ -15,23 +15,20 @@ from definitons import ROOT_DIR
 
 PLOT_DIR = os.path.join(ROOT_DIR, "comparison_plots")
 COLORS = [color for color in mcolors.TABLEAU_COLORS.values()]
-OPERATORS = ['overall', 'control']
 
 
 @gin.configurable
 class Args:
-    def __init__(self, name, non_learned, algorithms, trained_ons, run_ids, run_ons, operations,
+    def __init__(self, name, algorithms, trained_ons, run_ids, run_ons,
                  episode_length, subplots, barplots, plotby, same_as_trained, labels):
         self.same_as_trained = same_as_trained
         self.plotby = plotby
         self.barplots = barplots
         self.subplots = subplots
         self.episode_length = episode_length
-        self.operations = operations
         self.run_ons = run_ons
         self.run_ids = run_ids
         self.algorithms = algorithms
-        self.non_learned = non_learned
         self.name = name
         self.trained_ons = [name for name in FUNCTIONS.keys()] if trained_ons == "all" else trained_ons
         self.labels = labels
@@ -56,25 +53,6 @@ def main(args):
                 plot_by_run_on(args, df)
         else:
             raise NotImplementedError("Plot by {} has not been implemented yet".format(args.plotby))
-    else:
-        fig, ax = plt.subplots(1, 1)
-        if arguments.barplots:
-            means = [mean[args.episode_length - 1] for mean in df['mean_perf_over_time']]
-            ax.grid(axis='y')
-            plot_performance_by_labels(ax,
-                                       labels=[name for name in df['operation']],
-                                       performance=means)
-        else:
-            means = [mean[:args.episode_length] for mean in df['mean_perf_over_time']]
-            stds = [std[:args.episode_length] for std in df['std_perf_over_time']]
-            h = plot_performance_over_time_with_stds(ax,
-                                                     range(args.episode_length),
-                                                     means[:args.episode_length],
-                                                     stds[:args.episode_length],
-                                                     std_scale=0.25)
-            ax.grid()
-            plt.ylim(0, 1)
-            plt.legend(labels=[name for name in df['operation']], handles=h, loc=4)
 
     plt.savefig(os.path.join(PLOT_DIR, name), dpi=400, transparent=True)
     plt.show()
@@ -160,15 +138,6 @@ def get_data(args):
     columns = columns.drop('index')
     if arguments.plotby == "run_on":
         columns = columns.drop('operation')
-    elif arguments.plotby == "operation":
-        columns = columns.drop('run_on')
-        df = pd.DataFrame(data=data, columns=columns)
-        base_group_by = df.groupby(base_group_by)
-        overall_means = base_group_by['mean_perf_over_time'].mean()
-        overall_stds = base_group_by['std_perf_over_time'].mean()
-        overall_data = [list(d) + ['overall', ] + [m, ] + [s, ] for d, (m, s) in
-                        zip(list(base_group_by.groups), zip(overall_means, overall_stds))]
-        data += overall_data
 
     return pd.DataFrame(data=data, columns=columns)
 

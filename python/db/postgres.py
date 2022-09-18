@@ -2,8 +2,6 @@ import os.path
 
 import gin
 
-EVAL_CATEGORIES = ["control"]
-
 @gin.configurable
 class DBEngine:
     def __init__(self, enable, host, dbname, user, password):
