@@ -8,12 +8,12 @@ class TfEnvAbsObsAbsAct(TfEnv):
     def __init__(
             self,
             name,
-            objective_functions,
+            objective_function,
             starting_position,
             batch_size):
         super(TfEnvAbsObsAbsAct, self).__init__(
             name=name,
-            objective_functions=objective_functions,
+            objective_function=objective_function,
             starting_position=starting_position,
             batch_size=batch_size
         )

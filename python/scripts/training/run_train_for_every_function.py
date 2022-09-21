@@ -10,7 +10,7 @@ from definitons import PYTHON_DIR, ROOT_DIR
 
 
 def change_if_function_name(line, name):
-    if line.startswith('main.function_names'):
+    if line.startswith('main.function_name'):
         line = line.split("=")
         line[1] = name
         line = line[0] + "= " + line[1]
@@ -18,10 +18,10 @@ def change_if_function_name(line, name):
 
 
 def create_configfiles(configfile):
-    function_names = ["(\"{}\",)".format(name) for name in FUNCTIONS.keys()] + ["\"all\""]
+    function_name = ["(\"{}\",)".format(name) for name in FUNCTIONS.keys()] + ["\"all\""]
     new_configfiles = [configfile.strip(".gin") + "_" + name + ".gin" for name in FUNCTIONS.keys()] +\
                       [configfile.strip(".gin") + "_all.gin"]
-    for i, name in enumerate(function_names):
+    for i, name in enumerate(function_name):
         with open(configfile) as reader:
             lines = reader.readlines()
             lines = [change_if_function_name(line, name) for line in lines]

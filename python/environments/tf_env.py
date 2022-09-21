@@ -17,7 +17,7 @@ class TfEnv(TFEnvironment):
     def __init__(
             self,
             name,
-            objective_functions,
+            objective_function,
             starting_position,
             batch_size,
 
@@ -28,11 +28,8 @@ class TfEnv(TFEnvironment):
             number_optimization_parameters):
 
         self.name = name
-        self.objective_functions = objective_functions
-        if len(objective_functions) == 1:
-            self.evaluate_objective_function = self._evaluate_objective_function
-        else:
-            self.evaluate_objective_function = self._evaluate_objective_functions
+        self.objective_function = objective_function
+        self.evaluate_objective_function = self._evaluate_objective_function
         self._initial_state = starting_position
         self.episode_length = tf.constant(episode_length, dtype=tf.int64)
         self._number_observations = tf.constant(number_observations, dtype=tf.int64)
@@ -155,20 +152,20 @@ class TfEnv(TFEnvironment):
         self._assign_state(action)
 
     def _evaluate_objective_function(self, x):
-        reward = self.objective_functions[0](tf.transpose(x))
+        reward = self.objective_function(tf.transpose(x))
         return reward
 
-    def _evaluate_objective_functions(self, x):
-        number_objective_functions = len(self.objective_functions)
-        x = tf.reshape(
-            x,
-            (number_objective_functions, int(self.batch_size / number_objective_functions), self.input_dimension)
-        )
-        reward = []
-        for i in range(number_objective_functions):
-            reward.append(self.objective_functions[i](tf.transpose(x[i])))
-        reward = tf.reshape(reward, (self.batch_size,))
-        return reward
+    # def _evaluate_objective_functions(self, x):
+    #     number_objective_functions = len(self.objective_functions)
+    #     x = tf.reshape(
+    #         x,
+    #         (number_objective_functions, int(self.batch_size / number_objective_functions), self.input_dimension)
+    #     )
+    #     reward = []
+    #     for i in range(number_objective_functions):
+    #         reward.append(self.objective_functions[i](tf.transpose(x[i])))
+    #     reward = tf.reshape(reward, (self.batch_size,))
+    #     return reward
 
     def set_starting_positions_and_free_values(self, starting_positions):
         self._initial_state = starting_positions
@@ -176,3 +173,9 @@ class TfEnv(TFEnvironment):
 
     def get_states(self):
         return self._states
+
+    def get_episode_length(self):
+        return self.episode_length
+
+    def get_input_dimension(self):
+        return self.input_dimension

@@ -1,14 +1,13 @@
 # basic config
 main.agent_name                                         = "reinforce"
-main.function_names                                     = ("ackley",)  # ("ackley",) # ("ackley", "langermann", "michalewicz", "rastrigin", "rosenbrock", "sumsquares",)
+main.function_name                                      = "ackley"
 main.env_type                                           = "absolute"
 # environment config
-train.function_names                                    = ("ackley",)  # ("ackley",) # ("ackley", "langermann", "michalewicz", "rastrigin", "rosenbrock", "sumsquares",)
+train.function_name                                    = "ackley"
 train.agent_name                                        = "reinforce"
 train.batch_size                                        = 540  # 512
-train.input_dimension                                   = 5  # ---------------------------------------------------------
+train.input_dimension                                   = 2  # ---------------------------------------------------------
 train.randomize_start                                   = True
-train.randomization_interval                            = 1  # 100
 train.replay_buffer_capacity                            = 50  # ----------------------------
 
 # training loop config
@@ -36,9 +35,9 @@ create_agent.decay_rate                                 = 0.9
 # environment
 env_constructor.episode_length                          = 50  # ----------------------------
 env_constructor.number_observations                     = 5
-env_constructor.input_dimension                         = 5  # ---------------------------------------------------------
-env_constructor.number_optimization_parameters          = 3  # ---------------------------------------------------------
+env_constructor.input_dimension                         = 2  # ---------------------------------------------------------
+env_constructor.number_optimization_parameters          = 1  # ---------------------------------------------------------
 
 evaluation_driver_init.train_episode_length             = 50  # ----------------------------
-evaluation_driver_init.input_dimension                  = 5  # ---------------------------------------------------------
+evaluation_driver_init.input_dimension                  = 2  # ---------------------------------------------------------
 evaluation_driver_init.n_start_pos                      = 5 # 180 # 5

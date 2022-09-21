@@ -24,7 +24,7 @@ def change(starting_pattern, change_fn):
 
 
 def multiple_functions(line):
-    line = line.replace("main.function_name ", "main.function_names")
+    line = line.replace("main.function_name ", "main.function_name")
     function_name = line.split(" ")[-1].strip("\n")
     return line.replace(function_name, "({},)".format(function_name))
 

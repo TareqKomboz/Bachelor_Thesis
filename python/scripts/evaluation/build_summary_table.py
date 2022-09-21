@@ -1,7 +1,7 @@
 import os
 import shutil
 
-from common.utils import get_functions_from_formatted_function_names
+from common.utils import get_functions_from_formatted_function_name
 from objective_functions.tf_objective_functions import FUNCTIONS
 from db.postgres import DBEngine, initialize_db
 from definitons import RUNS_DIR
@@ -119,7 +119,7 @@ def find_summaries_and_write_to_file(file, value_name="train_final"):
         data.append(scan_evaluation_folder(folder, value_name))
     data = [[algorithms[i]] + [trained_ons[i]] + [run_ids[i]] + data[i] for i in range(len(data))]
     df = pd.DataFrame(data=data, columns=columns)
-    df.loc[(df.trained_on == "ackley,langermann,michalewicz,rastrigin,rosenbrock,sumsquares"),
+    df.loc[(df.trained_on == "ackley,griewank,levy,rastrigin,rosenbrock,sphere,styblinski_tang,zakharov"),
            'trained_on'] = 'all'
     df['overall'] = 0
     for function_name in FUNCTIONS.keys():
@@ -136,12 +136,12 @@ def find_summaries_and_write_to_file(file, value_name="train_final"):
             for name in FUNCTIONS.keys():
                 df['in_distribution'][i] += df['{}_control'.format(name)][i]
         elif len(trained_on.split(",")) >= 4:
-            function_names = get_functions_from_formatted_function_names(trained_on)
-            for name in function_names:
+            function_name = get_functions_from_formatted_function_name(trained_on)
+            for name in function_name:
                 df['in_distribution'][i] += df['{}_control'.format(name)][i]
         elif len(trained_on.split(",")) > 1:
-            function_names = trained_on.split(",")
-            for name in function_names:
+            function_name = trained_on.split(",")
+            for name in function_name:
                 df['in_distribution'][i] += df['{}_control'.format(name)][i]
 
         else:

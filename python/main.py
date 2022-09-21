@@ -9,20 +9,17 @@ import logging
 
 from common.build_run_id import get_run_id
 from objective_functions.tf_objective_functions import FUNCTIONS
-from common.utils import is_valid_filename, format_function_names
+from common.utils import is_valid_filename
 from definitons import RUNS_DIR
 from evaluation.evaluate import evaluate
 from training.train import train
 
 
 @gin.configurable
-def main(arguments, agent_name, function_names, env_type):
-    if function_names == 'all':
-        function_names = [name for name in FUNCTIONS.keys()]
-
+def main(arguments, agent_name, function_name, env_type):
     run_id = get_run_id(arguments.configfile)
 
-    run_dir = os.path.join(RUNS_DIR, agent_name, format_function_names(function_names), run_id)
+    run_dir = os.path.join(RUNS_DIR, agent_name, function_name, run_id)
 
     logfile = os.path.join(run_dir, "run.log")
     if arguments.evaluate:
@@ -47,13 +44,13 @@ def main(arguments, agent_name, function_names, env_type):
 
     logging.info("Loaded contents of configfile {}".format(arguments.configfile))
     logging.info("Starting run with {} agent, {} function and id {}"
-                 .format(agent_name, format_function_names(function_names), run_id))
+                 .format(agent_name, function_name, run_id))
     if not arguments.evaluate:
         final_performance, duration = train(run_dir=run_dir)
         logging.info("{}-{}-{} training finished in {}, final performance = {:.2f}"
                      .format(run_id,
                              agent_name,
-                             format_function_names(function_names),
+                             function_name,
                              time.strftime('%H:%M:%S', time.gmtime(duration)),
                              final_performance))
     else:
@@ -63,7 +60,7 @@ def main(arguments, agent_name, function_names, env_type):
         logging.info("{}-{}-{} evaluation finished, final performance = {:.2f}, {}"
                      .format(run_id,
                              agent_name,
-                             format_function_names(function_names),
+                             function_name,
                              final_performance,
                              time.strftime('%H:%M:%S', time.gmtime(duration))
                              ))

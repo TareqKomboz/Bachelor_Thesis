@@ -5,3 +5,11 @@ from numpy import array, ones
 
 if __name__ == "__main__":
     print("Hello World!")
+
+    FCT = {
+        "one": 1,
+        "two": 2
+    }
+
+    for label, fct in FCT.items():
+        print(fct)

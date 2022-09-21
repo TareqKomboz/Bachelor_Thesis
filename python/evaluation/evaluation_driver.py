@@ -11,33 +11,54 @@ import tensorflow as tf
 from evaluation.plot_utils import plot, plot_performance_over_time_with_stds, plot_performance_by_function
 
 
+@gin.configurable
 class EvaluationDriver:
-    @gin.configurable("evaluation_driver_init")
-    def __init__(
-            self,
-            run_dir,
+    def __init__(self, run_dir,
+                 num_observations,
+                 environment_type,
 
-            # optional gin parameters
-            train_episode_length,
-            input_dimension,
-            n_start_pos):
+                 # optional gin parameters
+                 train_episode_length=50,
+                 episode_length=200,
+                 plot_trajectories=True,
+                 plot_all=True,
+                 write_to_sql=False):
 
         self.dtype = tf.float32
         self.run_dir = run_dir
+        self.plot_trajectories = plot_trajectories
         self.train_episode_length = train_episode_length
 
-        self.n_start_pos = n_start_pos
-        self.starting_positions = build_eval_params(self.n_start_pos, input_dimension)
+        self.n_start_pos = 3
+        self.n_trans = 4
+        self.N_rotations = 10
+        self.N_input_noise = 10
+        self.N_output_noise = 10
+        self.domain = tf.constant([[-1, -1], [1, 1]], dtype=self.dtype)
+        self.starting_positions, self.translations, rotations, self.input_noises, self.output_noises = build_eval_params(
+            self.n_start_pos,
+            self.n_trans,
+            self.N_rotations,
+            self.N_input_noise,
+            self.N_output_noise,
+            self.domain)
+        self.plot_all = plot_all
         self.batch_size = len(self.starting_positions)
+        self.write_to_sql = write_to_sql
 
         self.envs = []
         for label, functions in FUNCTIONS.items():
-            self.envs.append(create_environment(
-                function_names=label,
-                objective_functions=(functions[0],),
-                start_point=self.starting_positions,
-                batch_size=self.batch_size
-            ))
+            self.envs.append(create_environment(environment_type,
+                                                label,
+                                                (functions[0],),
+                                                self.starting_positions,
+                                                episode_length,
+                                                num_observations,
+                                                self.batch_size,
+                                                translation=self.translations,
+                                                rotation=rotations,
+                                                input_noise=self.input_noises,
+                                                output_noise=self.output_noises))
 
     def run(self, policy, step_counter, log_summary=False):
         plot_dir = os.path.join(self.run_dir, "Step_{}".format(step_counter))
@@ -57,18 +78,26 @@ class EvaluationDriver:
                 time_step = env.step(action_step.action)
                 rewards.append(time_step.reward)
 
-            performance, means, stds = plot(
-                step_counter,
-                plot_dir,
-                self.n_start_pos,
-                function_values=tf.transpose(FUNCTIONS["ackley"][0](tf.transpose(env.get_states()))),  # Todo: understand
-                states=env.get_states(),
-                name=env.name,
-                train_episode_length=self.train_episode_length,
-                log_summary=log_summary
-            )
+            performance, means, stds = plot(step_counter,
+                                            FUNCTIONS[env.name][1],
+                                            plot_dir,
+                                            self.n_start_pos,
+                                            self.domain,
+                                            function_values=tf.transpose(FUNCTIONS["ackley"][0](tf.transpose(env.get_states()))),
+                                            states=env.get_states(),
+                                            name=env.name,
+                                            train_episode_length=self.train_episode_length,
+                                            plot_all=self.plot_all,
+                                            log_summary=log_summary)
 
             env.reset()
+
+            if self.write_to_sql:
+                from db.runs import save_to_sql
+                run_id = os.path.split(self.run_dir)[1]
+                trained_on = os.path.split(os.path.split(self.run_dir)[0])[1]
+                agent_name = os.path.split(os.path.split(os.path.split(self.run_dir)[0])[0])[1]
+                save_to_sql(means, stds, env.name, trained_on, agent_name, run_id, step_counter)
 
             performances.append(performance)
             mean_performance_over_time.append(tf.reduce_mean(means, axis=0))
@@ -83,35 +112,30 @@ class EvaluationDriver:
         run_id = os.path.split(self.run_dir)[1]
         train_function_name = os.path.split(os.path.split(self.run_dir)[0])[1]
         algorithm_name = os.path.split(os.path.split(os.path.split(self.run_dir)[0])[0])[1]
-        plot_performance_over_time_with_stds(
-            range(self.envs[0].episode_length),
-            np.array(mean_performance_over_time),
-            np.array(std_performance_over_time),
-            FUNCTIONS.keys(),
-            "{}-{}-{}-agent".format(run_id, algorithm_name, train_function_name),
-            plot_dir,
-            "performance over time",
-            std_scale=0.25
-        )
+        plot_performance_over_time_with_stds(range(self.envs[0].episode_length),
+                                             np.array(mean_performance_over_time),
+                                             np.array(std_performance_over_time),
+                                             FUNCTIONS.keys(),
+                                             "{}-{}-{}-agent"
+                                             .format(run_id, algorithm_name, train_function_name),
+                                             plot_dir,
+                                             "performance over time",
+                                             std_scale=0.25)
 
-        plot_performance_over_time_with_stds(
-            range(self.train_episode_length),
-            np.array(mean_performance_over_time)[:, :self.train_episode_length],
-            np.array(std_performance_over_time)[:, :self.train_episode_length],
-            FUNCTIONS.keys(),
-            "{}-{}-{}-agent".format(run_id, algorithm_name, train_function_name),
-            plot_dir,
-            "performance over time {} steps".format(self.train_episode_length),
-            std_scale=0.25
-        )
+        plot_performance_over_time_with_stds(range(self.train_episode_length),
+                                             np.array(mean_performance_over_time)[:, :self.train_episode_length],
+                                             np.array(std_performance_over_time)[:, :self.train_episode_length],
+                                             FUNCTIONS.keys(),
+                                             "{}-{}-{}-agent"
+                                             .format(run_id, algorithm_name, train_function_name),
+                                             plot_dir,
+                                             "performance over time {} steps".format(self.train_episode_length),
+                                             std_scale=0.25)
 
         plot_performance_by_function(FUNCTIONS.keys(), performances, plot_dir, "final performance")
-        plot_performance_by_function(
-            FUNCTIONS.keys(),
-            np.array(mean_performance_over_time)[:, self.train_episode_length - 1],
-            plot_dir,
-            "final performance at {} steps".format(self.train_episode_length)
-        )
+        plot_performance_by_function(FUNCTIONS.keys(),
+                                     np.array(mean_performance_over_time)[:, self.train_episode_length - 1],
+                                     plot_dir, "final performance at {} steps".format(self.train_episode_length))
 
         summary = ["average performances by function at step {} \n".format(step_counter)]
         for label, performance in zip(FUNCTIONS.keys(), performances):
