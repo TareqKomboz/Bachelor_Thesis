@@ -172,7 +172,7 @@ def train(run_dir,
             log_timestamp = time.time_ns()
 
         is_last_iteration = i == (number_iterations - 1)
-        
+
         if global_step % checkpoint_interval == 0 or is_last_iteration:
             train_checkpointer.save(global_step=global_step)
             policy_checkpointer.save(global_step=global_step)
