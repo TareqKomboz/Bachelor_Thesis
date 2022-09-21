@@ -10,7 +10,6 @@ from tf_agents.utils import common
 
 from agents.create_agent import create_agent
 from objective_functions.tf_objective_functions import FUNCTIONS
-from common.utils import format_function_names
 from environments.create_environment import create_environment
 from evaluation.evaluation_driver import EvaluationDriver
 from evaluation.evaluation_utils import plot_returns_and_losses
@@ -23,13 +22,12 @@ from numpy import ones
 def train(run_dir,
 
           # gin parameter
-          function_names,
+          function_name,
           agent_name,
           # environment parameters
           batch_size,
           input_dimension,
           randomize_start,
-          randomization_interval,
           replay_buffer_capacity,
 
           # training parameters
@@ -63,11 +61,9 @@ def train(run_dir,
     else:
         start_point = tf.constant(0.8, shape=(batch_size, input_dimension), dtype=tf.float32)
 
-    objective_functions = [FUNCTIONS[function_name][0] for function_name in function_names]
-
     train_env = create_environment(
-        function_names=format_function_names(function_names),
-        objective_functions=objective_functions,
+        function_name=function_name,
+        objective_function=FUNCTIONS[function_name][0],
         start_point=start_point,
         batch_size=batch_size
     )
@@ -76,11 +72,12 @@ def train(run_dir,
     eval_driver = EvaluationDriver(run_dir=run_dir)
 
     agent = create_agent(
-        agent_name,
-        train_env.observation_spec(),
-        train_env.action_spec(),
-        train_env.time_step_spec(),
-        step_counter=global_step)
+        name=agent_name,
+        obs_spec=train_env.observation_spec(),
+        act_spec=train_env.action_spec(),
+        ts_spec=train_env.time_step_spec(),
+        step_counter=global_step
+    )
 
     replay_buffer = tf_uniform_replay_buffer.TFUniformReplayBuffer(
         agent.collect_data_spec,
@@ -136,15 +133,14 @@ def train(run_dir,
 
         print("", end="\r")
 
-        if global_step % randomization_interval == 0:
-            if randomize_start:
-                start_point = tf.random.uniform(
-                    shape=(batch_size, input_dimension),
-                    minval=tuple((-1 * ones((input_dimension,), dtype=int)).tolist()),
-                    maxval=tuple((ones((input_dimension,), dtype=int)).tolist()),
-                    dtype=tf.float32
-                )
-                train_env.set_starting_positions_and_free_values(start_point)
+        if randomize_start:
+            start_point = tf.random.uniform(
+                shape=(batch_size, input_dimension),
+                minval=tuple((-1 * ones((input_dimension,), dtype=int)).tolist()),
+                maxval=tuple((ones((input_dimension,), dtype=int)).tolist()),
+                dtype=tf.float32
+            )
+            train_env.set_starting_positions_and_free_values(start_point)
 
         if global_step % log_interval == 0:
             rewards, losses, performances = driver.get_summary()
@@ -184,10 +180,15 @@ def train(run_dir,
             avg_performance = tf.reduce_mean(performances)
 
             returns, train_losses, train_performances = driver.get_summary()
-            plot_returns_and_losses(returns.numpy()[latest_eval_step:],
-                                    train_losses.numpy()[latest_eval_step:],
-                                    train_performances.numpy()[latest_quick_eval_step:],
-                                    plot_dir, agent_name, function_names, quick_eval_interval)
+            plot_returns_and_losses(
+                returns=returns.numpy()[latest_eval_step:],
+                train_losses=train_losses.numpy()[latest_eval_step:],
+                performances=train_performances.numpy()[latest_quick_eval_step:],
+                plot_dir=plot_dir,
+                agent_name=agent_name,
+                function_name=function_name,
+                quick_eval_interval=quick_eval_interval
+            )
 
             timestamp = time.gmtime((time.time_ns() - start_time) * 1e-9)
             logging.info("{}: Evaluation completed in {:.2f}s, average performance = {:.2f}, {}"

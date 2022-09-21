@@ -64,7 +64,8 @@ def plot_performance_over_time_with_stds(x, means, stds, labels, title, plot_dir
     plt.clf()
 
 
-def plot(step_counter,
+def plot(input_dimension,
+         step_counter,
          plot_dir,
          n_start_pos,
          function_values,
@@ -75,7 +76,7 @@ def plot(step_counter,
          ):
     plot_dir = os.path.join(plot_dir, name)
 
-    n_start_pos = (n_start_pos + 1) ** 2
+    n_start_pos = (n_start_pos + 1) ** input_dimension
 
     # control
     if not os.path.isdir(plot_dir):
@@ -118,27 +119,5 @@ def plot(step_counter,
 
     means = tf.convert_to_tensor([tf.reduce_mean(category, axis=0) for category in function_values])
     stds = tf.convert_to_tensor([tf.math.reduce_std(category, axis=0) for category in function_values])
-
-    plot_performance_over_time_with_stds(
-        range(len(means[0])),
-        means,
-        stds,
-        ["control"],
-        "convergence by category",
-        plot_dir,
-        "performance over time",
-        std_scale=0.25
-    )
-
-    plot_performance_over_time_with_stds(
-        range(train_episode_length),
-        means[:, :train_episode_length],
-        stds[:, :train_episode_length],
-        ["control"],
-        "convergence by category",
-        plot_dir,
-        "performance over time {} steps".format(train_episode_length),
-        std_scale=0.25
-    )
 
     return overall_final_performance, means, stds

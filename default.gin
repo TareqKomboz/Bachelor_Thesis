@@ -11,11 +11,11 @@ train.randomize_start                                   = True
 train.replay_buffer_capacity                            = 50  # ----------------------------
 
 # training loop config
-train.number_iterations                                 = 10000  # 50000
-train.log_interval                                      = 200
-train.eval_interval                                     = 2000
-train.quick_eval_interval                               = 20
-train.checkpoint_interval                               = 2000
+train.number_iterations                                 = 1000  # 50000
+train.log_interval                                      = 20
+train.eval_interval                                     = 20
+train.quick_eval_interval                               = 2
+train.checkpoint_interval                               = 20
 
 
 # reinforce agent config
@@ -38,6 +38,7 @@ env_constructor.number_observations                     = 5
 env_constructor.input_dimension                         = 2  # ---------------------------------------------------------
 env_constructor.number_optimization_parameters          = 1  # ---------------------------------------------------------
 
+# evaluation driver
 evaluation_driver_init.train_episode_length             = 50  # ----------------------------
 evaluation_driver_init.input_dimension                  = 2  # ---------------------------------------------------------
 evaluation_driver_init.n_start_pos                      = 5 # 180 # 5

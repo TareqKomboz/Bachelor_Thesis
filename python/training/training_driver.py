@@ -31,12 +31,12 @@ class TrainingDriver:
         iterator = iter(self.replay_buffer.as_dataset(
             single_deterministic_pass=False,
             sample_batch_size=self.train_env.batch_size,
-            num_steps=self.train_env.episode_length
+            num_steps=self.train_env.get_episode_length()
         ))
         experience, _ = next(iterator)
         loss = self.agent.train(experience=experience).loss
         avg_return = tf.divide(tf.reduce_sum(experience.reward), self.train_env.batch_size)
-        normalized_avg_return = tf.divide(avg_return, tf.cast(self.train_env.episode_length, tf.float32))
+        normalized_avg_return = tf.divide(avg_return, tf.cast(self.train_env.get_episode_length(), tf.float32))
         self.train_returns[self.step].assign(normalized_avg_return)
         self.train_losses[self.step].assign(loss)
 
@@ -52,7 +52,7 @@ class TrainingDriver:
         self.eval_rewards[:, 0].assign(time_step.reward)
         policy_state = self.eval_policy.get_initial_state(self.train_env.batch_size)
 
-        for i in range(1, tf.cast(self.train_env.episode_length, tf.int32)):
+        for i in range(1, tf.cast(self.train_env.get_episode_length(), tf.int32)):
             action_step = self.eval_policy.action(time_step, policy_state=policy_state)
             policy_state = action_step.state
             time_step = self.train_env.step(action_step.action)

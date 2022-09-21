@@ -4,8 +4,6 @@ import tensorflow as tf
 import numpy as np
 from matplotlib import pyplot as plt
 
-from common.utils import format_function_names
-
 
 def plot_returns_and_losses(returns,
                             train_losses,
@@ -38,7 +36,7 @@ def plot_returns_and_losses(returns,
     plt.ylim(0, 1)
     plt.ylabel("average return")
     plt.xlabel("train step")
-    plt.title("{} - {} returns".format(agent_name, format_function_names(function_name)))
+    plt.title("{} - {} returns".format(agent_name, function_name))
     plt.grid()
     plt.savefig(os.path.join(plot_dir, "train_returns"), transparent=True)
     plt.clf()
@@ -47,7 +45,7 @@ def plot_returns_and_losses(returns,
     plt.ylabel("train losses")
     plt.xlabel("train step")
     plt.grid()
-    plt.title("{} - {} train losses".format(agent_name, format_function_names(function_name)))
+    plt.title("{} - {} train losses".format(agent_name, function_name))
     plt.savefig(os.path.join(plot_dir, "train_losses"), transparent=True)
     plt.clf()
     xx = np.arange(0, (len(performances) * quick_eval_interval), quick_eval_interval)
@@ -58,7 +56,7 @@ def plot_returns_and_losses(returns,
     plt.xlabel("train step")
     plt.grid()
     plt.ylim(0, 1)
-    plt.title("{} - {} performances".format(agent_name, format_function_names(function_name)))
+    plt.title("{} - {} performances".format(agent_name, function_name))
     plt.savefig(os.path.join(plot_dir, "performances"), transparent=True)
     plt.clf()
     plt.plot(xx, performances[:, 0])
@@ -66,7 +64,7 @@ def plot_returns_and_losses(returns,
     plt.xlabel("train step")
     plt.ylim(0, 1)
     plt.grid()
-    plt.title("{} - {} final performances".format(agent_name, format_function_names(function_name)))
+    plt.title("{} - {} final performances".format(agent_name, function_name))
     plt.savefig(os.path.join(plot_dir, "final_performances"), transparent=True)
     plt.clf()
 

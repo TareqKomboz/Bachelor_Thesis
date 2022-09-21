@@ -179,3 +179,6 @@ class TfEnv(TFEnvironment):
 
     def get_input_dimension(self):
         return self.input_dimension
+
+    def get_name(self):
+        return self.name

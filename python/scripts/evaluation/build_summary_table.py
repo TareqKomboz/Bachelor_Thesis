@@ -1,7 +1,6 @@
 import os
 import shutil
 
-from common.utils import get_functions_from_formatted_function_name
 from objective_functions.tf_objective_functions import FUNCTIONS
 from db.postgres import DBEngine, initialize_db
 from definitons import RUNS_DIR
@@ -136,7 +135,7 @@ def find_summaries_and_write_to_file(file, value_name="train_final"):
             for name in FUNCTIONS.keys():
                 df['in_distribution'][i] += df['{}_control'.format(name)][i]
         elif len(trained_on.split(",")) >= 4:
-            function_name = get_functions_from_formatted_function_name(trained_on)
+            function_name = trained_on
             for name in function_name:
                 df['in_distribution'][i] += df['{}_control'.format(name)][i]
         elif len(trained_on.split(",")) > 1:
