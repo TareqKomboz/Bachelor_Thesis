@@ -77,12 +77,12 @@ class EvaluationDriver:
                 run_id = os.path.split(self.run_dir)[1]
                 trained_on = os.path.split(os.path.split(self.run_dir)[0])[1]
                 agent_name = os.path.split(os.path.split(os.path.split(self.run_dir)[0])[0])[1]
-                save_to_sql(means, stds, env.get_name(), trained_on, agent_name, run_id, step_counter)
+                save_to_sql(means, stds, env.name, trained_on, agent_name, run_id, step_counter)
 
             performances.append(performance)
             mean_performance_over_time.append(tf.reduce_mean(means, axis=0))
             std_performance_over_time.append(tf.reduce_mean(stds, axis=0))
-            names.append(env.get_name())
+            names.append(env.name)
             if not log_summary:
                 print("\r{} evaluated".format(", ".join(names)), end="")
         if log_summary:

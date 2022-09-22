@@ -114,8 +114,15 @@ def train(run_dir,
     logging.info("Setup completed in {:.2f}s".format((time.time_ns() - start_time) * 1e-9))
 
     # training loop
-    onpolicy = agent_name != "sac"
-    driver = TrainingDriver(agent, train_env, replay_buffer, replay_observer, number_iterations, onpolicy)
+    on_policy = agent_name != "sac"
+    training_driver = TrainingDriver(
+        agent=agent,
+        environment=train_env,
+        replay_buffer=replay_buffer,
+        replay_observer=replay_observer,
+        number_iterations=number_iterations,
+        clear_buffer=on_policy
+    )
 
     logging.info("Starting training loop, initial graph construction might take a bit")
     log_timestamp = time.time_ns()
@@ -127,9 +134,9 @@ def train(run_dir,
         print("{}: {} ({}) train loops completed, {}"
               .format(global_step.numpy(), (global_step.numpy() % log_interval), log_interval, timestamp), end="")
 
-        driver.train_step()
+        training_driver.train_step()
         if global_step % quick_eval_interval == 0:
-            driver.quick_eval()
+            training_driver.quick_eval()
 
         print("", end="\r")
 
@@ -143,13 +150,13 @@ def train(run_dir,
             train_env.set_starting_positions_and_free_values(start_point)
 
         if global_step % log_interval == 0:
-            rewards, losses, performances = driver.get_summary()
+            rewards, losses, performances = training_driver.get_summary()
 
-            final_performance = tf.reduce_mean(performances[driver.step_eval - quick_eval_interval:driver.step_eval, 0])
-            avg_performance = tf.reduce_mean(performances[driver.step_eval - quick_eval_interval:driver.step_eval, 1])
+            final_performance = tf.reduce_mean(performances[training_driver.step_eval - quick_eval_interval:training_driver.step_eval, 0])
+            avg_performance = tf.reduce_mean(performances[training_driver.step_eval - quick_eval_interval:training_driver.step_eval, 1])
 
-            avg_reward = tf.reduce_mean(rewards[driver.step - log_interval:driver.step])
-            avg_loss = tf.reduce_mean(losses[driver.step - log_interval:driver.step])
+            avg_reward = tf.reduce_mean(rewards[training_driver.step - log_interval:training_driver.step])
+            avg_loss = tf.reduce_mean(losses[training_driver.step - log_interval:training_driver.step])
 
             timestamp = time.gmtime((time.time_ns() - start_time) * 1e-9)
             logging.info("{}: {} train loops completed in {:.2f}s, "
@@ -179,7 +186,7 @@ def train(run_dir,
 
             avg_performance = tf.reduce_mean(performances)
 
-            returns, train_losses, train_performances = driver.get_summary()
+            returns, train_losses, train_performances = training_driver.get_summary()
             plot_returns_and_losses(
                 returns=returns.numpy()[latest_eval_step:],
                 train_losses=train_losses.numpy()[latest_eval_step:],
@@ -202,7 +209,7 @@ def train(run_dir,
                 perf_str += "{}={:.2f}, ".format(label, performance)
             logging.info("{}: performances by function: {}".format(global_step.numpy(), perf_str))
             log_timestamp = time.time_ns()
-            latest_eval_step = driver.step.numpy()
-            latest_quick_eval_step = driver.step_eval.numpy()
+            latest_eval_step = training_driver.step.numpy()
+            latest_quick_eval_step = training_driver.step_eval.numpy()
 
     return avg_performance, ((time.time_ns() - start_time) * 1e-9)

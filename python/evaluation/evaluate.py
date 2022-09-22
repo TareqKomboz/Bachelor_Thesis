@@ -27,10 +27,10 @@ def evaluate(agent_name, plot_dir):
     env = eval_driver.envs[0]
 
     agent = create_agent(
-        agent_name,
-        env.observation_spec(),
-        env.action_spec(),
-        env.time_step_spec(),
+        name=agent_name,
+        obs_spec=env.observation_spec(),
+        act_spec=env.action_spec(),
+        ts_spec=env.time_step_spec(),
         step_counter=global_step
     )
 

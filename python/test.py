@@ -13,3 +13,6 @@ if __name__ == "__main__":
 
     for label, fct in FCT.items():
         print(fct)
+
+
+
