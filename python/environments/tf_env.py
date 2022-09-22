@@ -13,7 +13,7 @@ LAST = ts.StepType.LAST
 
 
 class TfEnv(TFEnvironment):
-    @gin.configurable("env_constructor")
+    @gin.configurable("environment_constructor")
     def __init__(
             self,
             name,
@@ -25,23 +25,26 @@ class TfEnv(TFEnvironment):
             episode_length,
             number_observations,
             input_dimension,
-            number_optimization_parameters):
+            number_optimization_parameters,
+            randomize_start):
 
         self.name = name
         self.objective_function = objective_function
         self.evaluate_objective_function = self._evaluate_objective_function
         self._initial_state = starting_position
+        self._batch_size = batch_size
         self.episode_length = tf.constant(episode_length, dtype=tf.int64)
         self._number_observations = tf.constant(number_observations, dtype=tf.int64)
-        self._batch_size = batch_size
         self.input_dimension = tf.constant(input_dimension, dtype=tf.int64)
         self.number_optimization_parameters = number_optimization_parameters
+        self.randomize_start = randomize_start
         self.number_free_parameters = input_dimension - number_optimization_parameters
-        self.free_values = self._initial_state[:, :self.number_free_parameters]
 
         self._dtype = tf.float32
         self._steps = common.create_variable('step', 0)
         self._resets = common.create_variable('resets', 0)
+
+        self.free_values = self._initial_state[:, :self.number_free_parameters]
 
         self.observation_shape = self.input_dimension + 1
         observation_spec = specs.BoundedTensorSpec(
@@ -122,6 +125,8 @@ class TfEnv(TFEnvironment):
     def _reset(self):
         self._steps.assign(0)
         self._resets.assign_add(1)
+        # todo: if self.randomize_start:
+        #    self.set_starting_positions_and_free_values()
         self._state.assign(self._initial_state)
         self._states.assign(tf.zeros_like(self._states))
         self._states[:, 0].assign(self._state)
@@ -167,8 +172,15 @@ class TfEnv(TFEnvironment):
     #     reward = tf.reshape(reward, (self.batch_size,))
     #     return reward
 
-    def set_starting_positions_and_free_values(self, starting_positions):
-        self._initial_state = starting_positions
+    def set_starting_positions_and_free_values(self):
+        start_point = tf.random.uniform(
+            shape=(self.batch_size, self.input_dimension),
+            minval=tuple((-1 * ones((self.input_dimension,), dtype=int)).tolist()),
+            maxval=tuple((ones((self.input_dimension,), dtype=int)).tolist()),
+            dtype=tf.float32
+        )
+
+        self._initial_state = start_point
         self.free_values = self._initial_state[:, :self.number_free_parameters]
 
     def get_states(self):

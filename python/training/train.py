@@ -27,14 +27,13 @@ def train(run_dir,
           # environment parameters
           batch_size,
           input_dimension,
-          randomize_start,
           replay_buffer_capacity,
 
           # training parameters
-          number_iterations,
+          number_training_iterations,
           log_interval,
-          eval_interval,
-          quick_eval_interval,
+          evaluation_interval,
+          quick_evaluation_interval,
           checkpoint_interval):
     start_time = time.time_ns()
     logging.info("Starting training setup")
@@ -51,17 +50,14 @@ def train(run_dir,
     global_step = tf.compat.v1.train.get_or_create_global_step()
 
     # create train environment
-    if randomize_start:
-        start_point = tf.random.uniform(
-            shape=(batch_size, input_dimension),
-            minval=tuple((-1 * ones((input_dimension,), dtype=int)).tolist()),
-            maxval=tuple((ones((input_dimension,), dtype=int)).tolist()),
-            dtype=tf.float32
-        )
-    else:
-        start_point = tf.constant(0.8, shape=(batch_size, input_dimension), dtype=tf.float32)
+    start_point = tf.random.uniform(
+        shape=(batch_size, input_dimension),
+        minval=tuple((-1 * ones((input_dimension,), dtype=int)).tolist()),
+        maxval=tuple((ones((input_dimension,), dtype=int)).tolist()),
+        dtype=tf.float32
+    )
 
-    train_env = create_environment(
+    train_environment = create_environment(
         function_name=function_name,
         objective_function=FUNCTIONS[function_name][0],
         start_point=start_point,
@@ -69,19 +65,19 @@ def train(run_dir,
     )
 
     # Create evaluation and plotting environments
-    eval_driver = EvaluationDriver(run_dir=run_dir)
+    evaluation_driver = EvaluationDriver(run_dir=run_dir)
 
     agent = create_agent(
         name=agent_name,
-        obs_spec=train_env.observation_spec(),
-        act_spec=train_env.action_spec(),
-        ts_spec=train_env.time_step_spec(),
+        obs_spec=train_environment.observation_spec(),
+        act_spec=train_environment.action_spec(),
+        ts_spec=train_environment.time_step_spec(),
         step_counter=global_step
     )
 
     replay_buffer = tf_uniform_replay_buffer.TFUniformReplayBuffer(
         agent.collect_data_spec,
-        batch_size=train_env.batch_size,
+        batch_size=train_environment.batch_size,
         max_length=replay_buffer_capacity
     )
 
@@ -117,99 +113,94 @@ def train(run_dir,
     on_policy = agent_name != "sac"
     training_driver = TrainingDriver(
         agent=agent,
-        environment=train_env,
+        environment=train_environment,
         replay_buffer=replay_buffer,
         replay_observer=replay_observer,
-        number_iterations=number_iterations,
+        number_training_iterations=number_training_iterations,
         clear_buffer=on_policy
     )
 
     logging.info("Starting training loop, initial graph construction might take a bit")
     log_timestamp = time.time_ns()
-    latest_eval_step = 0
-    latest_quick_eval_step = 0
-    for i in range(number_iterations):
+    latest_evaluation_step = 0
+    latest_quick_evaluation_step = 0
+    for i in range(number_training_iterations):
 
         timestamp = time.strftime('%H:%M:%S', time.gmtime((time.time_ns() - start_time) * 1e-9))
-        print("{}: {} ({}) train loops completed, {}"
-              .format(global_step.numpy(), (global_step.numpy() % log_interval), log_interval, timestamp), end="")
+        print("{}: {} ({}) train loops completed, {}".format(
+            global_step.numpy(),
+            (global_step.numpy() % log_interval),
+            log_interval,
+            timestamp
+        ), end="")
 
         training_driver.train_step()
-        if global_step % quick_eval_interval == 0:
-            training_driver.quick_eval()
+        if global_step % quick_evaluation_interval == 0:
+            training_driver.quick_evaluation()
 
         print("", end="\r")
 
-        if randomize_start:
-            start_point = tf.random.uniform(
-                shape=(batch_size, input_dimension),
-                minval=tuple((-1 * ones((input_dimension,), dtype=int)).tolist()),
-                maxval=tuple((ones((input_dimension,), dtype=int)).tolist()),
-                dtype=tf.float32
-            )
-            train_env.set_starting_positions_and_free_values(start_point)
-
         if global_step % log_interval == 0:
-            rewards, losses, performances = training_driver.get_summary()
+            train_rewards, train_losses, evaluation_performances = training_driver.get_summary()
 
-            final_performance = tf.reduce_mean(performances[training_driver.step_eval - quick_eval_interval:training_driver.step_eval, 0])
-            avg_performance = tf.reduce_mean(performances[training_driver.step_eval - quick_eval_interval:training_driver.step_eval, 1])
+            average_average_final_reward_over_last_quick_evaluation_steps = \
+                tf.reduce_mean(evaluation_performances[training_driver.step_evaluation - quick_evaluation_interval:training_driver.step_evaluation, 0])
+            average_average_evaluation_reward_over_last_quick_evaluation_steps = \
+                tf.reduce_mean(evaluation_performances[training_driver.step_evaluation - quick_evaluation_interval:training_driver.step_evaluation, 1])
 
-            avg_reward = tf.reduce_mean(rewards[training_driver.step - log_interval:training_driver.step])
-            avg_loss = tf.reduce_mean(losses[training_driver.step - log_interval:training_driver.step])
+            average_train_reward_over_last_log_interval_steps = tf.reduce_mean(train_rewards[training_driver.step - log_interval:training_driver.step])
+            average_train_loss_over_last_log_interval_steps = tf.reduce_mean(train_losses[training_driver.step - log_interval:training_driver.step])
 
             timestamp = time.gmtime((time.time_ns() - start_time) * 1e-9)
-            logging.info("{}: {} train loops completed in {:.2f}s, "
-                         "train reward={:.2f}, "
-                         "loss={:.2f}, "
-                         "final perf={:.2f}, avg perf={:.2f}, "
-                         "{}"
-                         .format(global_step.numpy(),
-                                 log_interval,
-                                 (time.time_ns() - log_timestamp) * 1e-9,
-                                 avg_reward,
-                                 avg_loss,
-                                 final_performance,
-                                 avg_performance,
-                                 time.strftime('%H:%M:%S', timestamp)))
+            logging.info("{}: {} train loops completed in {:.2f}s, train reward={:.2f}, loss={:.2f}, final reward={:.2f}, eval reward={:.2f}, {}".format(
+                global_step.numpy(),
+                log_interval,
+                (time.time_ns() - log_timestamp) * 1e-9,
+                average_train_reward_over_last_log_interval_steps,
+                average_train_loss_over_last_log_interval_steps,
+                average_average_final_reward_over_last_quick_evaluation_steps,
+                average_average_evaluation_reward_over_last_quick_evaluation_steps,
+                time.strftime('%H:%M:%S', timestamp))
+            )
             log_timestamp = time.time_ns()
 
-        is_last_iteration = i == (number_iterations - 1)
+        is_last_iteration = i == (number_training_iterations - 1)
 
         if global_step % checkpoint_interval == 0 or is_last_iteration:
             train_checkpointer.save(global_step=global_step)
             policy_checkpointer.save(global_step=global_step)
             rb_checkpointer.save(global_step=global_step)
 
-        if global_step % eval_interval == 0 or is_last_iteration:
-            performances = eval_driver.run(agent.policy, global_step.numpy())
+        if global_step % evaluation_interval == 0 or is_last_iteration:
+            performances = evaluation_driver.run(agent.policy, global_step.numpy())
 
-            avg_performance = tf.reduce_mean(performances)
+            average_performance = tf.reduce_mean(performances)
 
-            returns, train_losses, train_performances = training_driver.get_summary()
+            train_rewards, train_losses, evaluation_performances = training_driver.get_summary()
             plot_returns_and_losses(
-                returns=returns.numpy()[latest_eval_step:],
-                train_losses=train_losses.numpy()[latest_eval_step:],
-                performances=train_performances.numpy()[latest_quick_eval_step:],
+                returns=train_rewards.numpy()[latest_evaluation_step:],
+                train_losses=train_losses.numpy()[latest_evaluation_step:],
+                performances=evaluation_performances.numpy()[latest_quick_evaluation_step:],
                 plot_dir=plot_dir,
                 agent_name=agent_name,
                 function_name=function_name,
-                quick_eval_interval=quick_eval_interval
+                quick_evaluation_interval=quick_evaluation_interval
             )
 
             timestamp = time.gmtime((time.time_ns() - start_time) * 1e-9)
-            logging.info("{}: Evaluation completed in {:.2f}s, average performance = {:.2f}, {}"
-                         .format(global_step.numpy(),
-                                 (time.time_ns() - log_timestamp) * 1e-9,
-                                 avg_performance,
-                                 time.strftime('%H:%M:%S', timestamp)))
+            logging.info("{}: Evaluation completed in {:.2f}s, average performance = {:.2f}, {}".format(
+                global_step.numpy(),
+                (time.time_ns() - log_timestamp) * 1e-9,
+                average_performance,
+                time.strftime('%H:%M:%S', timestamp))
+            )
 
             perf_str = ""
             for label, performance in zip(FUNCTIONS.keys(), performances):
                 perf_str += "{}={:.2f}, ".format(label, performance)
             logging.info("{}: performances by function: {}".format(global_step.numpy(), perf_str))
             log_timestamp = time.time_ns()
-            latest_eval_step = training_driver.step.numpy()
-            latest_quick_eval_step = training_driver.step_eval.numpy()
+            latest_evaluation_step = training_driver.step.numpy()
+            latest_quick_evaluation_step = training_driver.step_evaluation.numpy()
 
-    return avg_performance, ((time.time_ns() - start_time) * 1e-9)
+    return average_performance, ((time.time_ns() - start_time) * 1e-9)

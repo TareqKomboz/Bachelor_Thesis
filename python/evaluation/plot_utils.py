@@ -6,7 +6,6 @@ import matplotlib.colors as mcolors
 from matplotlib import pyplot as plt
 import tensorflow as tf
 
-from evaluation.evaluation_utils import split_function_values_and_states
 
 CMAP = 'viridis'
 ALPHA = 0.2
@@ -47,7 +46,7 @@ def plot_trajectory(meshgrid, rewards, states, image, plot_dir, name, domain, N_
     plt.scatter(x[-1], y[-1], color='tab:red', alpha=1.0, marker='s')
     plt.xticks([], labels=[])
     plt.yticks([], labels=[])
-    avg_reward = tf.reduce_mean(rewards)
+    average_reward = tf.reduce_mean(rewards)
     final_reward = tf.reduce_mean(rewards[:, -1])
     max_reward = tf.reduce_mean(tf.reduce_max(rewards, axis=1))
     if plot_all:
@@ -55,15 +54,15 @@ def plot_trajectory(meshgrid, rewards, states, image, plot_dir, name, domain, N_
             x, y = states[i, :, 0], states[i, :, 1]
             plt.plot(x, y, color=colors[i], alpha=ALPHA)
 
-        plt.title("final: {:.2f}, avg: {:.2f}, max: {:.2f}".format(final_reward, avg_reward, max_reward))
+        plt.title("final: {:.2f}, avg: {:.2f}, max: {:.2f}".format(final_reward, average_reward, max_reward))
 
     else:
-        avg_reward_example = tf.reduce_mean(rewards[0])
+        average_reward_example = tf.reduce_mean(rewards[0])
         final_reward_example = rewards[0, -1]
         max_reward_example = tf.reduce_max(rewards[0])
         plt.title("final: {:.2f} ({:.2f}), avg: {:.2f} ({:.2f}), max: {:.2f} ({:.2f})"
                   .format(final_reward_example, final_reward,
-                          avg_reward_example, avg_reward,
+                          average_reward_example, average_reward,
                           max_reward_example, max_reward))
 
     plt.savefig(os.path.join(plot_dir, "{}.png".format(name)), transparent=True)
@@ -108,7 +107,6 @@ def plot(input_dimension,
          plot_dir,
          n_start_pos,
          function_values,
-         states,
          name,
          train_episode_length,
          log_summary=False
@@ -123,17 +121,17 @@ def plot(input_dimension,
 
     control_rewards = function_values[:N_start_pos]
 
-    avg_control_reward = tf.reduce_mean(control_rewards)
-    rewards = [avg_control_reward]
+    average_control_reward = tf.reduce_mean(control_rewards)
+    rewards = [average_control_reward]
 
-    avg_control_final = tf.reduce_mean(control_rewards[:, -1])
-    finals = [avg_control_final]
+    average_control_final = tf.reduce_mean(control_rewards[:, -1])
+    finals = [average_control_final]
 
-    avg_control_train_final = tf.reduce_mean(control_rewards[:, train_episode_length - 1])
-    train_finals = [avg_control_train_final]
+    average_control_train_final = tf.reduce_mean(control_rewards[:, train_episode_length - 1])
+    train_finals = [average_control_train_final]
 
-    avg_control_max = tf.reduce_mean(tf.reduce_max(control_rewards, axis=1))
-    maxs = [avg_control_max]
+    average_control_max = tf.reduce_mean(tf.reduce_max(control_rewards, axis=1))
+    maxs = [average_control_max]
 
     labels = ['control']
     x = np.arange(len(labels))
@@ -175,7 +173,7 @@ def plot(input_dimension,
     plt.savefig(os.path.join(plot_dir, "summary-max"), transparent=True)
     plt.clf()
 
-    overall_avg_performance = tf.reduce_mean(tf.convert_to_tensor(rewards))
+    overall_average_performance = tf.reduce_mean(tf.convert_to_tensor(rewards))
     overall_final_performance = tf.reduce_mean(tf.convert_to_tensor(finals))
     overall_train_final_performance = tf.reduce_mean(tf.convert_to_tensor(train_finals))
     overall_max_performance = tf.reduce_mean(tf.convert_to_tensor(maxs))
@@ -183,9 +181,9 @@ def plot(input_dimension,
     summary = [
         "{} evaluation results at step {} \n".format(name, step_counter),
         "overall return={:.2f}, train_final={:.2f}, final={:.2f}, max={:.2f} \n".format(
-            overall_avg_performance, overall_train_final_performance, overall_final_performance, overall_max_performance
+            overall_average_performance, overall_train_final_performance, overall_final_performance, overall_max_performance
         ), "control return={:.2f}, train_final={:.2f}, final={:.2f}, max={:.2f} \n".format(
-            avg_control_reward, avg_control_train_final, avg_control_final, avg_control_max
+            average_control_reward, average_control_train_final, average_control_final, average_control_max
         )
     ]
     if log_summary:
@@ -194,27 +192,29 @@ def plot(input_dimension,
     f = open(os.path.join(plot_dir, "summary.txt"), 'w')
     f.writelines(summary)
 
-    function_values, states = split_function_values_and_states(function_values, states)
+    means = tf.convert_to_tensor([tf.reduce_mean(function_values, axis=0)])
+    stds = tf.convert_to_tensor([tf.math.reduce_std(function_values, axis=0)])
 
-    means = tf.convert_to_tensor([tf.reduce_mean(category, axis=0) for category in function_values])
-    stds = tf.convert_to_tensor([tf.math.reduce_std(category, axis=0) for category in function_values])
+    plot_performance_over_time_with_stds(
+        range(len(means[0])),
+        means,
+        stds,
+        ["control"],
+        "convergence by category",
+        plot_dir,
+        "performance over time",
+        std_scale=0.25
+    )
 
-    plot_performance_over_time_with_stds(range(len(means[0])),
-                                         means,
-                                         stds,
-                                         ["control"],
-                                         "convergence by category",
-                                         plot_dir,
-                                         "performance over time",
-                                         std_scale=0.25)
-
-    plot_performance_over_time_with_stds(range(train_episode_length),
-                                         means[:, :train_episode_length],
-                                         stds[:, :train_episode_length],
-                                         ["control"],
-                                         "convergence by category",
-                                         plot_dir,
-                                         "performance over time {} steps".format(train_episode_length),
-                                         std_scale=0.25)
+    plot_performance_over_time_with_stds(
+        range(train_episode_length),
+        means[:, :train_episode_length],
+        stds[:, :train_episode_length],
+        ["control"],
+        "convergence by category",
+        plot_dir,
+        "performance over time {} steps".format(train_episode_length),
+        std_scale=0.25
+    )
 
     return overall_final_performance, means, stds

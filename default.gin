@@ -1,20 +1,19 @@
 # basic config
 main.agent_name                                         = "reinforce"
 main.function_name                                      = "ackley"
-main.env_type                                           = "absolute"
+main.environment_type                                   = "absolute"
 # environment config
-train.function_name                                    = "ackley"
+train.function_name                                     = "ackley"
 train.agent_name                                        = "reinforce"
 train.batch_size                                        = 540  # 512
 train.input_dimension                                   = 2  # ---------------------------------------------------------
-train.randomize_start                                   = True
 train.replay_buffer_capacity                            = 50  # ----------------------------
 
 # training loop config
-train.number_iterations                                 = 1000  # 50000
+train.number_training_iterations                        = 100  # 50000
 train.log_interval                                      = 20
-train.eval_interval                                     = 20
-train.quick_eval_interval                               = 2
+train.evaluation_interval                               = 20
+train.quick_evaluation_interval                         = 2
 train.checkpoint_interval                               = 20
 
 
@@ -33,12 +32,14 @@ create_agent.decay_steps                                = 1000
 create_agent.decay_rate                                 = 0.9
 
 # environment
-env_constructor.episode_length                          = 50  # ----------------------------
-env_constructor.number_observations                     = 5
-env_constructor.input_dimension                         = 2  # ---------------------------------------------------------
-env_constructor.number_optimization_parameters          = 1  # ---------------------------------------------------------
+environment_constructor.episode_length                  = 50  # ----------------------------
+environment_constructor.number_observations             = 5
+environment_constructor.input_dimension                 = 2  # ---------------------------------------------------------
+environment_constructor.number_optimization_parameters  = 1  # ---------------------------------------------------------
+environment_constructor.randomize_start                 = True
 
 # evaluation driver
+evaluation_driver_init.function_name                    = "ackley"
 evaluation_driver_init.train_episode_length             = 50  # ----------------------------
 evaluation_driver_init.input_dimension                  = 2  # ---------------------------------------------------------
 evaluation_driver_init.n_start_pos                      = 5 # 180 # 5

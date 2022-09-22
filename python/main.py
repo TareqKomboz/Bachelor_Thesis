@@ -16,7 +16,7 @@ from training.train import train
 
 
 @gin.configurable
-def main(arguments, agent_name, function_name, env_type):
+def main(arguments, agent_name, function_name, environment_type):
     run_id = get_run_id(arguments.configfile)
 
     run_dir = os.path.join(RUNS_DIR, agent_name, function_name, run_id)

@@ -22,10 +22,10 @@ def rename_run_id(configfile, run_id):
     new_lines = [change_line_if_run_id(line, run_id) for line in lines]
     with open(configfile, 'w') as writer:
         writer.writelines(new_lines)
-    eval_folder = os.path.split(configfile)[0]
-    new_eval_folder = os.path.join(os.path.split(eval_folder)[0], run_id)
-    os.rename(eval_folder, new_eval_folder)
-    print("renamed {} to {}".format(eval_folder, new_eval_folder))
+    evaluation_folder = os.path.split(configfile)[0]
+    new_evaluation_folder = os.path.join(os.path.split(evaluation_folder)[0], run_id)
+    os.rename(evaluation_folder, new_evaluation_folder)
+    print("renamed {} to {}".format(evaluation_folder, new_evaluation_folder))
 
 
 def main():

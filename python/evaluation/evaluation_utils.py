@@ -11,7 +11,7 @@ def plot_returns_and_losses(returns,
                             plot_dir,
                             agent_name,
                             function_name,
-                            quick_eval_interval):
+                            quick_evaluation_interval):
     returns_file = os.path.join(plot_dir, "train_returns.csv")
     if os.path.isfile(returns_file):
         old_returns = np.fromfile(returns_file, dtype=np.float32)
@@ -48,7 +48,7 @@ def plot_returns_and_losses(returns,
     plt.title("{} - {} train losses".format(agent_name, function_name))
     plt.savefig(os.path.join(plot_dir, "train_losses"), transparent=True)
     plt.clf()
-    xx = np.arange(0, (len(performances) * quick_eval_interval), quick_eval_interval)
+    xx = np.arange(0, (len(performances) * quick_evaluation_interval), quick_evaluation_interval)
     plt.plot(xx, performances[:, 0])
     plt.plot(xx, performances[:, 1])
     plt.legend(["final", "average"])
@@ -69,7 +69,7 @@ def plot_returns_and_losses(returns,
     plt.clf()
 
 
-def build_eval_params(n_start_pos, input_dimension):
+def build_evaluation_params(n_start_pos, input_dimension):
     N_start_pos = (n_start_pos + 1) ** input_dimension
 
     my_list = []
@@ -81,12 +81,3 @@ def build_eval_params(n_start_pos, input_dimension):
     starting_positions = start_mesh
 
     return starting_positions
-
-
-def split_function_values_and_states(function_values, states):
-    f = function_values
-    split_function_values = [f]
-    f = states
-    split_states = [f]
-
-    return split_function_values, split_states

@@ -1,5 +1,5 @@
 class Params:
-    def __init__(self, rnn, n_obs, gamma, n_depth, vnet, net_size, n_episode, schedule, env_type):
+    def __init__(self, rnn, n_obs, gamma, n_depth, vnet, net_size, n_episode, schedule, environment_type):
         self.rnn = rnn
         self.n_obs = n_obs
         self.gamma = gamma
@@ -8,7 +8,7 @@ class Params:
         self.net_size = net_size
         self.n_episode = n_episode
         self.schedule = schedule
-        self.env_type = env_type
+        self.environment_type = environment_type
 
 
 def parse_value(line):
@@ -21,7 +21,7 @@ def read_parameters(configfile):
     for line in lines:
         if line.startswith("main.agent_name"):
             rnn = parse_value(line).startswith("rnn")
-        elif line.startswith("env_constructor.number_observations"):
+        elif line.startswith("environment_constructor.number_observations"):
             n_obs = parse_value(line)
         elif line.startswith("create_agent.gamma"):
             gamma = parse_value(line)
@@ -31,7 +31,7 @@ def read_parameters(configfile):
             vnet_layers = parse_value(line)
         elif line.startswith("create_agent.fc_layer_params"):
             pnet_layers = parse_value(line)
-        elif line.startswith("env_constructor.episode_length"):
+        elif line.startswith("environment_constructor.episode_length"):
             n_episode = parse_value(line)
         elif line.startswith("create_agent.use_learning_schedule"):
             schedule = parse_value(line)
@@ -39,8 +39,8 @@ def read_parameters(configfile):
             decay_steps = parse_value(line)
         elif line.startswith("create_agent.decay_rate"):
             decay_rate = parse_value(line)
-        elif line.startswith("main.env_type"):
-            env_type = parse_value(line)
+        elif line.startswith("main.environment_type"):
+            environment_type = parse_value(line)
 
     if pnet_layers == (100, 50):
         net_size = "normal"
@@ -82,7 +82,7 @@ def read_parameters(configfile):
             net_size=net_size,
             n_episode=n_episode,
             schedule=schedule,
-            env_type=env_type
+            environment_type=environment_type
         )
     except UnboundLocalError as e:
         print("this config file is incomplete: " + configfile)
@@ -103,7 +103,7 @@ def build_run_id(params):
         run_id += "_{}_episodes".format(params.n_episode)
     if not params.schedule == "normal":
         run_id += "_{}_schedule".format(params.schedule)
-    run_id += "_{}_env".format(params.env_type[:3])
+    run_id += "_{}_env".format(params.environment_type[:3])
     return run_id
 
 

@@ -22,15 +22,15 @@ def evaluate(agent_name, plot_dir):
 
     global_step = tf.compat.v1.train.get_or_create_global_step()
 
-    eval_driver = EvaluationDriver(run_dir=plot_dir)
+    evaluation_driver = EvaluationDriver(run_dir=plot_dir)
 
-    env = eval_driver.envs[0]
+    environment = evaluation_driver.envs[0]
 
     agent = create_agent(
         name=agent_name,
-        obs_spec=env.observation_spec(),
-        act_spec=env.action_spec(),
-        ts_spec=env.time_step_spec(),
+        obs_spec=environment.observation_spec(),
+        act_spec=environment.action_spec(),
+        ts_spec=environment.time_step_spec(),
         step_counter=global_step
     )
 
@@ -45,12 +45,12 @@ def evaluate(agent_name, plot_dir):
 
     logging.info("Checkpoint at step {} loaded, commencing evaluation, this might take a while..."
                  .format(global_step.numpy()))
-    performances = eval_driver.run(agent.policy, global_step.numpy())
-    avg_performance = tf.reduce_sum(performances) / len(performances)
+    performances = evaluation_driver.run(agent.policy, global_step.numpy())
+    average_performance = tf.reduce_sum(performances) / len(performances)
 
     perf_str = ""
     for label, performance in zip(FUNCTIONS.keys(), performances):
         perf_str += "{}={:.2f}, ".format(label, performance)
     logging.info("{}: performances by function: {}".format(global_step.numpy(), perf_str))
 
-    return avg_performance, (time.time_ns() - start_time) * 1e-9
+    return average_performance, (time.time_ns() - start_time) * 1e-9

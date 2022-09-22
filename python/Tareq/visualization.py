@@ -61,11 +61,11 @@ def visualize_environment(objective_function, objective_function_name, parameter
 def visualize_metric(objective_function_name,
                      metric,
                      metric_as_string,
-                     number_iterations,
+                     number_training_iterations,
                      evaluation_interval,
                      input_dimension,
                      font):
-    steps = range(0, number_iterations + 1, evaluation_interval)
+    steps = range(0, number_training_iterations + 1, evaluation_interval)
     plt.plot(steps, metric)
     plt.title(
         "Experimental Results {0}d {1}".format(input_dimension + 1, objective_function_name),
