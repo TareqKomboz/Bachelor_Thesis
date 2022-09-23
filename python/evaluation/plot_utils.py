@@ -13,8 +13,6 @@ COLORS_low_contrast = (
     'tab:orange', 'tab:red', 'darkolivegreen', 'indigo', 'darkorange', 'purple', 'rosybrown', 'midnightblue', 'orchid',
     'orangered', 'tomato', 'maroon', 'gold', 'darkslategrey', 'lime', 'pink')
 
-COLORS_high_contrast = ()
-
 
 def plot_performance_by_function(labels, performances, plot_dir, name):
     width = 0.2
@@ -102,15 +100,7 @@ def plot_performance_over_time_with_stds(x, means, stds, labels, title, plot_dir
     plt.clf()
 
 
-def plot(input_dimension,
-         step_counter,
-         plot_dir,
-         n_start_pos,
-         function_values,
-         name,
-         train_episode_length,
-         log_summary=False
-         ):
+def plot(input_dimension, step_counter, plot_dir, n_start_pos, function_values, name, episode_length, log_summary=False):
     plot_dir = os.path.join(plot_dir, name)
 
     N_start_pos = (n_start_pos + 1) ** input_dimension
@@ -127,7 +117,7 @@ def plot(input_dimension,
     average_control_final = tf.reduce_mean(control_rewards[:, -1])
     finals = [average_control_final]
 
-    average_control_train_final = tf.reduce_mean(control_rewards[:, train_episode_length - 1])
+    average_control_train_final = tf.reduce_mean(control_rewards[:, episode_length - 1])
     train_finals = [average_control_train_final]
 
     average_control_max = tf.reduce_mean(tf.reduce_max(control_rewards, axis=1))
@@ -160,7 +150,7 @@ def plot(input_dimension,
     plt.ylim(0, 1)
     plt.yticks(np.arange(0, 1.1, 0.1))
     plt.grid(axis='y')
-    plt.title("Average reward at {} steps".format(train_episode_length))
+    plt.title("Average reward at {} steps".format(episode_length))
     plt.savefig(os.path.join(plot_dir, "summary-train-final"), transparent=True)
     plt.clf()
 
@@ -181,9 +171,16 @@ def plot(input_dimension,
     summary = [
         "{} evaluation results at step {} \n".format(name, step_counter),
         "overall return={:.2f}, train_final={:.2f}, final={:.2f}, max={:.2f} \n".format(
-            overall_average_performance, overall_train_final_performance, overall_final_performance, overall_max_performance
-        ), "control return={:.2f}, train_final={:.2f}, final={:.2f}, max={:.2f} \n".format(
-            average_control_reward, average_control_train_final, average_control_final, average_control_max
+            overall_average_performance,
+            overall_train_final_performance,
+            overall_final_performance,
+            overall_max_performance
+        ),
+        "control return={:.2f}, train_final={:.2f}, final={:.2f}, max={:.2f} \n".format(
+            average_control_reward,
+            average_control_train_final,
+            average_control_final,
+            average_control_max
         )
     ]
     if log_summary:
@@ -196,24 +193,24 @@ def plot(input_dimension,
     stds = tf.convert_to_tensor([tf.math.reduce_std(function_values, axis=0)])
 
     plot_performance_over_time_with_stds(
-        range(len(means[0])),
-        means,
-        stds,
-        ["control"],
-        "convergence by category",
-        plot_dir,
-        "performance over time",
+        x=range(len(means[0])),
+        means=means,
+        stds=stds,
+        labels=["control"],
+        title="convergence by category",
+        plot_dir=plot_dir,
+        filename="performance over time",
         std_scale=0.25
     )
 
     plot_performance_over_time_with_stds(
-        range(train_episode_length),
-        means[:, :train_episode_length],
-        stds[:, :train_episode_length],
-        ["control"],
-        "convergence by category",
-        plot_dir,
-        "performance over time {} steps".format(train_episode_length),
+        x=range(episode_length),
+        means=means[:, :episode_length],
+        stds=stds[:, :episode_length],
+        labels=["control"],
+        title="convergence by category",
+        plot_dir=plot_dir,
+        filename="performance over time {} steps".format(episode_length),
         std_scale=0.25
     )
 

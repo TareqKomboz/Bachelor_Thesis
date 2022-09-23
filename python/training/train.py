@@ -19,22 +19,24 @@ from numpy import ones
 
 
 @gin.configurable
-def train(run_dir,
+def train(
+        run_dir,
+        environment_type,
+        agent_name,
+        input_dimension,
+        function_name,
+        number_free_parameters,
+        episode_length,
 
-          # gin parameter
-          function_name,
-          agent_name,
-          # environment parameters
-          batch_size,
-          input_dimension,
-          replay_buffer_capacity,
+        # environment parameters
+        batch_size,
 
-          # training parameters
-          number_training_iterations,
-          log_interval,
-          evaluation_interval,
-          quick_evaluation_interval,
-          checkpoint_interval):
+        # training parameters
+        number_training_iterations,
+        log_interval,
+        evaluation_interval,
+        quick_evaluation_interval,
+        checkpoint_interval):
     start_time = time.time_ns()
     logging.info("Starting training setup")
 
@@ -58,14 +60,25 @@ def train(run_dir,
     )
 
     train_environment = create_environment(
+        environment_type=environment_type,
+        input_dimension=input_dimension,
         function_name=function_name,
         objective_function=FUNCTIONS[function_name][0],
+        number_free_parameters=number_free_parameters,
         start_point=start_point,
-        batch_size=batch_size
+        batch_size=batch_size,
+        episode_length=episode_length
     )
 
     # Create evaluation and plotting environments
-    evaluation_driver = EvaluationDriver(run_dir=run_dir)
+    evaluation_driver = EvaluationDriver(
+        run_dir=run_dir,
+        environment_type=environment_type,
+        input_dimension=input_dimension,
+        function_name=function_name,
+        number_free_parameters=number_free_parameters,
+        episode_length=episode_length
+    )
 
     agent = create_agent(
         name=agent_name,
@@ -78,7 +91,7 @@ def train(run_dir,
     replay_buffer = tf_uniform_replay_buffer.TFUniformReplayBuffer(
         agent.collect_data_spec,
         batch_size=train_environment.batch_size,
-        max_length=replay_buffer_capacity
+        max_length=episode_length
     )
 
     replay_observer = [replay_buffer.add_batch]
@@ -178,9 +191,9 @@ def train(run_dir,
 
             train_rewards, train_losses, evaluation_performances = training_driver.get_summary()
             plot_returns_and_losses(
-                returns=train_rewards.numpy()[latest_evaluation_step:],
+                train_rewards=train_rewards.numpy()[latest_evaluation_step:],
                 train_losses=train_losses.numpy()[latest_evaluation_step:],
-                performances=evaluation_performances.numpy()[latest_quick_evaluation_step:],
+                evaluation_performances=evaluation_performances.numpy()[latest_quick_evaluation_step:],
                 plot_dir=plot_dir,
                 agent_name=agent_name,
                 function_name=function_name,

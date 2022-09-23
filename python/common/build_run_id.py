@@ -19,10 +19,16 @@ def read_parameters(configfile):
     with open(configfile) as reader:
         lines = reader.readlines()
     for line in lines:
-        if line.startswith("main.agent_name"):
+        if line.startswith("main.environment_type"):
+            environment_type = parse_value(line)
+        elif line.startswith("main.agent_name"):
             rnn = parse_value(line).startswith("rnn")
+        elif line.startswith("main.episode_length"):
+            n_episode = parse_value(line)
+
         elif line.startswith("environment_constructor.number_observations"):
             n_obs = parse_value(line)
+
         elif line.startswith("create_agent.gamma"):
             gamma = parse_value(line)
         elif line.startswith("create_agent.lstm_size"):
@@ -31,16 +37,12 @@ def read_parameters(configfile):
             vnet_layers = parse_value(line)
         elif line.startswith("create_agent.fc_layer_params"):
             pnet_layers = parse_value(line)
-        elif line.startswith("environment_constructor.episode_length"):
-            n_episode = parse_value(line)
         elif line.startswith("create_agent.use_learning_schedule"):
             schedule = parse_value(line)
         elif line.startswith("create_agent.decay_steps"):
             decay_steps = parse_value(line)
         elif line.startswith("create_agent.decay_rate"):
             decay_rate = parse_value(line)
-        elif line.startswith("main.environment_type"):
-            environment_type = parse_value(line)
 
     if pnet_layers == (100, 50):
         net_size = "normal"

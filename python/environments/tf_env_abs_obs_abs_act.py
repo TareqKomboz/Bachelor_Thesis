@@ -7,15 +7,21 @@ from environments.tf_env import TfEnv
 class TfEnvAbsObsAbsAct(TfEnv):
     def __init__(
             self,
+            input_dimension,
             name,
             objective_function,
+            number_free_parameters,
             starting_position,
-            batch_size):
+            batch_size,
+            episode_length):
         super(TfEnvAbsObsAbsAct, self).__init__(
+            input_dimension=input_dimension,
             name=name,
             objective_function=objective_function,
+            number_free_parameters=number_free_parameters,
             starting_position=starting_position,
-            batch_size=batch_size
+            batch_size=batch_size,
+            episode_length=episode_length
         )
 
     def _reset_observations(self):

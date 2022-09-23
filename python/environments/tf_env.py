@@ -16,16 +16,16 @@ class TfEnv(TFEnvironment):
     @gin.configurable("environment_constructor")
     def __init__(
             self,
+            input_dimension,
             name,
             objective_function,
+            number_free_parameters,
             starting_position,
             batch_size,
+            episode_length,
 
             # gin
-            episode_length,
             number_observations,
-            input_dimension,
-            number_optimization_parameters,
             randomize_start):
 
         self.name = name
@@ -36,9 +36,9 @@ class TfEnv(TFEnvironment):
         self.episode_length = tf.constant(episode_length, dtype=tf.int64)
         self._number_observations = tf.constant(number_observations, dtype=tf.int64)
         self.input_dimension = tf.constant(input_dimension, dtype=tf.int64)
-        self.number_optimization_parameters = number_optimization_parameters
+        self.number_free_parameters = number_free_parameters
         self.randomize_start = randomize_start
-        self.number_free_parameters = input_dimension - number_optimization_parameters
+        self.number_optimization_parameters = self.input_dimension - self.number_free_parameters
 
         self._dtype = tf.float32
         self._steps = common.create_variable('step', 0)

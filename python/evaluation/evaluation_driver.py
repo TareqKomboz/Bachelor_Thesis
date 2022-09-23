@@ -13,17 +13,20 @@ from evaluation.plot_utils import plot, plot_performance_over_time_with_stds, pl
 
 @gin.configurable("evaluation_driver_init")
 class EvaluationDriver:
-    def __init__(self, run_dir,
+    def __init__(
+            self,
+            run_dir,
+            environment_type,
+            input_dimension,
+            function_name,
+            number_free_parameters,
+            episode_length,
 
-                 # optional gin parameters
-                 function_name,
-                 train_episode_length,
-                 input_dimension,
-                 n_start_pos,
-                 plot_all=True):
+            # optional gin parameters
+            n_start_pos,
+            plot_all=True):
 
         self.run_dir = run_dir
-        self.train_episode_length = train_episode_length
         self.n_start_pos = n_start_pos
 
         self.starting_positions = build_evaluation_params(n_start_pos=self.n_start_pos, input_dimension=input_dimension)
@@ -31,10 +34,14 @@ class EvaluationDriver:
         self.batch_size = len(self.starting_positions)
 
         self.environment = create_environment(
+            environment_type=environment_type,
+            input_dimension=input_dimension,
             function_name=function_name,
             objective_function=FUNCTIONS[function_name][0],
+            number_free_parameters=number_free_parameters,
             start_point=self.starting_positions,
-            batch_size=self.batch_size
+            batch_size=self.batch_size,
+            episode_length=episode_length
         )
 
     def run(self, policy, step_counter, log_summary=False):
@@ -62,7 +69,7 @@ class EvaluationDriver:
             n_start_pos=self.n_start_pos,
             function_values=tf.transpose(FUNCTIONS["ackley"][0](tf.transpose(self.environment.get_states()))),
             name=self.environment.name,
-            train_episode_length=self.train_episode_length,
+            episode_length=self.environment.get_episode_length(),
             log_summary=log_summary
         )
 
@@ -97,13 +104,13 @@ class EvaluationDriver:
         )
 
         plot_performance_over_time_with_stds(
-            x=range(self.train_episode_length),
-            means=np.array(mean_performance_over_time)[:, :self.train_episode_length],
-            stds=np.array(std_performance_over_time)[:, :self.train_episode_length],
+            x=range(self.environment.get_episode_length()),
+            means=np.array(mean_performance_over_time)[:, :self.environment.get_episode_length()],
+            stds=np.array(std_performance_over_time)[:, :self.environment.get_episode_length()],
             labels=FUNCTIONS.keys(),
             title="{}-{}-{}-agent".format(run_id, algorithm_name, train_function_name),
             plot_dir=plot_dir,
-            filename="performance over time {} steps".format(self.train_episode_length),
+            filename="performance over time {} steps".format(self.environment.get_episode_length()),
             std_scale=0.25
         )
 
@@ -115,9 +122,9 @@ class EvaluationDriver:
         )
         plot_performance_by_function(
             labels=FUNCTIONS.keys(),
-            performances=np.array(mean_performance_over_time)[:, self.train_episode_length - 1],
+            performances=np.array(mean_performance_over_time)[:, self.environment.get_episode_length() - 1],
             plot_dir=plot_dir,
-            name="final performance at {} steps".format(self.train_episode_length)
+            name="final performance at {} steps".format(self.environment.get_episode_length())
         )
 
         summary = ["average performances by function at step {} \n".format(step_counter)]

@@ -12,7 +12,7 @@ from objective_functions.tf_objective_functions import FUNCTIONS
 from evaluation.evaluation_driver import EvaluationDriver
 
 
-def evaluate(agent_name, plot_dir):
+def evaluate(plot_dir, environment_type, agent_name, input_dimension, function_name, number_free_parameters, episode_length):
     start_time = time.time_ns()
 
     policy_checkpoint_dir = os.path.join(plot_dir, "checkpoint", "policy")
@@ -22,7 +22,14 @@ def evaluate(agent_name, plot_dir):
 
     global_step = tf.compat.v1.train.get_or_create_global_step()
 
-    evaluation_driver = EvaluationDriver(run_dir=plot_dir)
+    evaluation_driver = EvaluationDriver(
+        run_dir=plot_dir,
+        environment_type=environment_type,
+        input_dimension=input_dimension,
+        function_name=function_name,
+        number_free_parameters=number_free_parameters,
+        episode_length=episode_length
+    )
 
     environment = evaluation_driver.environment
 
