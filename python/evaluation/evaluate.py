@@ -24,7 +24,7 @@ def evaluate(agent_name, plot_dir):
 
     evaluation_driver = EvaluationDriver(run_dir=plot_dir)
 
-    environment = evaluation_driver.envs[0]
+    environment = evaluation_driver.environment
 
     agent = create_agent(
         name=agent_name,
