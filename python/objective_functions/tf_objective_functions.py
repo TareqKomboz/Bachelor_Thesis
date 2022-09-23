@@ -39,6 +39,7 @@ def norm_ackley(x):
     return value
 
 
+@tf.function
 def ackley_gradient(x):
     a = tf.constant(20.0, dtype=dtype)  # 10
     b = tf.constant(0.2, dtype=dtype)
@@ -62,7 +63,7 @@ def ackley_gradient(x):
 
 # plot for x between 5, 10, 50 and 1000
 # f(x)=0 for 000
-# @tf.function
+@tf.function
 def griewank(x):
     x = tf.multiply(x, 600.0)
     d = x.shape[0]
@@ -80,7 +81,7 @@ def griewank(x):
     return f
 
 
-# @tf.function
+@tf.function
 def norm_griewank(x):
     my_max = griewank(x=tf.ones_like(input=x))
     value = my_max - griewank(x)
@@ -89,6 +90,7 @@ def norm_griewank(x):
     return value
 
 
+@tf.function
 def griewank_gradient(x):
     d = x.shape[0]
     gradient = []
@@ -155,6 +157,7 @@ def norm_levy(x):
     return value
 
 
+@tf.function
 def levy_gradient(x):
     d = x.shape[0]
     gradient = []
@@ -177,6 +180,7 @@ def levy_gradient(x):
     return gradient
 
 
+@tf.function
 def w(x_i):
     return 1 + ((x_i - 1) / 4)
 
@@ -200,6 +204,7 @@ def w(x_i):
 #     value /= 1.592327
 #     value = tf.clip_by_value(value, clip_value_min=-1.0, clip_value_max=1.0)
 #     return value
+
 
 
 @tf.function
@@ -227,6 +232,7 @@ def norm_rastrigin(x):
     return value
 
 
+@tf.function
 def rastrigin_gradient(x):
     d = x.shape[0]
     gradient = []
@@ -267,6 +273,7 @@ def norm_rosenbrock(x):
     return value
 
 
+@tf.function
 def rosenbrock_gradient(x):
     d = x.shape[0]
     gradient = []
@@ -297,6 +304,7 @@ def norm_sphere(x):
     return value
 
 
+@tf.function
 def sphere_gradient(x):
     d = x.shape[0]
     gradient = []
@@ -330,6 +338,7 @@ def norm_styblinski_tang(x):
     return value
 
 
+@tf.function
 def styblinski_tang_gradient(x):
     d = x.shape[0]
     gradient = []
@@ -371,6 +380,7 @@ def norm_zakharov(x):
     return value
 
 
+@tf.function
 def zakharov_gradient(x):
     d = x.shape[0]
     gradient = []
@@ -389,23 +399,15 @@ def zakharov_gradient(x):
     return gradient
 
 
-
-
 FUNCTIONS = {
-    "ackley": (norm_ackley, norm_ackley, ackley),
-    "griewank": (norm_griewank, norm_griewank, griewank),
-    # "langermann": (norm_langermann, norm_langermann, langermann),
-    "levy": (norm_levy, norm_levy, levy),
-    # "michalewicz": (norm_michalewicz, norm_michalewicz, michalewicz),
-    "rastrigin": (norm_rastrigin, norm_rastrigin, rastrigin),
-    "rosenbrock": (lognorm_rosenbrock, lognorm_rosenbrock, rosenbrock),
-    "sphere": (norm_sphere, norm_sphere, sphere),
-    "styblinski_tang": (norm_styblinski_tang, norm_styblinski_tang, styblinski_tang),
-    "zakharov": (norm_zakharov, norm_zakharov, zakharov)
+    "ackley": (norm_ackley, ackley, ackley_gradient),
+    "griewank": (norm_griewank, griewank, griewank_gradient),
+    # "langermann": (norm_langermann, langermann, langermann_gradient),
+    "levy": (norm_levy, levy, levy_gradient),
+    # "michalewicz": (norm_michalewicz, michalewicz, michalewicz_gradient),
+    "rastrigin": (norm_rastrigin, rastrigin, rastrigin_gradient),
+    "rosenbrock": (lognorm_rosenbrock, rosenbrock, rosenbrock_gradient),
+    "sphere": (norm_sphere, sphere, sphere_gradient),
+    "styblinski_tang": (norm_styblinski_tang, styblinski_tang, styblinski_tang_gradient),
+    "zakharov": (norm_zakharov, zakharov, zakharov_gradient)
 }
-
-"""
-FUNCTIONS = {
-    "rosenbrock": (lognorm_rosenbrock, lognorm_rosenbrock, rosenbrock)
-}
-"""

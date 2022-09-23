@@ -45,7 +45,7 @@ def plot_returns_and_losses(
 
     xx = np.arange(0, len(train_losses))
     plt.plot(xx, train_losses)
-    plt.ylabel("train losse")
+    plt.ylabel("train loss")
     plt.xlabel("train step")
     plt.grid()
     plt.title("{} - {} train losses".format(agent_name, function_name))
@@ -64,14 +64,14 @@ def plot_returns_and_losses(
     plt.savefig(os.path.join(plot_dir, "evaluation_performances"), transparent=True)
     plt.clf()
 
-    plt.plot(xx, evaluation_performances[:, 0])
-    plt.ylabel("final evaluation_performances")
-    plt.xlabel("train step")
-    plt.ylim(0, 1)
-    plt.grid()
-    plt.title("{} - {} final evaluation_performances".format(agent_name, function_name))
-    plt.savefig(os.path.join(plot_dir, "final_evaluation_performances"), transparent=True)
-    plt.clf()
+    # plt.plot(xx, evaluation_performances[:, 0])
+    # plt.ylabel("final evaluation_performances")
+    # plt.xlabel("train step")
+    # plt.ylim(0, 1)
+    # plt.grid()
+    # plt.title("{} - {} final evaluation_performances".format(agent_name, function_name))
+    # plt.savefig(os.path.join(plot_dir, "final_evaluation_performances"), transparent=True)
+    # plt.clf()
 
 
 def build_evaluation_params(n_start_pos, input_dimension):

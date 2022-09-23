@@ -24,7 +24,7 @@ MESHGRID = tf.convert_to_tensor(tf.meshgrid(X, Y))
 
 
 def main():
-    function_idx = 0 if NORMALIZED else 2
+    function_idx = 0 if NORMALIZED else 1
     fig_name = "norm_" if NORMALIZED else ""
 
     if SINGLE_PLOT:

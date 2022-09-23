@@ -67,7 +67,7 @@ class EvaluationDriver:
             step_counter=step_counter,
             plot_dir=plot_dir,
             n_start_pos=self.n_start_pos,
-            function_values=tf.transpose(FUNCTIONS["ackley"][0](tf.transpose(self.environment.get_states()))),
+            function_values=tf.transpose(FUNCTIONS["ackley"][0](tf.transpose(self.environment.get_states()))), # tf.transpose(self.environment.get_function_values()),
             name=self.environment.name,
             episode_length=self.environment.get_episode_length(),
             log_summary=log_summary
@@ -103,28 +103,11 @@ class EvaluationDriver:
             std_scale=0.25
         )
 
-        plot_performance_over_time_with_stds(
-            x=range(self.environment.get_episode_length()),
-            means=np.array(mean_performance_over_time)[:, :self.environment.get_episode_length()],
-            stds=np.array(std_performance_over_time)[:, :self.environment.get_episode_length()],
-            labels=FUNCTIONS.keys(),
-            title="{}-{}-{}-agent".format(run_id, algorithm_name, train_function_name),
-            plot_dir=plot_dir,
-            filename="performance over time {} steps".format(self.environment.get_episode_length()),
-            std_scale=0.25
-        )
-
         plot_performance_by_function(
             labels=FUNCTIONS.keys(),
             performances=performances,
             plot_dir=plot_dir,
             name="final performance"
-        )
-        plot_performance_by_function(
-            labels=FUNCTIONS.keys(),
-            performances=np.array(mean_performance_over_time)[:, self.environment.get_episode_length() - 1],
-            plot_dir=plot_dir,
-            name="final performance at {} steps".format(self.environment.get_episode_length())
         )
 
         summary = ["average performances by function at step {} \n".format(step_counter)]

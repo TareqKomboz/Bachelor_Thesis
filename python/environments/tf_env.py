@@ -194,3 +194,6 @@ class TfEnv(TFEnvironment):
 
     def get_name(self):
         return self.name
+
+    def get_function_values(self):
+        return self._function_values

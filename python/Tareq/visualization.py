@@ -105,11 +105,10 @@ if __name__ == "__main__":
     # )
 
     for objective_function_name, fct_tuple in FUNCTIONS.items():
-        objective_function = FUNCTIONS.get("griewank")[2]
         objective_function = fct_tuple[2]
         visualize_environment(
             objective_function=objective_function,
-            objective_function_name=objective_function_name, # , "griewank"
+            objective_function_name=objective_function_name,
             parameter_bounds=(-1.0, 1.0),
             input_dimension=2,
             font={

@@ -200,18 +200,18 @@ def train(
                 quick_evaluation_interval=quick_evaluation_interval
             )
 
-            timestamp = time.gmtime((time.time_ns() - start_time) * 1e-9)
-            logging.info("{}: Evaluation completed in {:.2f}s, average performance = {:.2f}, {}".format(
-                global_step.numpy(),
-                (time.time_ns() - log_timestamp) * 1e-9,
-                average_performance,
-                time.strftime('%H:%M:%S', timestamp))
-            )
-
-            perf_str = ""
-            for label, performance in zip(FUNCTIONS.keys(), performances):
-                perf_str += "{}={:.2f}, ".format(label, performance)
-            logging.info("{}: performances by function: {}".format(global_step.numpy(), perf_str))
+            # timestamp = time.gmtime((time.time_ns() - start_time) * 1e-9)
+            # logging.info("{}: Evaluation completed in {:.2f}s, average performance = {:.2f}, {}".format(
+            #     global_step.numpy(),
+            #     (time.time_ns() - log_timestamp) * 1e-9,
+            #     average_performance,
+            #     time.strftime('%H:%M:%S', timestamp))
+            # )
+            #
+            # perf_str = ""
+            # for label, performance in zip(FUNCTIONS.keys(), performances):
+            #     perf_str += "{}={:.2f}, ".format(label, performance)
+            # logging.info("{}: performances by function: {}".format(global_step.numpy(), perf_str))
             log_timestamp = time.time_ns()
             latest_evaluation_step = training_driver.step.numpy()
             latest_quick_evaluation_step = training_driver.step_evaluation.numpy()
