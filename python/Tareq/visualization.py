@@ -105,7 +105,7 @@ if __name__ == "__main__":
     # )
 
     for objective_function_name, fct_tuple in FUNCTIONS.items():
-        objective_function = fct_tuple[2]
+        objective_function = fct_tuple[1]
         visualize_environment(
             objective_function=objective_function,
             objective_function_name=objective_function_name,

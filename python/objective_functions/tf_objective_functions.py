@@ -163,7 +163,7 @@ def levy_gradient(x):
     gradient = []
     for i in range(d):
         if i == 0:
-            term1 = 0.5 * tf.sin(math.pi * w(x[0])) * tf.cos(math.pi * w(x[0])) * math.pi
+            term1 = 0.5 * math.pi * tf.sin(math.pi * w(x[i])) * tf.cos(math.pi * w(x[i]))
             term2 = 0.5 * (w(x[i]) - 1) * (1 + 10 * (tf.sin(math.pi * w(x[i]) + 1) ** 2)) + \
                     5 * math.pi * ((w(x[i]) - 1) ** 2) * tf.sin((math.pi * w(x[i])) + 1) * tf.cos((math.pi * w(x[i])) + 1)
             gradient.append(term1 + term2)
@@ -173,8 +173,7 @@ def levy_gradient(x):
             gradient.append(term3)
         else:
             term2 = 0.5 * (w(x[i]) - 1) * (1 + 10 * (tf.sin(math.pi * w(x[i]) + 1) ** 2)) + \
-                    5 * math.pi * ((w(x[i]) - 1) ** 2) * tf.sin((math.pi * w(x[i])) + 1) * tf.cos(
-                (math.pi * w(x[i])) + 1)
+                    5 * math.pi * ((w(x[i]) - 1) ** 2) * tf.sin((math.pi * w(x[i])) + 1) * tf.cos((math.pi * w(x[i])) + 1)
             gradient.append(term2)
 
     return gradient
@@ -204,7 +203,6 @@ def w(x_i):
 #     value /= 1.592327
 #     value = tf.clip_by_value(value, clip_value_min=-1.0, clip_value_max=1.0)
 #     return value
-
 
 
 @tf.function

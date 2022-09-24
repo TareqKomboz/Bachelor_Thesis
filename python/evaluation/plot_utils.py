@@ -49,47 +49,40 @@ def plot_performance_over_time_with_stds(x, means, stds, labels, title, plot_dir
     plt.clf()
 
 
-def plot(input_dimension, step_counter, plot_dir, n_start_pos, function_values, name, episode_length, log_summary=False):
+def plot(step_counter, plot_dir, function_values, name, log_summary=False):
     plot_dir = os.path.join(plot_dir, name)
-
-    N_start_pos = (n_start_pos + 1) ** input_dimension
 
     # control
     if not os.path.isdir(plot_dir):
         os.makedirs(plot_dir)
 
-    control_rewards = function_values[:N_start_pos]
+    average_reward_over_batches_and_actions = tf.reduce_mean(function_values)
+    reward_stds_over_batches_and_actions = tf.convert_to_tensor([tf.math.reduce_std(function_values)])
 
-    average_control_reward = tf.reduce_mean(control_rewards)
-    rewards = [average_control_reward]
+    average_return_over_batch = tf.reduce_mean(tf.reduce_sum(input_tensor=function_values, axis=1, keepdims=True))
+    return_stds_over_batch = tf.convert_to_tensor([tf.math.reduce_std(tf.reduce_sum(
+        input_tensor=function_values,
+        axis=1,
+        keepdims=True
+    ))])
 
-    average_control_final = tf.reduce_mean(control_rewards[:, -1])
-    finals = [average_control_final]
+    average_final_objective_function_value_over_batch = tf.reduce_mean(function_values[:, -1])
+    final_objective_function_value_stds_over_batch = tf.convert_to_tensor([tf.math.reduce_std(function_values[:, -1])])
 
-    average_control_train_final = tf.reduce_mean(control_rewards[:, episode_length - 1])
-    train_finals = [average_control_train_final]
+    average_max_reward_of_episode_over_batches = tf.reduce_mean(tf.reduce_max(function_values, axis=1))
+    max_reward_of_episode_stds_over_batches = tf.convert_to_tensor([tf.math.reduce_std(tf.reduce_max(function_values, axis=1))])
 
-    average_control_max = tf.reduce_mean(tf.reduce_max(control_rewards, axis=1))
-    maxs = [average_control_max]
+    reward_means_over_batch = tf.convert_to_tensor([tf.reduce_mean(function_values, axis=0)])
+    reward_stds_over_batch = tf.convert_to_tensor([tf.math.reduce_std(function_values, axis=0)])
 
-    overall_average_performance = tf.reduce_mean(tf.convert_to_tensor(rewards))
-    overall_final_performance = tf.reduce_mean(tf.convert_to_tensor(finals))
-    overall_train_final_performance = tf.reduce_mean(tf.convert_to_tensor(train_finals))
-    overall_max_performance = tf.reduce_mean(tf.convert_to_tensor(maxs))
+
 
     summary = [
         "{} evaluation results at step {} \n".format(name, step_counter),
-        "overall return={:.2f}, train_final={:.2f}, final={:.2f}, max={:.2f} \n".format(
-            overall_average_performance,
-            overall_train_final_performance,
-            overall_final_performance,
-            overall_max_performance
-        ),
-        "control return={:.2f}, train_final={:.2f}, final={:.2f}, max={:.2f} \n".format(
-            average_control_reward,
-            average_control_train_final,
-            average_control_final,
-            average_control_max
+        "average reward={:.2f}, average final reward={:.2f}, average max reward={:.2f} \n".format(
+            average_reward_over_batches_and_actions,
+            average_final_objective_function_value_over_batch,
+            average_max_reward_of_episode_over_batches
         )
     ]
     if log_summary:
@@ -98,18 +91,16 @@ def plot(input_dimension, step_counter, plot_dir, n_start_pos, function_values, 
     f = open(os.path.join(plot_dir, "summary.txt"), 'w')
     f.writelines(summary)
 
-    means = tf.convert_to_tensor([tf.reduce_mean(function_values, axis=0)])
-    stds = tf.convert_to_tensor([tf.math.reduce_std(function_values, axis=0)])
+    # plot x=episode_length, y=average_reward
+    # plot_performance_over_time_with_stds(
+    #     x=range(len(reward_means_over_batch[0])),
+    #     means=reward_means_over_batch,
+    #     stds=reward_stds_over_batch,
+    #     labels=["control"],
+    #     title="convergence by category",
+    #     plot_dir=plot_dir,
+    #     filename="performance over time",
+    #     std_scale=0.25
+    # )
 
-    plot_performance_over_time_with_stds(
-        x=range(len(means[0])),
-        means=means,
-        stds=stds,
-        labels=["control"],
-        title="convergence by category",
-        plot_dir=plot_dir,
-        filename="performance over time",
-        std_scale=0.25
-    )
-
-    return overall_final_performance, means, stds
+    return average_final_objective_function_value_over_batch, reward_means_over_batch, reward_stds_over_batch

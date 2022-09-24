@@ -10,17 +10,17 @@ train.batch_size                                        = 540  # 512
 
 # training loop config
 train.number_training_iterations                        = 100  # 50000
-train.log_interval                                      = 20
-train.evaluation_interval                               = 20
+train.log_interval                                      = 10
+train.evaluation_interval                               = 10
 train.quick_evaluation_interval                         = 2
-train.checkpoint_interval                               = 20
+train.checkpoint_interval                               = 100
 
 # environment
 environment_constructor.number_observations             = 5
 environment_constructor.randomize_start                 = True
 
 # evaluation driver
-evaluation_driver_init.n_start_pos                      = 5 # 180 # 5
+evaluation_driver_init.n_start_pos                      = 3
 
 # reinforce agent config
 create_agent.gamma                                      = 0.99

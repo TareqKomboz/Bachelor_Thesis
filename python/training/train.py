@@ -117,9 +117,9 @@ def train(
     rb_checkpointer.initialize_or_restore().expect_partial()
     try:
         load_status.assert_consumed()
-        checkpoint_loaded = True
+        pass
     except AssertionError:
-        checkpoint_loaded = False
+        pass
     logging.info("Setup completed in {:.2f}s".format((time.time_ns() - start_time) * 1e-9))
 
     # training loop

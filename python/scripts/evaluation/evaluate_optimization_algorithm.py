@@ -46,22 +46,21 @@ def plot_from_file(mean_file, std_file, output_length=min(200, episode_length)):
     mean_over_time = np.fromfile(mean_file, np.float32).reshape(len(FUNCTIONS), episode_length)
     std_over_time = np.fromfile(std_file, np.float32).reshape(len(FUNCTIONS), episode_length)
     plot_performance_over_time_with_stds(
-        range(output_length),
-        mean_over_time[:, :output_length],
-        std_over_time[:, :output_length],
-        FUNCTIONS.keys(),
-        "{}-optimization".format(method_name),
-        plot_dir,
-        "performance over time.png",
+        x=range(output_length),
+        means=mean_over_time[:, :output_length],
+        stds=std_over_time[:, :output_length],
+        labels=FUNCTIONS.keys(),
+        title="{}-optimization".format(method_name),
+        plot_dir=plot_dir,
+        filename="performance over time.png",
         std_scale=0.25
     )
 
-    plot_performance_by_function(FUNCTIONS.keys(), mean_over_time[:, 49], plot_dir, "final performances at 50 steps")
     plot_performance_by_function(
-        FUNCTIONS.keys(),
-        mean_over_time[:, output_length - 1],
-        plot_dir,
-        "final performances at {} steps".format(output_length)
+        labels=FUNCTIONS.keys(),
+        performances=mean_over_time[:, 49],
+        plot_dir=plot_dir,
+        name="final performances at 50 steps"
     )
 
     summary = ["average performances by function at step {} \n".format(0)]

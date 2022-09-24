@@ -46,7 +46,7 @@ class EvaluationDriver:
 
     def run(self, policy, step_counter, log_summary=False):
         plot_dir = os.path.join(self.run_dir, "Step_{}".format(step_counter))
-        performances = []
+        average_final_objective_function_values = []
         names = []
         mean_performance_over_time = []
         std_performance_over_time = []
@@ -62,20 +62,17 @@ class EvaluationDriver:
             policy_state = action_step.state
             time_step = self.environment.step(action_step.action)
 
-        performance, means, stds = plot(
-            input_dimension=self.environment.input_dimension,
+        average_final_objective_function_value_over_batch, means, stds = plot(
             step_counter=step_counter,
             plot_dir=plot_dir,
-            n_start_pos=self.n_start_pos,
-            function_values=tf.transpose(FUNCTIONS["ackley"][0](tf.transpose(self.environment.get_states()))), # tf.transpose(self.environment.get_function_values()),
+            function_values=self.environment.get_function_values(),
             name=self.environment.name,
-            episode_length=self.environment.get_episode_length(),
             log_summary=log_summary
         )
 
         self.environment.reset()
 
-        performances.append(performance)
+        average_final_objective_function_values.append(average_final_objective_function_value_over_batch)
         mean_performance_over_time.append(tf.reduce_mean(means, axis=0))
         std_performance_over_time.append(tf.reduce_mean(stds, axis=0))
         names.append(self.environment.name)
@@ -103,18 +100,11 @@ class EvaluationDriver:
             std_scale=0.25
         )
 
-        plot_performance_by_function(
-            labels=FUNCTIONS.keys(),
-            performances=performances,
-            plot_dir=plot_dir,
-            name="final performance"
-        )
-
         summary = ["average performances by function at step {} \n".format(step_counter)]
-        for label, performance in zip(FUNCTIONS.keys(), performances):
-            summary.append("{} function performance = {:.2f} \n".format(label, performance))
+        for label, average_final_objective_function_value in zip(FUNCTIONS.keys(), average_final_objective_function_values):
+            summary.append("{} function average_final_objective_function_value = {:.2f} \n".format(label, average_final_objective_function_value))
 
         f = open(os.path.join(plot_dir, "summary.txt"), 'w')
         f.writelines(summary)
 
-        return performances
+        return average_final_objective_function_values
