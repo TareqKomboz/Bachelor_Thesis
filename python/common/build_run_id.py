@@ -2,6 +2,7 @@ class Params:
     def __init__(
             self,
             environment_type,
+            agent_name,
             rnn,
             input_dimension,
             function_name,
@@ -21,6 +22,7 @@ class Params:
             net_size,
             schedule):
         self.environment_type = environment_type
+        self.agent_name = agent_name
         self.rnn = rnn
         self.input_dimension = input_dimension
         self.function_name = function_name
@@ -52,7 +54,8 @@ def read_parameters(configfile):
         if line.startswith("main.environment_type"):
             environment_type = parse_value(line)
         elif line.startswith("main.agent_name"):
-            rnn = parse_value(line).startswith("rnn")
+            agent_name = parse_value(line)
+            rnn = agent_name.startswith("rnn")
         elif line.startswith("main.input_dimension"):
             input_dimension = parse_value(line)
         elif line.startswith("main.function_name"):
@@ -121,6 +124,7 @@ def read_parameters(configfile):
     try:
         return Params(
             environment_type=environment_type,
+            agent_name=agent_name,
             rnn=rnn,
             input_dimension=input_dimension,
             function_name=function_name,
@@ -146,7 +150,12 @@ def read_parameters(configfile):
 
 
 def build_run_id(params):
-    run_id = "{}_inputDim_{}_numFree".format(params.number_observations, params.number_free_parameters)
+    run_id = "{}_{}_env_{}_epsLen_{}_numObs".format(
+        params.environment_type[:3],
+        params.agent_name,
+        params.episode_length,
+        params.number_observations
+    )
     if params.rnn:
         run_id += "_{}_depth".format(params.n_depth)
     if params.gamma != 0.99:
@@ -155,11 +164,8 @@ def build_run_id(params):
         run_id += f"_{params.vnet}_vnet"
     if not params.net_size == "normal":
         run_id += "_{}_pnet".format(params.net_size)
-    if params.episode_length != 50:
-        run_id += "_{}_episodes".format(params.episode_length)
     if not params.schedule == "normal":
         run_id += "_{}_schedule".format(params.schedule)
-    run_id += "_{}_env".format(params.environment_type[:3])
     return run_id
 
 

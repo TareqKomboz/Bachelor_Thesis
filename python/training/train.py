@@ -185,9 +185,7 @@ def train(
             rb_checkpointer.save(global_step=global_step)
 
         if global_step % evaluation_interval == 0 or is_last_iteration:
-            performances = evaluation_driver.run(agent.policy, global_step.numpy())
-
-            average_performance = tf.reduce_mean(performances)
+            average_final_objective_function_value_over_batch = evaluation_driver.run(agent.policy, global_step.numpy())
 
             train_rewards, train_losses, evaluation_performances = training_driver.get_summary()
             plot_returns_and_losses(
@@ -204,7 +202,7 @@ def train(
             # logging.info("{}: Evaluation completed in {:.2f}s, average performance = {:.2f}, {}".format(
             #     global_step.numpy(),
             #     (time.time_ns() - log_timestamp) * 1e-9,
-            #     average_performance,
+            #     average_final_objective_function_value_over_batch,
             #     time.strftime('%H:%M:%S', timestamp))
             # )
             #
@@ -216,4 +214,4 @@ def train(
             latest_evaluation_step = training_driver.step.numpy()
             latest_quick_evaluation_step = training_driver.step_evaluation.numpy()
 
-    return average_performance, ((time.time_ns() - start_time) * 1e-9)
+    return average_final_objective_function_value_over_batch, ((time.time_ns() - start_time) * 1e-9)

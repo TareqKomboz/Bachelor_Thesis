@@ -8,7 +8,7 @@ class TfEnvAbsObsAbsAct(TfEnv):
     def __init__(
             self,
             input_dimension,
-            name,
+            function_name,
             objective_function,
             number_free_parameters,
             starting_position,
@@ -16,7 +16,7 @@ class TfEnvAbsObsAbsAct(TfEnv):
             episode_length):
         super(TfEnvAbsObsAbsAct, self).__init__(
             input_dimension=input_dimension,
-            name=name,
+            function_name=function_name,
             objective_function=objective_function,
             number_free_parameters=number_free_parameters,
             starting_position=starting_position,

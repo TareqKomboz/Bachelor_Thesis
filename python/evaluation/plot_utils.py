@@ -49,9 +49,7 @@ def plot_performance_over_time_with_stds(x, means, stds, labels, title, plot_dir
     plt.clf()
 
 
-def plot(step_counter, plot_dir, function_values, name):
-    plot_dir = os.path.join(plot_dir, name)
-
+def plot(step_counter, plot_dir, function_values):
     # control
     if not os.path.isdir(plot_dir):
         os.makedirs(plot_dir)
@@ -72,44 +70,30 @@ def plot(step_counter, plot_dir, function_values, name):
     average_max_reward_of_episode_over_batches = tf.reduce_mean(tf.reduce_max(function_values, axis=1))
     max_reward_of_episode_stds_over_batches = tf.convert_to_tensor([tf.math.reduce_std(tf.reduce_max(function_values, axis=1))])
 
-    reward_means_over_batch = tf.convert_to_tensor([tf.reduce_mean(function_values, axis=0)])
-    reward_stds_over_batch = tf.convert_to_tensor([tf.math.reduce_std(function_values, axis=0)])
-
-    # summary = [
-    #     "{} evaluation results at step {} \n".format(name, step_counter),
-    #     "average reward={:.2f}, average final reward={:.2f}, average max reward={:.2f} \n".format(
-    #         average_reward_over_batches_and_actions,
-    #         reward_stds_over_batches_and_actions,
-    #         average_return_over_batch,
-    #         return_stds_over_batch,
-    #         average_final_objective_function_value_over_batch,
-    #         final_objective_function_value_stds_over_batch,
-    #         average_max_reward_of_episode_over_batches,
-    #         max_reward_of_episode_stds_over_batches
-    #     )
-    # ]
-
     summary = [
-        "{} evaluation results at step {} \n".format(name, step_counter),
-        "average_reward_over_batches_and_actions={:.2f}, reward_stds_over_batches_and_actions={} \n".format(
+        "Evaluation results at step {} \n".format(step_counter),
+        "average_reward_over_batches_and_actions={:.2f}, reward_stds_over_batches_and_actions={:.2f} \n".format(
             average_reward_over_batches_and_actions,
-            reward_stds_over_batches_and_actions.numpy()
+            reward_stds_over_batches_and_actions.numpy()[0]
         ),
-        "average_return_over_batch={:.2f}, return_stds_over_batch={} \n".format(
+        "average_return_over_batch={:.2f}, return_stds_over_batch={:.2f} \n".format(
             average_return_over_batch,
-            return_stds_over_batch.numpy()
+            return_stds_over_batch.numpy()[0]
         ),
-        "average_final_objective_function_value_over_batch={:.2f}, final_objective_function_value_stds_over_batch={} \n".format(
+        "average_final_objective_function_value_over_batch={:.2f}, final_objective_function_value_stds_over_batch={:.2f} \n".format(
             average_final_objective_function_value_over_batch,
-            final_objective_function_value_stds_over_batch.numpy()
+            final_objective_function_value_stds_over_batch.numpy()[0]
         ),
-        "average_max_reward_of_episode_over_batches={:.2f}, max_reward_of_episode_stds_over_batches={} \n".format(
+        "average_max_reward_of_episode_over_batches={:.2f}, max_reward_of_episode_stds_over_batches={:.2f} \n".format(
             average_max_reward_of_episode_over_batches,
-            max_reward_of_episode_stds_over_batches.numpy()
+            max_reward_of_episode_stds_over_batches.numpy()[0]
         )
     ]
     f = open(os.path.join(plot_dir, "summary.txt"), 'w')
     f.writelines(summary)
+
+    reward_means_over_batch = tf.convert_to_tensor([tf.reduce_mean(function_values, axis=0)])
+    reward_stds_over_batch = tf.convert_to_tensor([tf.math.reduce_std(function_values, axis=0)])
 
     # plot x=episode_length, y=average_reward
     plot_performance_over_time_with_stds(

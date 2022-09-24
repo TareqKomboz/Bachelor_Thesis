@@ -13,7 +13,7 @@ def create_environment(
     if environment_type == "absolute":
         return TfEnvAbsObsAbsAct(
             input_dimension=input_dimension,
-            name=function_name,
+            function_name=function_name,
             objective_function=objective_function,
             number_free_parameters=number_free_parameters,
             starting_position=start_point,

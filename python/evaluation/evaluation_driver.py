@@ -46,8 +46,6 @@ class EvaluationDriver:
 
     def run(self, policy, step_counter):
         plot_dir = os.path.join(self.run_dir, "Step_{}".format(step_counter))
-        average_final_objective_function_values = []
-        names = []
         mean_performance_over_time = []
         std_performance_over_time = []
 
@@ -62,34 +60,29 @@ class EvaluationDriver:
         average_final_objective_function_value_over_batch, reward_means_over_batch, reward_stds_over_batch = plot(
             step_counter=step_counter,
             plot_dir=plot_dir,
-            function_values=self.environment.get_function_values(),
-            name=self.environment.name
+            function_values=self.environment.get_function_values()
         )
 
         self.environment.reset()
 
-        average_final_objective_function_values.append(average_final_objective_function_value_over_batch)
         mean_performance_over_time.append(tf.reduce_mean(reward_means_over_batch, axis=0))
         std_performance_over_time.append(tf.reduce_mean(reward_stds_over_batch, axis=0))
-        names.append(self.environment.name)
-        print("\r{} evaluated".format(", ".join(names)), end="")
-
-
-
 
         print("\r", end="")
-        run_id = os.path.split(self.run_dir)[1]
-        train_function_name = os.path.split(os.path.split(self.run_dir)[0])[1]
-        algorithm_name = os.path.split(os.path.split(os.path.split(self.run_dir)[0])[0])[1]
+
         plot_performance_over_time_with_stds(
             x=range(self.environment.get_episode_length()),
             means=np.array(mean_performance_over_time),
             stds=np.array(std_performance_over_time),
             labels=FUNCTIONS.keys(),
-            title="{}-{}-{}-agent".format(run_id, algorithm_name, train_function_name),
+            title="{}d-{} {} free".format(
+                self.environment.get_input_dimension(),
+                self.environment.get_function_name(),
+                self.environment.get_number_free_parameters()
+            ),
             plot_dir=plot_dir,
             filename="performance over time",
             std_scale=0.25
         )
 
-        return average_final_objective_function_values
+        return average_final_objective_function_value_over_batch

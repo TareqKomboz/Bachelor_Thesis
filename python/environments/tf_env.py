@@ -17,7 +17,7 @@ class TfEnv(TFEnvironment):
     def __init__(
             self,
             input_dimension,
-            name,
+            function_name,
             objective_function,
             number_free_parameters,
             starting_position,
@@ -28,7 +28,7 @@ class TfEnv(TFEnvironment):
             number_observations,
             randomize_start):
 
-        self.name = name
+        self.function_name = function_name
         self.objective_function = objective_function
         self.evaluate_objective_function = self._evaluate_objective_function
         self._initial_state = starting_position
@@ -192,8 +192,11 @@ class TfEnv(TFEnvironment):
     def get_input_dimension(self):
         return self.input_dimension
 
-    def get_name(self):
-        return self.name
+    def get_function_name(self):
+        return self.function_name
 
     def get_function_values(self):
         return self._function_values
+
+    def get_number_free_parameters(self):
+        return self.number_free_parameters

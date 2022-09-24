@@ -1,19 +1,19 @@
 main.environment_type                                   = "absolute"
 main.agent_name                                         = "reinforce"
-main.input_dimension                                    = 2  #
+main.input_dimension                                    = 2
 main.function_name                                      = "ackley"
-main.number_free_parameters                             = 1  #
+main.number_free_parameters                             = 1
 main.episode_length                                     = 50  # = replay_buffer_capacity
 
 # environment config
 train.batch_size                                        = 256  # 512
 
 # training loop config
-train.number_training_iterations                        = 100  # 50000
-train.log_interval                                      = 10
-train.evaluation_interval                               = 10
-train.quick_evaluation_interval                         = 2
-train.checkpoint_interval                               = 100
+train.number_training_iterations                        = 100 # 10000  # 50000
+train.log_interval                                      = 100 # 100
+train.evaluation_interval                               = 100 # 1000
+train.quick_evaluation_interval                         = 10 # 10
+train.checkpoint_interval                               = 100 # 1000
 
 # environment
 environment_constructor.number_observations             = 5
