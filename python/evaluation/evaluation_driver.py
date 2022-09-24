@@ -44,15 +44,12 @@ class EvaluationDriver:
             episode_length=episode_length
         )
 
-    def run(self, policy, step_counter, log_summary=False):
+    def run(self, policy, step_counter):
         plot_dir = os.path.join(self.run_dir, "Step_{}".format(step_counter))
         average_final_objective_function_values = []
         names = []
         mean_performance_over_time = []
         std_performance_over_time = []
-
-
-
 
         time_step = self.environment.reset()
         policy_state = policy.get_initial_state(self.environment.batch_size)
@@ -62,30 +59,25 @@ class EvaluationDriver:
             policy_state = action_step.state
             time_step = self.environment.step(action_step.action)
 
-        average_final_objective_function_value_over_batch, means, stds = plot(
+        average_final_objective_function_value_over_batch, reward_means_over_batch, reward_stds_over_batch = plot(
             step_counter=step_counter,
             plot_dir=plot_dir,
             function_values=self.environment.get_function_values(),
-            name=self.environment.name,
-            log_summary=log_summary
+            name=self.environment.name
         )
 
         self.environment.reset()
 
         average_final_objective_function_values.append(average_final_objective_function_value_over_batch)
-        mean_performance_over_time.append(tf.reduce_mean(means, axis=0))
-        std_performance_over_time.append(tf.reduce_mean(stds, axis=0))
+        mean_performance_over_time.append(tf.reduce_mean(reward_means_over_batch, axis=0))
+        std_performance_over_time.append(tf.reduce_mean(reward_stds_over_batch, axis=0))
         names.append(self.environment.name)
-        if not log_summary:
-            print("\r{} evaluated".format(", ".join(names)), end="")
+        print("\r{} evaluated".format(", ".join(names)), end="")
 
 
 
 
-        if log_summary:
-            print("\n")
-        else:
-            print("\r", end="")
+        print("\r", end="")
         run_id = os.path.split(self.run_dir)[1]
         train_function_name = os.path.split(os.path.split(self.run_dir)[0])[1]
         algorithm_name = os.path.split(os.path.split(os.path.split(self.run_dir)[0])[0])[1]
@@ -99,12 +91,5 @@ class EvaluationDriver:
             filename="performance over time",
             std_scale=0.25
         )
-
-        summary = ["average performances by function at step {} \n".format(step_counter)]
-        for label, average_final_objective_function_value in zip(FUNCTIONS.keys(), average_final_objective_function_values):
-            summary.append("{} function average_final_objective_function_value = {:.2f} \n".format(label, average_final_objective_function_value))
-
-        f = open(os.path.join(plot_dir, "summary.txt"), 'w')
-        f.writelines(summary)
 
         return average_final_objective_function_values

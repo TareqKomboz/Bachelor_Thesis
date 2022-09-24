@@ -1,14 +1,44 @@
 class Params:
-    def __init__(self, rnn, n_obs, gamma, n_depth, vnet, net_size, n_episode, schedule, environment_type):
+    def __init__(
+            self,
+            environment_type,
+            rnn,
+            input_dimension,
+            function_name,
+            number_free_parameters,
+            episode_length,
+
+            batch_size,
+
+            number_observations,
+            randomize_start,
+
+            n_start_pos,
+
+            gamma,
+            n_depth,
+            vnet,
+            net_size,
+            schedule):
+        self.environment_type = environment_type
         self.rnn = rnn
-        self.n_obs = n_obs
+        self.input_dimension = input_dimension
+        self.function_name = function_name
+        self.number_free_parameters = number_free_parameters
+        self.episode_length = episode_length
+
+        self.batch_size = batch_size
+
+        self.number_observations = number_observations
+        self.randomize_start = randomize_start
+
+        self.n_start_pos = n_start_pos
+
         self.gamma = gamma
         self.n_depth = n_depth
         self.vnet = vnet
         self.net_size = net_size
-        self.n_episode = n_episode
         self.schedule = schedule
-        self.environment_type = environment_type
 
 
 def parse_value(line):
@@ -23,11 +53,25 @@ def read_parameters(configfile):
             environment_type = parse_value(line)
         elif line.startswith("main.agent_name"):
             rnn = parse_value(line).startswith("rnn")
+        elif line.startswith("main.input_dimension"):
+            input_dimension = parse_value(line)
+        elif line.startswith("main.function_name"):
+            function_name = parse_value(line)
+        elif line.startswith("main.number_free_parameters"):
+            number_free_parameters = parse_value(line)
         elif line.startswith("main.episode_length"):
-            n_episode = parse_value(line)
+            episode_length = parse_value(line)
+
+        elif line.startswith("train.batch_size"):
+            batch_size = parse_value(line)
 
         elif line.startswith("environment_constructor.number_observations"):
-            n_obs = parse_value(line)
+            number_observations = parse_value(line)
+        elif line.startswith("environment_constructor.randomize_start"):
+            randomize_start = parse_value(line)
+
+        elif line.startswith("evaluation_driver_init.n_start_pos"):
+            n_start_pos = parse_value(line)
 
         elif line.startswith("create_agent.gamma"):
             gamma = parse_value(line)
@@ -76,15 +120,25 @@ def read_parameters(configfile):
         schedule = "fast"
     try:
         return Params(
+            environment_type=environment_type,
             rnn=rnn,
-            n_obs=n_obs,
+            input_dimension=input_dimension,
+            function_name=function_name,
+            number_free_parameters=number_free_parameters,
+            episode_length=episode_length,
+
+            batch_size=batch_size,
+
+            number_observations=number_observations,
+            randomize_start=randomize_start,
+
+            n_start_pos=n_start_pos,
+
             gamma=gamma,
             n_depth=n_depth,
             vnet=vnet,
             net_size=net_size,
-            n_episode=n_episode,
-            schedule=schedule,
-            environment_type=environment_type
+            schedule=schedule
         )
     except UnboundLocalError as e:
         print("this config file is incomplete: " + configfile)
@@ -92,7 +146,7 @@ def read_parameters(configfile):
 
 
 def build_run_id(params):
-    run_id = "{}_obs".format(params.n_obs)
+    run_id = "{}_inputDim_{}_numFree".format(params.number_observations, params.number_free_parameters)
     if params.rnn:
         run_id += "_{}_depth".format(params.n_depth)
     if params.gamma != 0.99:
@@ -101,8 +155,8 @@ def build_run_id(params):
         run_id += f"_{params.vnet}_vnet"
     if not params.net_size == "normal":
         run_id += "_{}_pnet".format(params.net_size)
-    if params.n_episode != 50:
-        run_id += "_{}_episodes".format(params.n_episode)
+    if params.episode_length != 50:
+        run_id += "_{}_episodes".format(params.episode_length)
     if not params.schedule == "normal":
         run_id += "_{}_schedule".format(params.schedule)
     run_id += "_{}_env".format(params.environment_type[:3])

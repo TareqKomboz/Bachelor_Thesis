@@ -6,7 +6,7 @@ main.number_free_parameters                             = 1  #
 main.episode_length                                     = 50  # = replay_buffer_capacity
 
 # environment config
-train.batch_size                                        = 540  # 512
+train.batch_size                                        = 256  # 512
 
 # training loop config
 train.number_training_iterations                        = 100  # 50000
@@ -26,8 +26,6 @@ evaluation_driver_init.n_start_pos                      = 3
 create_agent.gamma                                      = 0.99
 create_agent.entropy_coefficient                        = 0.01
 create_agent.value_estimation_loss_coef                 = 1.0
-create_agent.gradient_clipping                          = None
-create_agent.normalize_returns                          = True
 create_agent.fc_layer_params                            = (100, 50)
 create_agent.value_fc_layer_params                      = (100,)
 create_agent.lstm_size                                  = (40,)
