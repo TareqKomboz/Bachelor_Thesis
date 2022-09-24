@@ -12,13 +12,20 @@ from common.utils import is_valid_filename
 from definitons import RUNS_DIR
 from evaluation.evaluate import evaluate
 from training.train import train
+from objective_functions.tf_objective_functions import FUNCTIONS
 
 
 @gin.configurable
 def main(arguments, environment_type, agent_name, input_dimension, function_name, number_free_parameters, episode_length):
     run_id = get_run_id(arguments.configfile)
 
-    run_dir = os.path.join(RUNS_DIR, agent_name, function_name, run_id)
+    run_dir = os.path.join(
+        RUNS_DIR,
+        "input_dimension_{}".format(input_dimension),
+        "number_free_parameters_{}".format(number_free_parameters),
+        function_name,
+        run_id
+    )
 
     logfile = os.path.join(run_dir, "run.log")
     if arguments.evaluate:
@@ -48,7 +55,7 @@ def main(arguments, environment_type, agent_name, input_dimension, function_name
         run_id
     ))
     if not arguments.evaluate:
-        final_performance, duration = train(
+        average_final_objective_function_value_over_batch, duration = train(
             run_dir=run_dir,
             environment_type=environment_type,
             agent_name=agent_name,
@@ -57,16 +64,14 @@ def main(arguments, environment_type, agent_name, input_dimension, function_name
             number_free_parameters=number_free_parameters,
             episode_length=episode_length
         )
-        logging.info("{}-{}-{}-{}d-{}-{}free-{}opt - training finished in {}, final performance = {:.2f}".format(
+        logging.info("{}-{}d-{}-{}free-{}opt - training finished in {}, final performance = {:.2f}".format(
             run_id,
-            environment_type,
-            agent_name,
             input_dimension,
             function_name,
             number_free_parameters,
             (input_dimension - number_free_parameters),
             time.strftime('%H:%M:%S', time.gmtime(duration)),
-            final_performance
+            average_final_objective_function_value_over_batch
         ))
     else:
         logging.info("Skipping training, evaluation only")
@@ -80,10 +85,8 @@ def main(arguments, environment_type, agent_name, input_dimension, function_name
             episode_length=episode_length
         )
 
-        logging.info("{}-{}-{}-{}d-{}-{}free-{}opt - evaluation finished, final performance = {:.2f}, {}".format(
+        logging.info("{}-{}d-{}-{}free-{}opt - evaluation finished in {}, final performance = {:.2f}".format(
             run_id,
-            environment_type,
-            agent_name,
             input_dimension,
             function_name,
             number_free_parameters,
@@ -116,3 +119,14 @@ if __name__ == "__main__":
     args = arg_parser.parse_args()
     gin.parse_config_file(args.configfile)
     main(arguments=args)
+
+    # for input_dimension in [2, 3, 4]:
+    #     for number_free_parameter in range(1, input_dimension):
+    #         for function_name in FUNCTIONS.keys():
+    #             gin.parse_config_file(args.configfile)
+    #             main(
+    #                 arguments=args,
+    #                 input_dimension=input_dimension,
+    #                 number_free_parameter=number_free_parameter,
+    #                 function_name=function_name
+    #             )
