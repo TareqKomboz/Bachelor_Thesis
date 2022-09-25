@@ -64,12 +64,12 @@ def main(arguments, environment_type, agent_name, input_dimension, function_name
             number_free_parameters=number_free_parameters,
             episode_length=episode_length
         )
-        logging.info("{}-{}d-{}-{}free-{}opt - training finished in {}, final performance = {:.2f}".format(
+        logging.info("{}-{}d-{}free-{}opt-{} - training finished in {}, final performance = {:.2f}".format(
             run_id,
             input_dimension,
-            function_name,
             number_free_parameters,
             (input_dimension - number_free_parameters),
+            function_name,
             time.strftime('%H:%M:%S', time.gmtime(duration)),
             average_final_objective_function_value_over_batch
         ))
@@ -85,12 +85,12 @@ def main(arguments, environment_type, agent_name, input_dimension, function_name
             episode_length=episode_length
         )
 
-        logging.info("{}-{}d-{}-{}free-{}opt - evaluation finished in {}, final performance = {:.2f}".format(
+        logging.info("{}-{}d-{}free-{}opt-{} - evaluation finished in {}, final performance = {:.2f}".format(
             run_id,
             input_dimension,
-            function_name,
             number_free_parameters,
             (input_dimension - number_free_parameters),
+            function_name,
             time.strftime('%H:%M:%S', time.gmtime(duration)),
             final_performance
         ))

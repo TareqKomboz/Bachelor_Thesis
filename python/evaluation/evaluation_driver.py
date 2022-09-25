@@ -1,14 +1,13 @@
 import os
 
 import gin
-import numpy as np
 
 from objective_functions.tf_objective_functions import FUNCTIONS
 from environments.create_environment import create_environment
 from evaluation.evaluation_utils import build_evaluation_params
 import tensorflow as tf
 
-from evaluation.plot_utils import plot, plot_performance_over_time_with_stds, plot_performance_by_function
+from evaluation.plot_utils import plot, plot_performance_over_time_with_stds
 
 
 @gin.configurable("evaluation_driver_init")
@@ -46,18 +45,26 @@ class EvaluationDriver:
 
     def run(self, policy, step_counter):
         plot_dir = os.path.join(self.run_dir, "Step_{}".format(step_counter))
-        mean_performance_over_time = []
-        std_performance_over_time = []
 
         time_step = self.environment.reset()
         policy_state = policy.get_initial_state(self.environment.batch_size)
-
         while not tf.reduce_all(time_step.is_last()):
             action_step = policy.action(time_step, policy_state=policy_state)
             policy_state = action_step.state
             time_step = self.environment.step(action_step.action)
 
-        average_final_objective_function_value_over_batch, reward_means_over_batch, reward_stds_over_batch = plot(
+        (
+            average_reward_over_batches_and_actions,
+            reward_stds_over_batches_and_actions,
+            average_return_over_batch,
+            return_stds_over_batch,
+            average_final_objective_function_value_over_batch,
+            final_objective_function_value_stds_over_batch,
+            average_max_reward_of_episode_over_batches,
+            max_reward_of_episode_stds_over_batches,
+            reward_means_over_batch,
+            reward_stds_over_batch
+        ) = plot(
             step_counter=step_counter,
             plot_dir=plot_dir,
             function_values=self.environment.get_function_values()
@@ -65,24 +72,29 @@ class EvaluationDriver:
 
         self.environment.reset()
 
-        mean_performance_over_time.append(tf.reduce_mean(reward_means_over_batch, axis=0))
-        std_performance_over_time.append(tf.reduce_mean(reward_stds_over_batch, axis=0))
-
         print("\r", end="")
 
         plot_performance_over_time_with_stds(
             x=range(self.environment.get_episode_length()),
-            means=np.array(mean_performance_over_time),
-            stds=np.array(std_performance_over_time),
-            labels=FUNCTIONS.keys(),
-            title="{}d-{} {} free".format(
+            means=reward_means_over_batch,
+            stds=reward_stds_over_batch,
+            title="Convergence on {}D-{} with {} Free".format(
                 self.environment.get_input_dimension(),
                 self.environment.get_function_name(),
                 self.environment.get_number_free_parameters()
             ),
             plot_dir=plot_dir,
-            filename="performance over time",
+            filename="convergence",
             std_scale=0.25
         )
 
-        return average_final_objective_function_value_over_batch
+        return [
+            average_reward_over_batches_and_actions,
+            reward_stds_over_batches_and_actions,
+            average_return_over_batch,
+            return_stds_over_batch,
+            average_final_objective_function_value_over_batch,
+            final_objective_function_value_stds_over_batch,
+            average_max_reward_of_episode_over_batches,
+            max_reward_of_episode_stds_over_batches
+        ]

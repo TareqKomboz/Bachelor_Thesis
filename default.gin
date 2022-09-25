@@ -9,11 +9,11 @@ main.episode_length                                     = 50  # = replay_buffer_
 train.batch_size                                        = 256  # 512
 
 # training loop config
-train.number_training_iterations                        = 100 # 10000  # 50000
-train.log_interval                                      = 100 # 100
-train.evaluation_interval                               = 100 # 1000
+train.number_training_iterations                        = 10 # 10000  # 50000
+train.log_interval                                      = 10 # 100
+train.evaluation_interval                               = 10 # 1000
 train.quick_evaluation_interval                         = 10 # 10
-train.checkpoint_interval                               = 100 # 1000
+train.checkpoint_interval                               = 10 # 1000
 
 # environment
 environment_constructor.number_observations             = 5

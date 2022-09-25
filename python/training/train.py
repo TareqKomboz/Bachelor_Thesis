@@ -185,7 +185,16 @@ def train(
             rb_checkpointer.save(global_step=global_step)
 
         if global_step % evaluation_interval == 0 or is_last_iteration:
-            average_final_objective_function_value_over_batch = evaluation_driver.run(agent.policy, global_step.numpy())
+            [
+                average_reward_over_batches_and_actions,
+                reward_stds_over_batches_and_actions,
+                average_return_over_batch,
+                return_stds_over_batch,
+                average_final_objective_function_value_over_batch,
+                final_objective_function_value_stds_over_batch,
+                average_max_reward_of_episode_over_batches,
+                max_reward_of_episode_stds_over_batches
+            ] = evaluation_driver.run(agent.policy, global_step.numpy())
 
             train_rewards, train_losses, evaluation_performances = training_driver.get_summary()
             plot_returns_and_losses(
