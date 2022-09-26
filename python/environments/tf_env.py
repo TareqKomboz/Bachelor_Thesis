@@ -25,8 +25,7 @@ class TfEnv(TFEnvironment):
             episode_length,
 
             # gin
-            number_observations,
-            randomize_start):
+            number_observations):
 
         self.function_name = function_name
         self.objective_function = objective_function
@@ -37,7 +36,6 @@ class TfEnv(TFEnvironment):
         self._number_observations = tf.constant(number_observations, dtype=tf.int64)
         self.input_dimension = tf.constant(input_dimension, dtype=tf.int64)
         self.number_free_parameters = number_free_parameters
-        self.randomize_start = randomize_start
         self.number_optimization_parameters = self.input_dimension - self.number_free_parameters
 
         self._dtype = tf.float32
@@ -125,8 +123,6 @@ class TfEnv(TFEnvironment):
     def _reset(self):
         self._steps.assign(0)
         self._resets.assign_add(1)
-        # todo: if self.randomize_start:
-        #    self.set_starting_positions_and_free_values()
         self._state.assign(self._initial_state)
         self._states.assign(tf.zeros_like(self._states))
         self._states[:, 0].assign(self._state)
@@ -139,7 +135,7 @@ class TfEnv(TFEnvironment):
 
     def _step(self, action):
         self._steps.assign_add(1)
-        if self._steps >= self.episode_length:
+        if tf.greater_equal(self._steps, self.episode_length):
             return self.reset()
         self.assign_state(action)
         self._states[:, self._steps].assign(self._state)
@@ -160,26 +156,7 @@ class TfEnv(TFEnvironment):
         reward = self.objective_function(tf.transpose(x))
         return reward
 
-    # def _evaluate_objective_functions(self, x):
-    #     number_objective_functions = len(self.objective_functions)
-    #     x = tf.reshape(
-    #         x,
-    #         (number_objective_functions, int(self.batch_size / number_objective_functions), self.input_dimension)
-    #     )
-    #     reward = []
-    #     for i in range(number_objective_functions):
-    #         reward.append(self.objective_functions[i](tf.transpose(x[i])))
-    #     reward = tf.reshape(reward, (self.batch_size,))
-    #     return reward
-
-    def set_starting_positions_and_free_values(self):
-        start_point = tf.random.uniform(
-            shape=(self.batch_size, self.input_dimension),
-            minval=tuple((-1 * ones((self.input_dimension,), dtype=int)).tolist()),
-            maxval=tuple((ones((self.input_dimension,), dtype=int)).tolist()),
-            dtype=tf.float32
-        )
-
+    def set_starting_positions_and_free_values(self, start_point):
         self._initial_state = start_point
         self.free_values = self._initial_state[:, :self.number_free_parameters]
 

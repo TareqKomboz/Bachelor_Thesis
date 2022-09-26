@@ -78,7 +78,7 @@ class EvaluationDriver:
             x=range(self.environment.get_episode_length()),
             means=reward_means_over_batch,
             stds=reward_stds_over_batch,
-            title="Convergence on {}D-{} with {} Free".format(
+            title="{}D {} - {} free - Convergence".format(
                 self.environment.get_input_dimension(),
                 self.environment.get_function_name(),
                 self.environment.get_number_free_parameters()

@@ -67,11 +67,11 @@ def read_parameters(configfile):
 
         elif line.startswith("train.batch_size"):
             batch_size = parse_value(line)
+        elif line.startswith("train.randomize_start"):
+            randomize_start = parse_value(line)
 
         elif line.startswith("environment_constructor.number_observations"):
             number_observations = parse_value(line)
-        elif line.startswith("environment_constructor.randomize_start"):
-            randomize_start = parse_value(line)
 
         elif line.startswith("evaluation_driver_init.n_start_pos"):
             n_start_pos = parse_value(line)

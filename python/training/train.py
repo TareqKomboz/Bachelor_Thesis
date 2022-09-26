@@ -15,7 +15,9 @@ from evaluation.evaluation_driver import EvaluationDriver
 from evaluation.evaluation_utils import plot_returns_and_losses
 from training.training_driver import TrainingDriver
 
-from numpy import ones
+from Tareq.utils import save_data
+
+from numpy import ones, asarray
 
 
 @gin.configurable
@@ -30,6 +32,7 @@ def train(
 
         # environment parameters
         batch_size,
+        randomize_start,
 
         # training parameters
         number_training_iterations,
@@ -52,12 +55,15 @@ def train(
     global_step = tf.compat.v1.train.get_or_create_global_step()
 
     # create train environment
-    start_point = tf.random.uniform(
-        shape=(batch_size, input_dimension),
-        minval=tuple((-1 * ones((input_dimension,), dtype=int)).tolist()),
-        maxval=tuple((ones((input_dimension,), dtype=int)).tolist()),
-        dtype=tf.float32
-    )
+    if randomize_start:
+        start_point = tf.random.uniform(
+            shape=(batch_size, input_dimension),
+            minval=tuple((-1 * ones((input_dimension,), dtype=int)).tolist()),
+            maxval=tuple((ones((input_dimension,), dtype=int)).tolist()),
+            dtype=tf.float32
+        )
+    else:
+        start_point = tf.constant(0.8, shape=(batch_size, 2), dtype=tf.float32)
 
     train_environment = create_environment(
         environment_type=environment_type,
@@ -137,6 +143,7 @@ def train(
     log_timestamp = time.time_ns()
     latest_evaluation_step = 0
     latest_quick_evaluation_step = 0
+    full_metric_list = []
     for i in range(number_training_iterations):
 
         timestamp = time.strftime('%H:%M:%S', time.gmtime((time.time_ns() - start_time) * 1e-9))
@@ -153,27 +160,43 @@ def train(
 
         print("", end="\r")
 
+        if randomize_start:
+            start_point = tf.random.uniform(
+                shape=(batch_size, input_dimension),
+                minval=tuple((-1 * ones((input_dimension,), dtype=int)).tolist()),
+                maxval=tuple((ones((input_dimension,), dtype=int)).tolist()),
+                dtype=tf.float32
+            )
+            train_environment.set_starting_positions_and_free_values(start_point)
+
         if global_step % log_interval == 0:
             train_rewards, train_losses, evaluation_performances = training_driver.get_summary()
 
             average_average_final_reward_over_last_quick_evaluation_steps = \
-                tf.reduce_mean(evaluation_performances[training_driver.step_evaluation - quick_evaluation_interval:training_driver.step_evaluation, 0])
+                tf.reduce_mean(evaluation_performances[
+                               training_driver.step_evaluation - quick_evaluation_interval:training_driver.step_evaluation,
+                               0])
             average_average_evaluation_reward_over_last_quick_evaluation_steps = \
-                tf.reduce_mean(evaluation_performances[training_driver.step_evaluation - quick_evaluation_interval:training_driver.step_evaluation, 1])
+                tf.reduce_mean(evaluation_performances[
+                               training_driver.step_evaluation - quick_evaluation_interval:training_driver.step_evaluation,
+                               1])
 
-            average_train_reward_over_last_log_interval_steps = tf.reduce_mean(train_rewards[training_driver.step - log_interval:training_driver.step])
-            average_train_loss_over_last_log_interval_steps = tf.reduce_mean(train_losses[training_driver.step - log_interval:training_driver.step])
+            average_train_reward_over_last_log_interval_steps = tf.reduce_mean(
+                train_rewards[training_driver.step - log_interval:training_driver.step])
+            average_train_loss_over_last_log_interval_steps = tf.reduce_mean(
+                train_losses[training_driver.step - log_interval:training_driver.step])
 
             timestamp = time.gmtime((time.time_ns() - start_time) * 1e-9)
-            logging.info("{}: {} train loops completed in {:.2f}s, train reward={:.2f}, loss={:.2f}, final reward={:.2f}, eval reward={:.2f}, {}".format(
-                global_step.numpy(),
-                log_interval,
-                (time.time_ns() - log_timestamp) * 1e-9,
-                average_train_reward_over_last_log_interval_steps,
-                average_train_loss_over_last_log_interval_steps,
-                average_average_final_reward_over_last_quick_evaluation_steps,
-                average_average_evaluation_reward_over_last_quick_evaluation_steps,
-                time.strftime('%H:%M:%S', timestamp))
+            logging.info(
+                "{}: {} train loops completed in {:.2f}s, train reward={:.2f}, loss={:.2f}, final reward={:.2f}, eval reward={:.2f}, {}".format(
+                    global_step.numpy(),
+                    log_interval,
+                    (time.time_ns() - log_timestamp) * 1e-9,
+                    average_train_reward_over_last_log_interval_steps,
+                    average_train_loss_over_last_log_interval_steps,
+                    average_average_final_reward_over_last_quick_evaluation_steps,
+                    average_average_evaluation_reward_over_last_quick_evaluation_steps,
+                    time.strftime('%H:%M:%S', timestamp))
             )
             log_timestamp = time.time_ns()
 
@@ -185,42 +208,63 @@ def train(
             rb_checkpointer.save(global_step=global_step)
 
         if global_step % evaluation_interval == 0 or is_last_iteration:
-            [
-                average_reward_over_batches_and_actions,
-                reward_stds_over_batches_and_actions,
-                average_return_over_batch,
-                return_stds_over_batch,
-                average_final_objective_function_value_over_batch,
-                final_objective_function_value_stds_over_batch,
-                average_max_reward_of_episode_over_batches,
-                max_reward_of_episode_stds_over_batches
-            ] = evaluation_driver.run(agent.policy, global_step.numpy())
+            last_metric_list = evaluation_driver.run(agent.policy, global_step.numpy())
+            full_metric_list.append(last_metric_list)
 
-            train_rewards, train_losses, evaluation_performances = training_driver.get_summary()
-            plot_returns_and_losses(
-                train_rewards=train_rewards.numpy()[latest_evaluation_step:],
-                train_losses=train_losses.numpy()[latest_evaluation_step:],
-                evaluation_performances=evaluation_performances.numpy()[latest_quick_evaluation_step:],
-                plot_dir=plot_dir,
-                agent_name=agent_name,
-                function_name=function_name,
-                quick_evaluation_interval=quick_evaluation_interval
+            timestamp = time.gmtime((time.time_ns() - start_time) * 1e-9)
+            logging.info("{}: Evaluation completed in {:.2f}s, average performance = {:.2f}, {}".format(
+                global_step.numpy(),
+                (time.time_ns() - log_timestamp) * 1e-9,
+                last_metric_list[4],  # average_final_objective_function_value_over_batch
+                time.strftime('%H:%M:%S', timestamp))
             )
 
-            # timestamp = time.gmtime((time.time_ns() - start_time) * 1e-9)
-            # logging.info("{}: Evaluation completed in {:.2f}s, average performance = {:.2f}, {}".format(
-            #     global_step.numpy(),
-            #     (time.time_ns() - log_timestamp) * 1e-9,
-            #     average_final_objective_function_value_over_batch,
-            #     time.strftime('%H:%M:%S', timestamp))
-            # )
-            #
-            # perf_str = ""
-            # for label, performance in zip(FUNCTIONS.keys(), performances):
-            #     perf_str += "{}={:.2f}, ".format(label, performance)
-            # logging.info("{}: performances by function: {}".format(global_step.numpy(), perf_str))
             log_timestamp = time.time_ns()
             latest_evaluation_step = training_driver.step.numpy()
             latest_quick_evaluation_step = training_driver.step_evaluation.numpy()
 
-    return average_final_objective_function_value_over_batch, ((time.time_ns() - start_time) * 1e-9)
+    # save/plot full_metric_list
+    full_metric_array = asarray(full_metric_list)
+    train_rewards, train_losses, evaluation_performances = training_driver.get_summary()
+
+    plot_returns_and_losses(
+        train_rewards=train_rewards.numpy(),
+        train_losses=train_losses.numpy(),
+        evaluation_performances=evaluation_performances.numpy(),
+        plot_dir=plot_dir,
+        input_dimension=input_dimension,
+        number_free_parameters=number_free_parameters,
+        function_name=function_name,
+        quick_evaluation_interval=quick_evaluation_interval
+    )
+
+    csv_dir = os.path.join(run_dir, "CSVs")
+
+    # control
+    if not os.path.isdir(csv_dir):
+        os.makedirs(csv_dir)
+
+    save_data(
+        csv_dir=csv_dir,
+        data={
+            csv_dir+'\\full_metric_list.csv': full_metric_array,
+            csv_dir+'\\last_metric_list.csv': asarray(last_metric_list),
+
+            csv_dir+'\\average_reward_over_batches_and_actions.csv': full_metric_array[:, 0],
+            csv_dir+'\\reward_stds_over_batches_and_actions.csv': full_metric_array[:, 1],
+            csv_dir+'\\average_return_over_batch.csv': full_metric_array[:, 2],
+            csv_dir+'\\return_stds_over_batch.csv': full_metric_array[:, 3],
+            csv_dir+'\\average_final_objective_function_value_over_batch.csv': full_metric_array[:, 4],
+            csv_dir+'\\final_objective_function_value_stds_over_batch.csv': full_metric_array[:, 5],
+            csv_dir+'\\average_max_reward_of_episode_over_batches.csv': full_metric_array[:, 6],
+            csv_dir+'\\max_reward_of_episode_stds_over_batches.csv': full_metric_array[:, 7],
+
+            csv_dir + '\\train_rewards.csv': train_rewards.numpy(),
+            csv_dir + '\\train_losses.csv': train_losses.numpy(),
+            csv_dir + '\\evaluation_performances.csv': evaluation_performances.numpy(),
+
+            csv_dir+'\\execution_time.csv': asarray([((time.time_ns() - start_time) * 1e-9)])
+        }
+    )
+
+    return last_metric_list[4], ((time.time_ns() - start_time) * 1e-9)

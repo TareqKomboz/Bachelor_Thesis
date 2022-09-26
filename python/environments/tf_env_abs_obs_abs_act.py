@@ -40,11 +40,8 @@ class TfEnvAbsObsAbsAct(TfEnv):
 
     def _assign_state(self, action):
         clipped_action = common.clip_to_spec(value=action, spec=self.action_spec())
-        expanded_action = clipped_action  # clipped_action # tf.expand_dims(clipped_action, axis=0)
+        expanded_action = clipped_action  # why not: tf.expand_dims(clipped_action, axis=0)
         self._state.assign(tf.concat(
             values=[self.free_values, expanded_action],
             axis=1
         ))
-
-        # state = common.clip_to_spec(action, self.action_spec())
-        # self._state.assign(state)

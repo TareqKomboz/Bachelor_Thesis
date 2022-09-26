@@ -71,7 +71,7 @@ def main(arguments, environment_type, agent_name, input_dimension, function_name
             (input_dimension - number_free_parameters),
             function_name,
             time.strftime('%H:%M:%S', time.gmtime(duration)),
-            average_final_objective_function_value_over_batch
+            average_final_objective_function_value_over_batch  # final performance
         ))
     else:
         logging.info("Skipping training, evaluation only")
@@ -118,15 +118,15 @@ if __name__ == "__main__":
                             default=False)
     args = arg_parser.parse_args()
     gin.parse_config_file(args.configfile)
-    main(arguments=args)
+    # main(arguments=args)
 
-    # for input_dimension in [2, 3, 4]:
-    #     for number_free_parameter in range(1, input_dimension):
-    #         for function_name in FUNCTIONS.keys():
-    #             gin.parse_config_file(args.configfile)
-    #             main(
-    #                 arguments=args,
-    #                 input_dimension=input_dimension,
-    #                 number_free_parameter=number_free_parameter,
-    #                 function_name=function_name
-    #             )
+    for input_dimension in [2, 3, 4]:
+        for number_free_parameters in range(1, input_dimension):
+            for function_name in FUNCTIONS.keys():
+                gin.parse_config_file(args.configfile)
+                main(
+                    arguments=args,
+                    input_dimension=input_dimension,
+                    number_free_parameters=number_free_parameters,
+                    function_name=function_name
+                )

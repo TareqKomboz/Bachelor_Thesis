@@ -10,7 +10,7 @@ class TrainingDriver:
         self.evaluation_performances = common.create_variable('performance', shape=(number_training_iterations, 2), dtype=tf.float32)
         self.evaluation_rewards = common.create_variable(
             'evaluation_rewards',
-            shape=(environment.batch_size, environment.episode_length),
+            shape=(environment.batch_size, environment.get_episode_length()),
             dtype=tf.float32
         )
         self.driver = DynamicEpisodeDriver(environment, agent.collect_policy, replay_observer)

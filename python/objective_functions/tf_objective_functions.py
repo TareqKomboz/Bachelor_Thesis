@@ -398,14 +398,14 @@ def zakharov_gradient(x):
 
 
 FUNCTIONS = {
-    "ackley": (norm_ackley, ackley, ackley_gradient),
-    "griewank": (norm_griewank, griewank, griewank_gradient),
+    "Ackley": (norm_ackley, ackley, ackley_gradient),
+    "Griewank": (norm_griewank, griewank, griewank_gradient),
     # "langermann": (norm_langermann, langermann, langermann_gradient),
-    "levy": (norm_levy, levy, levy_gradient),
+    "Levy": (norm_levy, levy, levy_gradient),
     # "michalewicz": (norm_michalewicz, michalewicz, michalewicz_gradient),
-    "rastrigin": (norm_rastrigin, rastrigin, rastrigin_gradient),
-    "rosenbrock": (lognorm_rosenbrock, rosenbrock, rosenbrock_gradient),
-    "sphere": (norm_sphere, sphere, sphere_gradient),
-    "styblinski_tang": (norm_styblinski_tang, styblinski_tang, styblinski_tang_gradient),
-    "zakharov": (norm_zakharov, zakharov, zakharov_gradient)
+    "Rastrigin": (norm_rastrigin, rastrigin, rastrigin_gradient),
+    "Rosenbrock": (lognorm_rosenbrock, rosenbrock, rosenbrock_gradient),
+    "Sphere": (norm_sphere, sphere, sphere_gradient),
+    "Styblinski_tang": (norm_styblinski_tang, styblinski_tang, styblinski_tang_gradient),
+    "Zakharov": (norm_zakharov, zakharov, zakharov_gradient)
 }
