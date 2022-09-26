@@ -10,11 +10,11 @@ train.batch_size                                        = 256  # 512
 train.randomize_start                                   = True
 
 # training loop config
-train.number_training_iterations                        = 1000 # 10000  # 50000
-train.log_interval                                      = 10 # 100
-train.evaluation_interval                               = 100 # 1000
-train.quick_evaluation_interval                         = 1 # 10
-train.checkpoint_interval                               = 100 # 1000
+train.number_training_iterations                        = 50000 # 10000
+train.log_interval                                      = 500
+train.evaluation_interval                               = 5000
+train.quick_evaluation_interval                         = 50
+train.checkpoint_interval                               = 5000
 
 # environment
 environment_constructor.number_observations             = 5
