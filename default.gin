@@ -2,7 +2,7 @@ main.environment_type                                   = "absolute"
 main.agent_name                                         = "reinforce"
 main.input_dimension                                    = 2
 main.function_name                                      = "Ackley"
-main.number_free_parameters                             = 0
+main.number_free_parameters                             = 1
 main.episode_length                                     = 50  # = replay_buffer_capacity
 
 # environment config
