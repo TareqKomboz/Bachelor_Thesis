@@ -6,7 +6,7 @@ main.number_free_parameters                             = 0
 main.episode_length                                     = 50  # = replay_buffer_capacity
 
 # environment config
-train.batch_size                                        = 256  # 512
+train.batch_size                                        = 512
 train.randomize_start                                   = True
 
 # training loop config
@@ -17,7 +17,7 @@ train.quick_evaluation_interval                         = 10
 train.checkpoint_interval                               = 1000
 
 # environment
-environment_constructor.number_observations             = 5
+environment_constructor.number_observations             = 1
 
 # evaluation driver
 evaluation_driver_init.n_start_pos                      = 3
