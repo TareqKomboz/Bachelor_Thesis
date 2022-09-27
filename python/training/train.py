@@ -141,8 +141,6 @@ def train(
 
     logging.info("Starting training loop, initial graph construction might take a bit")
     log_timestamp = time.time_ns()
-    latest_evaluation_step = 0
-    latest_quick_evaluation_step = 0
     full_metric_list = []
     for i in range(number_training_iterations):
 
@@ -220,8 +218,6 @@ def train(
             )
 
             log_timestamp = time.time_ns()
-            latest_evaluation_step = training_driver.step.numpy()
-            latest_quick_evaluation_step = training_driver.step_evaluation.numpy()
 
     # save/plot full_metric_list
     full_metric_array = asarray(full_metric_list)
