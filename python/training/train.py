@@ -63,7 +63,7 @@ def train(
             dtype=tf.float32
         )
     else:
-        start_point = tf.constant(0.8, shape=(batch_size, 2), dtype=tf.float32)
+        start_point = tf.constant(0.8, shape=(batch_size, input_dimension), dtype=tf.float32)
 
     train_environment = create_environment(
         environment_type=environment_type,

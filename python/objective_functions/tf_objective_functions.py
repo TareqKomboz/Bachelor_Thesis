@@ -60,7 +60,7 @@ def griewank(x):
 #     c = tf.constant([1, 2, 5, 2, 3], dtype=dtype)
 #     a = tf.constant([[3, 5, 2, 1, 7], [5, 2, 1, 4, 9]], dtype=dtype)
 #     d = x.shape[0]
-#     batch_size = x.shape[1]
+#     batch_size = x.shape[0]
 #
 #     f = tf.zeros(shape=(batch_size,))
 #     for i in tf.range(m):
@@ -81,7 +81,7 @@ def levy(x):
 
     term1 = (tf.sin(math.pi * w(x[0]))) ** 2
     term3 = ((w(x[d-1]) - 1) ** 2) * (1 + (tf.sin(2 * math.pi * w(x[d-1]))) ** 2)
-    my_sum = 0
+    my_sum = 0.0
     for i in range(d - 1):
         my_sum += ((w(x[i]) - 1) ** 2) * (1 + (10 * (tf.sin((math.pi * w(x[i])) + 1) ** 2)))
 
@@ -112,10 +112,11 @@ def w(x_i):
 @tf.function
 def rastrigin(x):
     x = tf.multiply(x, 5.0)
+    d = x.shape[0]
+
     pi2 = tf.constant(2 * math.pi, dtype=tf.float32)
     a = tf.constant(10.0, dtype=tf.float32)
 
-    d = x.shape[0]
     my_sum = 0.0
     for i in range(d):
         my_sum += (tf.pow(x[i], 2) - (a * tf.cos(pi2 * x[i])))
@@ -127,7 +128,7 @@ def rastrigin(x):
 
 @tf.function
 def rosenbrock(x):
-    x = tf.multiply(2.0, x)  # Todo x in (-5.0, 10.0) or (-2.048, 2.048)
+    x = tf.multiply(x, 2.0)  # Todo x in (-5.0, 10.0) or (-2.048, 2.048)
     d = x.shape[0]
 
     f = 0
@@ -150,15 +151,20 @@ def rosenbrock(x):
 # f(x)=0 at 000
 @tf.function
 def sphere(x):
-    x *= 5.0
-    x = tf.pow(x, 2)
-    return tf.math.reduce_sum(x, axis=0)
+    x = tf.multiply(x, 5.0)
+    d = x.shape[0]
+
+    my_sum = 0.0
+    for i in range(d):
+        my_sum += tf.pow(x[i], 2)
+
+    return my_sum
 
 
 # f(x)=-39.17*d at (-2.9, ..., -2.9)
 @tf.function
 def styblinski_tang(x):
-    x *= 5.0
+    x = tf.multiply(x, 5.0)
     d = x.shape[0]
 
     my_sum = 0.0
@@ -174,7 +180,7 @@ def styblinski_tang(x):
 @tf.function
 def zakharov(x):
     # x = (((x + 1.0) / 2.0) * 15.0) - 5.0
-    x *= 5
+    x = tf.multiply(x, 5.0)
     d = x.shape[0]
 
     sum1 = 0.0
@@ -194,29 +200,39 @@ def zakharov(x):
     return f
 
 
-@tf.function
-def normalize_function(x, number_free_parameters, objective_function, function_name):
-    my_max = objective_function(x=-tf.ones_like(input=x))
+def normalize_function(x, number_free_parameters, free_values, objective_function, function_name):
     f = objective_function(x)
-    d = x.shape[0]
+    x_shape = x.shape
+    d = x_shape[0]
+    batch_size = x_shape[1]
+    rest_zeros = tf.zeros(shape=(d-number_free_parameters, batch_size))
+    rest_ones = tf.ones(shape=(d-number_free_parameters, batch_size))
 
-    if function_name == "Ackley":
-        my_min = objective_function(x=tf.zeros_like(input=x))
-    elif function_name == "Griewank":
-        my_min = objective_function(x=tf.zeros_like(input=x))
+    max_input_x = tf.concat(
+        values=[tf.convert_to_tensor(free_values), tf.convert_to_tensor(-1 * rest_ones)],
+        axis=0
+    )
+    my_max = objective_function(x=max_input_x)
+
+    if function_name == "Ackley" \
+            or function_name == "Griewank" \
+            or function_name == "Rastrigin" \
+            or function_name == "Sphere" \
+            or function_name == "Zakharov":
+        min_input_opt = rest_zeros
     elif function_name == "Levy":
-        my_min = objective_function(x=tf.divide(tf.ones_like(input=x), 10.0))
-    elif function_name == "Rastrigin":
-        my_min = objective_function(x=tf.zeros_like(input=x))
+        min_input_opt = rest_ones / 10.0
     elif function_name == "Rosenbrock":
-        my_min = objective_function(x=tf.divide(tf.ones_like(input=x), 2.0))
-    elif function_name == "Sphere":
-        my_min = objective_function(x=tf.zeros_like(input=x))
+        min_input_opt = rest_ones / 2.0
     elif function_name == "Styblinski_tang":
         my_min = -39.16599 * d
-        my_min = objective_function(x=tf.divide(tf.multiply(tf.ones_like(input=x), -2.903534), 5.0))
-    elif function_name == "Zakharov":
-        my_min = objective_function(x=tf.zeros_like(input=x))
+        min_input_opt = (rest_ones * -2.903534) / 5.0
+
+    min_input_x = tf.concat(
+        values=[tf.convert_to_tensor(free_values), tf.convert_to_tensor(min_input_opt)],
+        axis=0
+    )
+    my_min = objective_function(x=min_input_x)
 
     value = (my_max - f) / (my_max - my_min)
     return tf.clip_by_value(value, clip_value_min=0.0, clip_value_max=1.0)

@@ -158,6 +158,7 @@ class TfEnv(TFEnvironment):
         return normalize_function(
             x=tf.transpose(self._state),
             number_free_parameters=self.number_free_parameters,
+            free_values=tf.transpose(self.free_values),
             objective_function=self.objective_function,
             function_name=self.function_name
         )
