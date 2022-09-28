@@ -4,7 +4,7 @@ import gin
 
 from objective_functions.tf_objective_functions import FUNCTIONS
 from environments.create_environment import create_environment
-from evaluation.evaluation_utils import build_evaluation_params
+from evaluation.evaluation_utils import build_evaluation_parameters
 import tensorflow as tf
 
 from evaluation.plot_utils import plot, plot_performance_over_time_with_stds
@@ -28,7 +28,7 @@ class EvaluationDriver:
         self.run_dir = run_dir
         self.n_start_pos = n_start_pos
 
-        self.starting_positions = build_evaluation_params(n_start_pos=self.n_start_pos, input_dimension=input_dimension)
+        self.starting_positions = build_evaluation_parameters(n_start_pos=self.n_start_pos, input_dimension=input_dimension)  # todo: not as batchsize
         self.plot_all = plot_all
         self.batch_size = len(self.starting_positions)
 
@@ -36,7 +36,7 @@ class EvaluationDriver:
             environment_type=environment_type,
             input_dimension=input_dimension,
             function_name=function_name,
-            objective_function=FUNCTIONS[function_name][0],
+            objective_function=FUNCTIONS[function_name],
             number_free_parameters=number_free_parameters,
             start_point=self.starting_positions,
             batch_size=self.batch_size,

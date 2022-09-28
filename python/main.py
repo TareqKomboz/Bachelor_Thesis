@@ -120,18 +120,16 @@ if __name__ == "__main__":
     gin.parse_config_file(args.configfile)
     main(arguments=args)
 
-    # for input_dimension in [2, 3]:
-    #     for number_free_parameters in range(1, input_dimension):
-    #         for function_name in FUNCTIONS.keys():
-    #             gin.parse_config_file(args.configfile)
-    #             main(
-    #                 arguments=args,
-    #                 input_dimension=input_dimension,
-    #                 number_free_parameters=number_free_parameters,
-    #                 function_name=function_name
-    #             )
+    # for function_name in FUNCTIONS.keys():
+    #     gin.parse_config_file(args.configfile)
+    #     main(
+    #         arguments=args,
+    #         input_dimension=2,
+    #         number_free_parameters=1,
+    #         function_name=function_name
+    #     )
     #
-    # for input_dimension in [6, 10]:
+    # for input_dimension in [4, 6, 8, 10]:
     #     for number_free_parameters in [1, (input_dimension / 2), (input_dimension - 1)]:
     #         for function_name in FUNCTIONS.keys():
     #             gin.parse_config_file(args.configfile)

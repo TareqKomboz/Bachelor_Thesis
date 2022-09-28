@@ -1,6 +1,7 @@
-from numpy import array
+def square(x):
+    return x ** 2
 
 
 if __name__ == "__main__":
-    c = [0, 20, 3]
-    print(c[:5])
+    for i in range(8000000):
+        square(i)

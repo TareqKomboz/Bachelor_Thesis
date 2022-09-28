@@ -47,7 +47,7 @@ def plot_returns_and_losses(
     plt.clf()
 
 
-def build_evaluation_params(n_start_pos, input_dimension):
+def build_evaluation_parameters(n_start_pos, input_dimension):
     N_start_pos = (n_start_pos + 1) ** input_dimension
 
     my_list = []

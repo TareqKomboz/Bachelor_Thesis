@@ -10,9 +10,10 @@ import tensorflow as tf
 dtype = tf.float32
 
 
+# f(x)=0 at 000
 @tf.function
 def ackley(x):
-    x = tf.multiply(x, 32.0)
+    x = tf.multiply(x, 20.0)  # 32
     a = tf.constant(20.0, dtype=dtype)  # 10
     b = tf.constant(0.2, dtype=dtype)
     c = tf.constant(2.0 * math.pi, dtype=dtype)  # 0.25
@@ -28,37 +29,6 @@ def ackley(x):
 
     f = (-a * tf.exp(-b * tf.sqrt((1 / d) * sum1))) - tf.exp((1 / d) * sum2) + tf.exp(1.0) + a
     return f
-
-
-@tf.function
-def norm_ackley(x):
-    my_max = ackley(x=tf.ones_like(input=x))
-    value = my_max - ackley(x)
-    value /= my_max
-    value = tf.clip_by_value(value, clip_value_min=-1.0, clip_value_max=1.0)
-    return value
-
-
-@tf.function
-def ackley_gradient(x):
-    a = tf.constant(20.0, dtype=dtype)  # 10
-    b = tf.constant(0.2, dtype=dtype)
-    c = tf.constant(2.0 * math.pi, dtype=dtype)  # 0.25
-    d = x.shape[0]
-    gradient = []
-
-    sum1 = 0.0
-    for i in range(d):
-        sum1 += tf.pow(x[i], 2)
-
-    sum2 = 0.0
-    for j in range(d):
-        sum2 += tf.cos(c * x[j])
-
-    for k in range(d):
-        gradient.append((a * b * x[k] * tf.exp(-b * tf.sqrt((1 / d) * sum1)) / tf.sqrt((d * sum1))) + (tf.exp((1 / d) * sum2) * (c / d) * tf.sin(c * x[k])))
-
-    return gradient
 
 
 # plot for x between 5, 10, 50 and 1000
@@ -79,26 +49,6 @@ def griewank(x):
     f = tf.math.add(tf.math.subtract(my_sum, prod), 1.0)
 
     return f
-
-
-@tf.function
-def norm_griewank(x):
-    my_max = griewank(x=tf.ones_like(input=x))
-    value = my_max - griewank(x)
-    value /= my_max
-    value = tf.clip_by_value(value, clip_value_min=-1.0, clip_value_max=1.0)
-    return value
-
-
-@tf.function
-def griewank_gradient(x):
-    d = x.shape[0]
-    gradient = []
-    for i in range(d):
-        casted_i = tf.cast(i + 1, dtype=tf.float32)
-        gradient.append((x[i] / 2000.0) + ((1 / tf.sqrt(casted_i)) * tf.sin(tf.math.divide(x[i], tf.math.sqrt(casted_i)))))
-
-    return gradient
 
 
 # @tf.function
@@ -123,14 +73,6 @@ def griewank_gradient(x):
 #     return f
 
 
-# @tf.function
-# def norm_langermann(x):
-#     value = 5.0 - langermann(x)
-#     value /= 10.0
-#     value = tf.clip_by_value(value, clip_value_min=-1.0, clip_value_max=1.0)
-#     return value
-
-
 # f(x)=0 for 111
 @tf.function
 def levy(x):
@@ -149,37 +91,6 @@ def levy(x):
 
 
 @tf.function
-def norm_levy(x):
-    my_max = levy(x=-tf.ones_like(input=x))
-    value = my_max - levy(x)
-    value /= my_max
-    value = tf.clip_by_value(value, clip_value_min=-1.0, clip_value_max=1.0)
-    return value
-
-
-@tf.function
-def levy_gradient(x):
-    d = x.shape[0]
-    gradient = []
-    for i in range(d):
-        if i == 0:
-            term1 = 0.5 * math.pi * tf.sin(math.pi * w(x[i])) * tf.cos(math.pi * w(x[i]))
-            term2 = 0.5 * (w(x[i]) - 1) * (1 + 10 * (tf.sin(math.pi * w(x[i]) + 1) ** 2)) + \
-                    5 * math.pi * ((w(x[i]) - 1) ** 2) * tf.sin((math.pi * w(x[i])) + 1) * tf.cos((math.pi * w(x[i])) + 1)
-            gradient.append(term1 + term2)
-        elif i == d - 1:
-            term3 = 0.5 * (w(x[i]) - 1) * (1 + (tf.sin(2 * math.pi * w(x[i])) ** 2)) + \
-                    math.pi * ((w(x[i]) - 1) ** 2) * tf.sin(2 * math.pi * w(x[i])) * tf.cos(2 * math.pi * w(x[i]))
-            gradient.append(term3)
-        else:
-            term2 = 0.5 * (w(x[i]) - 1) * (1 + 10 * (tf.sin(math.pi * w(x[i]) + 1) ** 2)) + \
-                    5 * math.pi * ((w(x[i]) - 1) ** 2) * tf.sin((math.pi * w(x[i])) + 1) * tf.cos((math.pi * w(x[i])) + 1)
-            gradient.append(term2)
-
-    return gradient
-
-
-@tf.function
 def w(x_i):
     return 1 + ((x_i - 1) / 4)
 
@@ -195,19 +106,12 @@ def w(x_i):
 #     for i in range(d):
 #         f += tf.sin(x[i]) * (tf.sin((((i + 1) * (x[i] ** 2)) / math.pi)) ** (2 * m))
 #     return -f
-#
-#
-# @tf.function
-# def norm_michalewicz(x):
-#     value = - 0.20895 - michalewicz(x)
-#     value /= 1.592327
-#     value = tf.clip_by_value(value, clip_value_min=-1.0, clip_value_max=1.0)
-#     return value
 
 
+# f(x)=0 at 000
 @tf.function
 def rastrigin(x):
-    x = tf.multiply(x, 5.12)
+    x = tf.multiply(x, 5.0)
     pi2 = tf.constant(2 * math.pi, dtype=tf.float32)
     a = tf.constant(10.0, dtype=tf.float32)
 
@@ -222,27 +126,8 @@ def rastrigin(x):
 
 
 @tf.function
-def norm_rastrigin(x):
-    my_max = rastrigin(x=tf.ones_like(input=x))  # Todo: max = 37.0511589 or 80
-    value = my_max - rastrigin(x)
-    value /= my_max
-    value = tf.clip_by_value(value, clip_value_min=-1.0, clip_value_max=1.0)
-    return value
-
-
-@tf.function
-def rastrigin_gradient(x):
-    d = x.shape[0]
-    gradient = []
-    for i in range(d):
-        gradient.append((2 * x[i]) + (10 * 2 * math.pi * tf.sin(2 * math.pi * x[i])))
-
-    return gradient
-
-
-@tf.function
 def rosenbrock(x):
-    x *= 2.0  # Todo x in (-5.0, 10.0) or (-2.048, 2.048)
+    x = tf.multiply(2.0, x)  # Todo x in (-5.0, 10.0) or (-2.048, 2.048)
     d = x.shape[0]
 
     f = 0
@@ -252,66 +137,25 @@ def rosenbrock(x):
     return f
 
 
-# local minimum (0,0) = 0,
-@tf.function
-def lognorm_rosenbrock(x):
-    my_max = tf.math.log(rosenbrock(x=-tf.ones_like(input=x)))
-    value = my_max - tf.math.log(rosenbrock(x))  # 5 - ...
-    value /= my_max  # 20
-    value = tf.clip_by_value(value, clip_value_min=-1.0, clip_value_max=1.0)
-    return value
+# f(x)=0 at 111
+# @tf.function
+# def lognorm_rosenbrock(x, number_free_parameters):
+#     my_max = tf.math.log(rosenbrock(x=-tf.ones_like(input=x)))
+#     value = my_max - tf.math.log(rosenbrock(x))  # 5 - ...
+#     value /= my_max  # 20
+#     value = tf.clip_by_value(value, clip_value_min=-1.0, clip_value_max=1.0)
+#     return value
 
 
-@tf.function
-def norm_rosenbrock(x):
-    my_max = rosenbrock(x=-tf.ones_like(input=x))  # my_max = 3609.0
-    value = my_max - rosenbrock(x)
-    value /= my_max
-    value = tf.clip_by_value(value, clip_value_min=-1.0, clip_value_max=1.0)
-    return value
-
-
-@tf.function
-def rosenbrock_gradient(x):
-    d = x.shape[0]
-    gradient = []
-    for i in range(d):
-        if i == 0:
-            gradient.append((-400 * x[i] * (x[i+1] - (x[i] ** 2))) + 2 * (x[i] - 1))
-        elif i == d - 1:
-            gradient.append((-400 * x[i] * (x[i+1] - (x[i] ** 2))) + (2 * (x[i] - 1)) + (200 * (x[i] - (x[i-1] ** 2))))
-        else:
-            gradient.append(200 * (x[i] - (x[i-1] ** 2)))
-
-    return gradient
-
-
+# f(x)=0 at 000
 @tf.function
 def sphere(x):
-    x *= 10.0
+    x *= 5.0
     x = tf.pow(x, 2)
     return tf.math.reduce_sum(x, axis=0)
 
 
-@tf.function
-def norm_sphere(x):
-    my_max = sphere(x=tf.ones_like(input=x))
-    value = my_max - sphere(x)
-    value /= my_max
-    value = tf.clip_by_value(value, clip_value_min=-1.0, clip_value_max=1.0)
-    return value
-
-
-@tf.function
-def sphere_gradient(x):
-    d = x.shape[0]
-    gradient = []
-    for i in range(d):
-        gradient.append(2*x[i])
-
-    return gradient
-
-
+# f(x)=-39.17*d at (-2.9, ..., -2.9)
 @tf.function
 def styblinski_tang(x):
     x *= 5.0
@@ -326,30 +170,11 @@ def styblinski_tang(x):
     return f
 
 
-@tf.function
-def norm_styblinski_tang(x):
-    d = x.shape[0]
-    my_max = styblinski_tang(x=tf.ones_like(input=x))
-    value = my_max - styblinski_tang(x)
-    value /= (my_max + (39.16599 * d))
-    value = tf.clip_by_value(value, clip_value_min=-1.0, clip_value_max=1.0)
-    return value
-
-
-@tf.function
-def styblinski_tang_gradient(x):
-    d = x.shape[0]
-    gradient = []
-    for i in range(d):
-        gradient.append(0.5 * ((4 * (x[i] ** 3)) - (32 * x[i]) + 5))
-
-    return gradient
-    
-    
 # f(x)=0 bei 000
 @tf.function
 def zakharov(x):
-    x = (((x + 1.0) / 2.0) * 15.0) - 5.0
+    # x = (((x + 1.0) / 2.0) * 15.0) - 5.0
+    x *= 5
     d = x.shape[0]
 
     sum1 = 0.0
@@ -370,42 +195,42 @@ def zakharov(x):
 
 
 @tf.function
-def norm_zakharov(x):
-    my_max = zakharov(x=tf.ones_like(input=x))
-    value = my_max - zakharov(x)
-    value /= my_max
-    value = tf.clip_by_value(value, clip_value_min=-1.0, clip_value_max=1.0)
-    return value
-
-
-@tf.function
-def zakharov_gradient(x):
+def normalize_function(x, number_free_parameters, objective_function, function_name):
+    my_max = objective_function(x=-tf.ones_like(input=x))
+    f = objective_function(x)
     d = x.shape[0]
-    gradient = []
 
-    sum1 = 0.0
-    for j in range(d):
-        sum1 += (j + 1) * x[j]
+    if function_name == "Ackley":
+        my_min = objective_function(x=tf.zeros_like(input=x))
+    elif function_name == "Griewank":
+        my_min = objective_function(x=tf.zeros_like(input=x))
+    elif function_name == "Levy":
+        my_min = objective_function(x=tf.divide(tf.ones_like(input=x), 10.0))
+    elif function_name == "Rastrigin":
+        my_min = objective_function(x=tf.zeros_like(input=x))
+    elif function_name == "Rosenbrock":
+        my_min = objective_function(x=tf.divide(tf.ones_like(input=x), 2.0))
+    elif function_name == "Sphere":
+        my_min = objective_function(x=tf.zeros_like(input=x))
+    elif function_name == "Styblinski_tang":
+        my_min = -39.16599 * d
+        my_min = objective_function(x=tf.divide(tf.multiply(tf.ones_like(input=x), -2.903534), 5.0))
+    elif function_name == "Zakharov":
+        my_min = objective_function(x=tf.zeros_like(input=x))
 
-    sum2 = 0.0
-    for k in range(d):
-        sum2 += 0.5 * (k + 1) * x[k]
-
-    for i in range(d):
-        gradient.append((2 * x[i]) + (0.5 * i * sum1) + (2 * i * (sum2 ** 3)))
-
-    return gradient
+    value = (my_max - f) / (my_max - my_min)
+    return tf.clip_by_value(value, clip_value_min=0.0, clip_value_max=1.0)
 
 
 FUNCTIONS = {
-    "Ackley": (norm_ackley, ackley, ackley_gradient),
-    "Griewank": (norm_griewank, griewank, griewank_gradient),
-    # "langermann": (norm_langermann, langermann, langermann_gradient),
-    "Levy": (norm_levy, levy, levy_gradient),
-    # "michalewicz": (norm_michalewicz, michalewicz, michalewicz_gradient),
-    "Rastrigin": (norm_rastrigin, rastrigin, rastrigin_gradient),
-    "Rosenbrock": (lognorm_rosenbrock, rosenbrock, rosenbrock_gradient),
-    "Sphere": (norm_sphere, sphere, sphere_gradient),
-    "Styblinski_tang": (norm_styblinski_tang, styblinski_tang, styblinski_tang_gradient),
-    "Zakharov": (norm_zakharov, zakharov, zakharov_gradient)
+    "Ackley": ackley,
+    "Griewank": griewank,
+    # "Langermann": langermann,
+    "Levy": levy,
+    # "Michalewicz": michalewicz,
+    "Rastrigin": rastrigin,
+    "Rosenbrock": rosenbrock,
+    "Sphere": sphere,
+    "Styblinski_tang": styblinski_tang,
+    "Zakharov": zakharov
 }

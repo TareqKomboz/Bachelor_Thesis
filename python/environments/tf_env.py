@@ -7,6 +7,8 @@ from tf_agents.environments import TFEnvironment
 
 from numpy import ones
 
+from python.objective_functions.tf_objective_functions import normalize_function
+
 FIRST = ts.StepType.FIRST
 MID = ts.StepType.MID
 LAST = ts.StepType.LAST
@@ -127,7 +129,7 @@ class TfEnv(TFEnvironment):
         self._states.assign(tf.zeros_like(self._states))
         self._states[:, 0].assign(self._state)
         self._function_values.assign(tf.zeros_like(self._function_values))
-        self._function_values[:, 0].assign(self.evaluate_objective_function(self._initial_state))
+        self._function_values[:, 0].assign(self.evaluate_objective_function())
         self._observations.assign(tf.zeros_like(self._observations))
         self._reset_observations()
 
@@ -139,7 +141,7 @@ class TfEnv(TFEnvironment):
             return self.reset()
         self.assign_state(action)
         self._states[:, self._steps].assign(self._state)
-        self._function_values[:, self._steps].assign(self.evaluate_objective_function(self._state))
+        self._function_values[:, self._steps].assign(self.evaluate_objective_function())
         self.build_observation()
         return self.current_time_step()
 
@@ -152,9 +154,13 @@ class TfEnv(TFEnvironment):
     def assign_state(self, action):
         self._assign_state(action)
 
-    def _evaluate_objective_function(self, x):
-        reward = self.objective_function(tf.transpose(x))
-        return reward
+    def _evaluate_objective_function(self):
+        return normalize_function(
+            x=tf.transpose(self._state),
+            number_free_parameters=self.number_free_parameters,
+            objective_function=self.objective_function,
+            function_name=self.function_name
+        )
 
     def set_starting_positions_and_free_values(self, start_point):
         self._initial_state = start_point

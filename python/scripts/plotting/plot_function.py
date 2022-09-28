@@ -24,12 +24,9 @@ MESHGRID = tf.convert_to_tensor(tf.meshgrid(X, Y))
 
 
 def main():
-    function_idx = 0 if NORMALIZED else 1
-    fig_name = "norm_" if NORMALIZED else ""
-
     if SINGLE_PLOT:
         for function_name in FUNCTIONS.keys():
-            image = FUNCTIONS[function_name][function_idx](MESHGRID)
+            image = FUNCTIONS[function_name](MESHGRID)
             print("plotting {}, max={}, min={}, area={}".format(
                 function_name,
                 tf.reduce_max(image),
@@ -39,15 +36,15 @@ def main():
             fig, ax = plt.subplots(1, 1)
             p = plot(image, ax)
             plt.colorbar(p)
-            plt.savefig(os.path.join(PLOT_DIR, "{}{}_{}D".format(fig_name, function_name, DIMENSIONS)),
+            plt.savefig(os.path.join(PLOT_DIR, "{}_{}D".format(function_name, DIMENSIONS)),
                         dpi=400, transparent=True)
             plt.show()
     else:
         images = []
         for function_name in FUNCTIONS.keys():
-            images.append(FUNCTIONS[function_name][function_idx](MESHGRID))
+            images.append(FUNCTIONS[function_name](MESHGRID))
         sub_plots(images)
-        plt.savefig(os.path.join(PLOT_DIR, "{}All_{}D".format(fig_name, DIMENSIONS)), dpi=400, transparent=True)
+        plt.savefig(os.path.join(PLOT_DIR, "All_{}D".format(DIMENSIONS)), dpi=400, transparent=True)
         plt.show()
 
 

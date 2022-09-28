@@ -69,7 +69,7 @@ def train(
         environment_type=environment_type,
         input_dimension=input_dimension,
         function_name=function_name,
-        objective_function=FUNCTIONS[function_name][0],
+        objective_function=FUNCTIONS[function_name],
         number_free_parameters=number_free_parameters,
         start_point=start_point,
         batch_size=batch_size,

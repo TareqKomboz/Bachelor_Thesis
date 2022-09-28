@@ -104,15 +104,26 @@ if __name__ == "__main__":
     #     average_episode_rewards=array([])
     # )
 
-    for objective_function_name, fct_tuple in FUNCTIONS.items():
-        objective_function = fct_tuple[1]
-        visualize_environment(
-            objective_function=objective_function,
-            objective_function_name=objective_function_name,
-            parameter_bounds=(-1.0, 1.0),
-            input_dimension=2,
-            font={
-                "font_title": {'family': 'sans-serif', 'color': 'black', 'size': 20},
-                "font_axis_labels": {'family': 'sans-serif', 'color': 'blue', 'size': 15}
-            }
-        )
+    # for objective_function_name, fct_tuple in FUNCTIONS.items():
+    #     objective_function = fct_tuple[1]
+    #     visualize_environment(
+    #         objective_function=objective_function,
+    #         objective_function_name=objective_function_name,
+    #         parameter_bounds=(-1.0, 1.0),
+    #         input_dimension=2,
+    #         font={
+    #             "font_title": {'family': 'sans-serif', 'color': 'black', 'size': 20},
+    #             "font_axis_labels": {'family': 'sans-serif', 'color': 'blue', 'size': 15}
+    #         }
+    #     )
+
+    visualize_environment(
+        objective_function=FUNCTIONS["Rosenbrock"],
+        objective_function_name="Rosenbrock",
+        parameter_bounds=(-1.0, 1.0),
+        input_dimension=2,
+        font={
+            "font_title": {'family': 'sans-serif', 'color': 'black', 'size': 20},
+            "font_axis_labels": {'family': 'sans-serif', 'color': 'blue', 'size': 15}
+        }
+    )
