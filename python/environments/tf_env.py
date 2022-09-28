@@ -7,7 +7,7 @@ from tf_agents.environments import TFEnvironment
 
 from numpy import ones
 
-from python.objective_functions.tf_objective_functions import normalize_function
+from objective_functions.tf_objective_functions import normalize_function
 
 FIRST = ts.StepType.FIRST
 MID = ts.StepType.MID
