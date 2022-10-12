@@ -118,14 +118,14 @@ if __name__ == "__main__":
                             default=False)
     args = arg_parser.parse_args()
     gin.parse_config_file(args.configfile)
-    # main(arguments=args)  # for debugging
+    main(arguments=args, input_dimension=20)  # for debugging
 
-    for input_dimension in [20, 30, 40, 50, 100]:
-        for number_free_parameters in [1, int(input_dimension / 2), (input_dimension - 1)]:
-            for function_name in FUNCTIONS.keys():
-                main(
-                    arguments=args,
-                    input_dimension=input_dimension,
-                    number_free_parameters=number_free_parameters,
-                    function_name=function_name
-                )
+    # for input_dimension in [20, 30, 40, 50, 100]:
+    #     for number_free_parameters in [1, int(input_dimension / 2), (input_dimension - 1)]:
+    #         for function_name in FUNCTIONS.keys():
+    #             main(
+    #                 arguments=args,
+    #                 input_dimension=input_dimension,
+    #                 number_free_parameters=number_free_parameters,
+    #                 function_name=function_name
+    #             )

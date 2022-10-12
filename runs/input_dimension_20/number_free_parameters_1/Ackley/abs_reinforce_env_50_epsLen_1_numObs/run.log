@@ -1,0 +1,3 @@
+INFO:root:Loaded contents of configfile C:\Users\Zeyad\PycharmProjects\Kilian_modified\default.gin
+INFO:root:Starting run on absolute environment with reinforce agent on 20d-Ackley function with 1 free and 19 opt parameters. run_id abs_reinforce_env_50_epsLen_1_numObs
+INFO:root:Starting training setup

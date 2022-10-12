@@ -128,7 +128,7 @@ def rastrigin(x):
 
 @tf.function
 def rosenbrock(x):
-    x = tf.multiply(x, 2.0)  # Todo x in (-5.0, 10.0) or (-2.048, 2.048)
+    x = tf.multiply(x, 2.0)  # x in (-5.0, 10.0) or (-2.048, 2.048)
     d = x.shape[0]
 
     f = 0

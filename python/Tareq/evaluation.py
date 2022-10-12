@@ -30,6 +30,3 @@ def compute_average_objective_function_value_and_return(
     average_episode_return = total_return / number_evaluation_episodes
 
     return average_final_objective_function_value, average_episode_return
-
-
-# Todo: amount of time it takes to learn = count number of episodes before threshold of average performance is exceeded
