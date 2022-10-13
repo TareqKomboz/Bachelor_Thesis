@@ -4,7 +4,7 @@ import gin
 
 from objective_functions.tf_objective_functions import FUNCTIONS
 from environments.create_environment import create_environment
-from evaluation.evaluation_utils import build_evaluation_parameters
+from evaluation.evaluation_utils import build_evaluation_parameters, build_evaluation_parameters_new
 import tensorflow as tf
 
 from evaluation.plot_utils import plot, plot_performance_over_time_with_stds
@@ -26,9 +26,15 @@ class EvaluationDriver:
             plot_all=True):
 
         self.run_dir = run_dir
+        self.environment_type = environment_type
         self.n_start_pos = n_start_pos
-
-        self.starting_positions = build_evaluation_parameters(n_start_pos=self.n_start_pos, input_dimension=input_dimension)  # todo: not as batchsize
+        self.starting_positions = build_evaluation_parameters(
+            n_start_pos=self.n_start_pos,
+            input_dimension=input_dimension
+        )
+        self.function_name = function_name
+        self.number_free_parameters = number_free_parameters
+        self.episode_length = episode_length
         self.plot_all = plot_all
         self.batch_size = len(self.starting_positions)
 
@@ -42,6 +48,19 @@ class EvaluationDriver:
             batch_size=self.batch_size,
             episode_length=episode_length
         )
+
+        # self.environments = []
+        # for starting_position in self.starting_positions:
+        #     self.environments.append(create_environment(
+        #         environment_type=environment_type,
+        #         input_dimension=input_dimension,
+        #         function_name=function_name,
+        #         objective_function=FUNCTIONS[function_name],
+        #         number_free_parameters=number_free_parameters,
+        #         start_point=starting_position,
+        #         batch_size=self.batch_size,
+        #         episode_length=episode_length
+        #     ))
 
     def run(self, policy, step_counter):
         plot_dir = os.path.join(self.run_dir, "Step_{}".format(step_counter))
