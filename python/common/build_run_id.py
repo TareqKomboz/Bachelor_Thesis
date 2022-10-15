@@ -150,9 +150,8 @@ def read_parameters(configfile):
 
 
 def build_run_id(params):
-    run_id = "{}_{}_env_{}_epsLen_{}_numObs".format(
+    run_id = "{}_env_{}_epsLen_{}_numObs".format(
         params.environment_type[:3],
-        params.agent_name,
         params.episode_length,
         params.number_observations
     )

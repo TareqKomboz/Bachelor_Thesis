@@ -21,6 +21,7 @@ def main(arguments, environment_type, agent_name, input_dimension, function_name
 
     run_dir = os.path.join(
         RUNS_DIR,
+        "agent_name_{}".format(agent_name),
         "input_dimension_{}".format(input_dimension),
         "number_free_parameters_{}".format(number_free_parameters),
         function_name,
@@ -118,15 +119,26 @@ if __name__ == "__main__":
                             default=False)
     args = arg_parser.parse_args()
     gin.parse_config_file(args.configfile)
-    # main(arguments=args, input_dimension=10)  # for debugging
+    # main(arguments=args)  # for debugging
 
-    # for input_dimension in [20, 30, 40, 50, 100]:
-    for input_dimension in [12, 14, 16, 18, 20]:
-        for number_free_parameters in [1, int(input_dimension / 2), (input_dimension - 1)]:
-            for function_name in FUNCTIONS.keys():
-                main(
-                    arguments=args,
-                    input_dimension=input_dimension,
-                    number_free_parameters=number_free_parameters,
-                    function_name=function_name
-                )
+    for agent_name in ["rnn_reinforce", "ppo", "rnn_ppo"]:
+        for input_dimension in [2, 10]:
+            if input_dimension == 2:
+                for function_name in FUNCTIONS.keys():
+                    main(
+                        arguments=args,
+                        input_dimension=input_dimension,
+                        number_free_parameters=1,
+                        function_name=function_name,
+                        agent_name=agent_name
+                    )
+            else:
+                for number_free_parameters in [1, (input_dimension - 1)]:
+                    for function_name in FUNCTIONS.keys():
+                        main(
+                            arguments=args,
+                            input_dimension=input_dimension,
+                            number_free_parameters=number_free_parameters,
+                            function_name=function_name,
+                            agent_name=agent_name
+                        )

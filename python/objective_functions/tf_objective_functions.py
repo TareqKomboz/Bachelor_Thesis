@@ -1,5 +1,6 @@
 import math
 import tensorflow as tf
+import numpy as np
 
 # All functions must take inputs of range (-1, 1) of dimension (2, N),
 # the normalized version output is scaled so the surface integral equals 0 and the global minimum is 1

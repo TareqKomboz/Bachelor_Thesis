@@ -75,4 +75,3 @@ def build_evaluation_parameters_new(n_start_pos, input_dimension):
     reshaped_mesh = np.reshape(transposed_mesh, (1, input_dimension))
 
     return reshaped_mesh
-
