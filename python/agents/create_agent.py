@@ -88,7 +88,7 @@ def create_agent(name,
             greedy_eval=True,
             discount_factor=gamma,
             entropy_regularization=entropy_coefficient,
-            number_epochs=10
+            num_epochs=10
         )
     elif name == "rnn_ppo":
         actor_net = ActorDistributionRnnNetwork(
@@ -108,7 +108,7 @@ def create_agent(name,
             greedy_eval=True,
             discount_factor=gamma,
             entropy_regularization=entropy_coefficient,
-            number_epochs=10
+            num_epochs=10
         )
     else:
         raise NotImplementedError("{} agent is not implemented".format(name))

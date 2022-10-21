@@ -1,0 +1,5 @@
+Evaluation results at step 49000 
+average_reward_over_batches_and_actions=0.81, reward_stds_over_batches_and_actions=0.36 
+average_return_over_batch=40.44, return_stds_over_batch=17.17 
+average_final_objective_function_value_over_batch=0.83, final_objective_function_value_stds_over_batch=0.34 
+average_max_reward_of_episode_over_batches=0.89, max_reward_of_episode_stds_over_batches=0.24 

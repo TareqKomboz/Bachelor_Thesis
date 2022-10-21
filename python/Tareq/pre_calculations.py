@@ -56,10 +56,11 @@ def plot_mse(
 if __name__ == "__main__":
     n_start_pos = 4
     lmnop = 1
-    for input_dimension in [4, 6, 8, 10]:
+    for input_dimension in [2]:  # , 4, 6, 8, 10]:
         batch_size = n_start_pos ** input_dimension
         initial_state = build_evaluation_parameters(n_start_pos=n_start_pos, input_dimension=input_dimension)
-        for number_free_parameters in [1, int((input_dimension / 2)), (input_dimension - 1)]:
+        if input_dimension == 2:
+            number_free_parameters = 1
             free_values = initial_state[:, :number_free_parameters]
             transposed_free_values = tf.transpose(free_values)
             rest_zeros = tf.zeros(shape=(input_dimension - number_free_parameters, batch_size))
@@ -129,3 +130,74 @@ if __name__ == "__main__":
                 )
                 print("wow {}".format(lmnop))
                 lmnop += 1
+        else:
+            for number_free_parameters in [1, int((input_dimension / 2)), (input_dimension - 1)]:
+                free_values = initial_state[:, :number_free_parameters]
+                transposed_free_values = tf.transpose(free_values)
+                rest_zeros = tf.zeros(shape=(input_dimension - number_free_parameters, batch_size))
+                rest_ones = tf.ones(shape=(input_dimension - number_free_parameters, batch_size))
+                max_input_x = tf.concat(
+                    values=[tf.convert_to_tensor(transposed_free_values), tf.convert_to_tensor(-1 * rest_ones)],
+                    axis=0
+                )
+                for function_name in FUNCTIONS.keys():
+                    base_directory = "C:\\Users\\Zeyad\\PycharmProjects\\Kilian_modified\\linux\\runs\\input_dimension_{0}\\number_free_parameters_{1}\\{2}\\abs_reinforce_env_50_epsLen_1_numObs".format(
+                        input_dimension,
+                        number_free_parameters,
+                        function_name
+                    )
+                    objective_function = FUNCTIONS[function_name]
+                    my_max = objective_function(x=max_input_x).numpy()  # calc max
+                    if function_name == "Ackley" \
+                            or function_name == "Griewank" \
+                            or function_name == "Rastrigin" \
+                            or function_name == "Sphere" \
+                            or function_name == "Zakharov":
+                        min_input_opt = rest_zeros
+                    elif function_name == "Levy":
+                        min_input_opt = rest_ones / 10.0
+                    elif function_name == "Rosenbrock":
+                        min_input_opt = rest_ones / 2.0
+                    elif function_name == "Styblinski_tang":
+                        my_min = -39.16599 * input_dimension
+                        min_input_opt = (rest_ones * -2.903534) / 5.0
+
+                    min_input_x = tf.concat(
+                        values=[tf.convert_to_tensor(transposed_free_values), tf.convert_to_tensor(min_input_opt)],
+                        axis=0
+                    )
+                    my_min = objective_function(x=min_input_x).numpy()
+
+                    train_rewards = load_array_from_csv(
+                        base_directory + "\\CSVs\\train_rewards.csv",
+                        ','
+                    )
+
+                    my_mse_list = []
+                    my_std_list = []
+                    for reward in train_rewards:
+                        function_values = my_max - (reward * (my_max - my_min))
+                        mse_val, std_val = calc_mse(function_values, my_min)
+                        my_mse_list.append(mse_val)
+                        my_std_list.append(std_val)
+
+                    mse_array = np.asarray(a=my_mse_list, dtype=np.float32)
+                    std_array = np.asarray(a=my_std_list, dtype=np.float32)
+
+                    save_data(
+                        data={
+                            base_directory + "\\CSVs\\mse_over_batches.csv": mse_array,
+                            base_directory + "\\CSVs\\std_mse_over_batches.csv": std_array,
+                        }
+                    )
+
+                    plot_mse(
+                        mse=mse_array,
+                        std=std_array,
+                        plot_dir=base_directory,
+                        input_dimension=input_dimension,
+                        number_free_parameters=number_free_parameters,
+                        function_name=function_name
+                    )
+                    print("wow {}".format(lmnop))
+                    lmnop += 1
