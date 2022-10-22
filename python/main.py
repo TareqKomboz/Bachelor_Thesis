@@ -122,31 +122,20 @@ if __name__ == "__main__":
     # main(arguments=args)  # for debugging
 
     # for agent_name in ["ppo", "rnn_ppo"]:
-    for input_dimension in [4]:
-        # if input_dimension == 2:
-        #     for function_name in FUNCTIONS.keys():
-        #         main(
-        #             arguments=args,
-        #             input_dimension=input_dimension,
-        #             number_free_parameters=1,
-        #             function_name=function_name
-        #         )
-        # else:
-        for number_free_parameters in [1]:
-            for function_name in ["Rastrigin"]:
+    for function_name in ["Zakharov"]:
+        for input_dimension in [2, 4, 6, 8, 10]:
+            if input_dimension == 2:
                 main(
                     arguments=args,
                     input_dimension=input_dimension,
-                    number_free_parameters=number_free_parameters,
+                    number_free_parameters=1,
                     function_name=function_name
                 )
-
-    for input_dimension in [10]:
-        for number_free_parameters in [1]:
-            for function_name in ["Styblinski_tang"]:
-                main(
-                    arguments=args,
-                    input_dimension=input_dimension,
-                    number_free_parameters=number_free_parameters,
-                    function_name=function_name
-                )
+            else:
+                for number_free_parameters in [1, int(input_dimension/2), input_dimension-1]:
+                    main(
+                        arguments=args,
+                        input_dimension=input_dimension,
+                        number_free_parameters=number_free_parameters,
+                        function_name=function_name
+                    )

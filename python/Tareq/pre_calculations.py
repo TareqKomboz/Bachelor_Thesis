@@ -35,6 +35,8 @@ def plot_mse(
         number_free_parameters,
         function_name,
         std_scale=0.1):
+    if function_name == "Styblinski_tang":
+        function_name = "Styblinski-Tang"
 
     xx = np.arange(0, len(mse))
 
@@ -44,10 +46,11 @@ def plot_mse(
     plt.fill_between(xx, mse, mse - std_scale * std, color=colors[0], alpha=0.2)
     plt.fill_between(xx, mse, mse + std_scale * std, color=colors[0], alpha=0.2)
 
-    # plt.ylim(0, 1)
+    plt.xlim(0, len(mse))
+    plt.ylim(0)
     plt.ylabel("Squared Error")
-    plt.xlabel("Training iteration step")
-    plt.title("{}D {} - {} free - mean squared error".format(input_dimension, function_name, number_free_parameters))
+    plt.xlabel("Training Iteration Step")
+    plt.title("{}D {} - {} Free - Mean Squared Error".format(input_dimension, function_name, number_free_parameters))
     plt.grid()
     plt.savefig((plot_dir + "\\mse.png"), transparent=True)
     plt.clf()
@@ -56,7 +59,7 @@ def plot_mse(
 if __name__ == "__main__":
     n_start_pos = 4
     lmnop = 1
-    for input_dimension in [2]:  # , 4, 6, 8, 10]:
+    for input_dimension in [10]:  # , 4, 6, 8, 10]:
         batch_size = n_start_pos ** input_dimension
         initial_state = build_evaluation_parameters(n_start_pos=n_start_pos, input_dimension=input_dimension)
         if input_dimension == 2:
@@ -70,7 +73,7 @@ if __name__ == "__main__":
                 axis=0
             )
             for function_name in FUNCTIONS.keys():
-                base_directory = "C:\\Users\\Zeyad\\PycharmProjects\\Kilian_modified\\linux\\runs\\input_dimension_{0}\\number_free_parameters_{1}\\{2}\\abs_reinforce_env_50_epsLen_1_numObs".format(
+                base_directory = "C:\\Users\\Zeyad\\PycharmProjects\\Kilian_modified\\linux\\runs_long\\agent_name_reinforce\\input_dimension_{0}\\number_free_parameters_{1}\\{2}\\abs_env_50_epsLen_1_numObs".format(
                     input_dimension,
                     number_free_parameters,
                     function_name
@@ -131,7 +134,7 @@ if __name__ == "__main__":
                 print("wow {}".format(lmnop))
                 lmnop += 1
         else:
-            for number_free_parameters in [1, int((input_dimension / 2)), (input_dimension - 1)]:
+            for number_free_parameters in [1]:  # , int((input_dimension / 2)), (input_dimension - 1)]:
                 free_values = initial_state[:, :number_free_parameters]
                 transposed_free_values = tf.transpose(free_values)
                 rest_zeros = tf.zeros(shape=(input_dimension - number_free_parameters, batch_size))
@@ -140,8 +143,8 @@ if __name__ == "__main__":
                     values=[tf.convert_to_tensor(transposed_free_values), tf.convert_to_tensor(-1 * rest_ones)],
                     axis=0
                 )
-                for function_name in FUNCTIONS.keys():
-                    base_directory = "C:\\Users\\Zeyad\\PycharmProjects\\Kilian_modified\\linux\\runs\\input_dimension_{0}\\number_free_parameters_{1}\\{2}\\abs_reinforce_env_50_epsLen_1_numObs".format(
+                for function_name in ["Styblinski_tang"]:  # FUNCTIONS.keys():
+                    base_directory = "C:\\Users\\Zeyad\\PycharmProjects\\Kilian_modified\\linux\\runs_long\\agent_name_reinforce\\input_dimension_{0}\\number_free_parameters_{1}\\{2}\\abs_env_50_epsLen_1_numObs".format(
                         input_dimension,
                         number_free_parameters,
                         function_name

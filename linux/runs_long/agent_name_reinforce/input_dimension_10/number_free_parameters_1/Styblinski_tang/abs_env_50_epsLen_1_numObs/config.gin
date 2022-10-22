@@ -1,0 +1,38 @@
+main.environment_type                                   = "absolute"
+main.agent_name                                         = "reinforce"
+main.input_dimension                                    = 2
+main.function_name                                      = "Ackley"
+main.number_free_parameters                             = 1
+main.episode_length                                     = 50  # = replay_buffer_capacity
+
+# environment config
+train.batch_size                                        = 512
+train.randomize_start                                   = True
+
+# training loop config
+train.number_training_iterations                        = 30000
+train.log_interval                                      = 300
+train.evaluation_interval                               = 3000
+train.quick_evaluation_interval                         = 30
+train.checkpoint_interval                               = 3000
+
+# environment
+environment_constructor.number_observations             = 1
+
+# evaluation driver
+evaluation_driver_init.n_start_pos                      = 4
+
+# reinforce agent config
+create_agent.gamma                                      = 0.99
+create_agent.entropy_coefficient                        = 0.01
+create_agent.value_estimation_loss_coef                 = 1.0
+create_agent.fc_layer_params                            = (100, 50)
+create_agent.value_fc_layer_params                      = (100,)
+create_agent.lstm_size                                  = (40,)
+create_agent.learning_rate                              = 1e-3
+create_agent.use_learning_schedule                      = True
+create_agent.decay_steps                                = 1000
+create_agent.decay_rate                                 = 0.9
+
+save_array_as_csv.delimiter                             = ','
+load_array_from_csv.delimiter                           = ','

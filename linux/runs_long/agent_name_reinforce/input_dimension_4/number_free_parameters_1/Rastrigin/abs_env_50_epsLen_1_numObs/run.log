@@ -1,0 +1,301 @@
+INFO:root:Loaded contents of configfile /home/abuelktq/PycharmProjects/Kilian_modified/default.gin
+INFO:root:Starting run on absolute environment with reinforce agent on 4d-Rastrigin function with 1 free and 3 opt parameters. run_id abs_env_50_epsLen_1_numObs
+INFO:root:Starting training setup
+INFO:absl:No checkpoint available at /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint
+INFO:absl:No checkpoint available at /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/policy
+INFO:absl:No checkpoint available at /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer
+INFO:root:Setup completed in 0.34s
+INFO:root:Starting training loop, initial graph construction might take a bit
+WARNING:tensorflow:From /home/abuelktq/.local/lib/python3.8/site-packages/tensorflow/python/autograph/impl/api.py:458: ReplayBuffer.get_next (from tf_agents.replay_buffers.replay_buffer) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `as_dataset(..., single_deterministic_pass=False) instead.
+INFO:root:300: 300 train loops completed in 77.75s, train reward=0.49, loss=3564.16, final reward=0.86, eval reward=0.85, 00:01:18
+INFO:root:600: 300 train loops completed in 67.65s, train reward=0.52, loss=1741.28, final reward=0.88, eval reward=0.86, 00:02:25
+INFO:root:900: 300 train loops completed in 67.26s, train reward=0.53, loss=1808.31, final reward=0.87, eval reward=0.86, 00:03:33
+INFO:root:1200: 300 train loops completed in 67.45s, train reward=0.54, loss=1844.90, final reward=0.89, eval reward=0.88, 00:04:40
+INFO:root:1500: 300 train loops completed in 67.31s, train reward=0.55, loss=1872.00, final reward=0.90, eval reward=0.89, 00:05:47
+INFO:root:1800: 300 train loops completed in 66.98s, train reward=0.56, loss=1895.96, final reward=0.94, eval reward=0.92, 00:06:54
+INFO:root:2100: 300 train loops completed in 67.01s, train reward=0.56, loss=1911.21, final reward=0.94, eval reward=0.93, 00:08:01
+INFO:root:2400: 300 train loops completed in 66.70s, train reward=0.56, loss=1926.93, final reward=0.95, eval reward=0.94, 00:09:08
+INFO:root:2700: 300 train loops completed in 66.58s, train reward=0.56, loss=1941.83, final reward=0.95, eval reward=0.94, 00:10:15
+INFO:root:3000: 300 train loops completed in 66.80s, train reward=0.57, loss=1954.24, final reward=0.94, eval reward=0.93, 00:11:21
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/ckpt-3000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/policy/ckpt-3000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer/ckpt-3000
+INFO:root:3000: Evaluation completed in 1.35s, average performance = 0.90, 00:11:23
+INFO:root:3300: 300 train loops completed in 67.09s, train reward=0.57, loss=1964.75, final reward=0.92, eval reward=0.91, 00:12:30
+INFO:root:3600: 300 train loops completed in 66.70s, train reward=0.57, loss=1974.52, final reward=0.89, eval reward=0.88, 00:13:36
+INFO:root:3900: 300 train loops completed in 66.96s, train reward=0.57, loss=1980.97, final reward=0.89, eval reward=0.88, 00:14:43
+INFO:root:4200: 300 train loops completed in 66.87s, train reward=0.57, loss=1988.37, final reward=0.90, eval reward=0.89, 00:15:50
+INFO:root:4500: 300 train loops completed in 66.48s, train reward=0.57, loss=1993.98, final reward=0.92, eval reward=0.90, 00:16:57
+INFO:root:4800: 300 train loops completed in 67.00s, train reward=0.58, loss=2000.22, final reward=0.93, eval reward=0.91, 00:18:04
+INFO:root:5100: 300 train loops completed in 67.19s, train reward=0.58, loss=2005.35, final reward=0.94, eval reward=0.92, 00:19:11
+INFO:root:5400: 300 train loops completed in 66.90s, train reward=0.58, loss=2005.35, final reward=0.92, eval reward=0.91, 00:20:18
+INFO:root:5700: 300 train loops completed in 66.89s, train reward=0.58, loss=2010.15, final reward=0.91, eval reward=0.89, 00:21:25
+INFO:root:6000: 300 train loops completed in 66.86s, train reward=0.58, loss=2012.85, final reward=0.88, eval reward=0.87, 00:22:32
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/ckpt-6000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/policy/ckpt-6000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer/ckpt-6000
+INFO:root:6000: Evaluation completed in 1.23s, average performance = 0.89, 00:22:33
+INFO:root:6300: 300 train loops completed in 67.31s, train reward=0.58, loss=2020.62, final reward=0.90, eval reward=0.89, 00:23:40
+INFO:root:6600: 300 train loops completed in 65.75s, train reward=0.58, loss=2024.79, final reward=0.93, eval reward=0.92, 00:24:46
+INFO:root:6900: 300 train loops completed in 66.75s, train reward=0.58, loss=2027.31, final reward=0.98, eval reward=0.96, 00:25:53
+INFO:root:7200: 300 train loops completed in 66.94s, train reward=0.58, loss=2029.34, final reward=0.98, eval reward=0.97, 00:27:00
+INFO:root:7500: 300 train loops completed in 66.56s, train reward=0.58, loss=2034.16, final reward=0.98, eval reward=0.96, 00:28:06
+INFO:root:7800: 300 train loops completed in 66.82s, train reward=0.58, loss=2036.75, final reward=0.97, eval reward=0.96, 00:29:13
+INFO:root:8100: 300 train loops completed in 67.02s, train reward=0.58, loss=2038.55, final reward=0.96, eval reward=0.94, 00:30:20
+INFO:root:8400: 300 train loops completed in 67.12s, train reward=0.58, loss=2042.36, final reward=0.95, eval reward=0.93, 00:31:27
+INFO:root:8700: 300 train loops completed in 67.01s, train reward=0.58, loss=2050.51, final reward=0.95, eval reward=0.94, 00:32:34
+INFO:root:9000: 300 train loops completed in 67.13s, train reward=0.58, loss=2054.71, final reward=0.96, eval reward=0.94, 00:33:41
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/ckpt-9000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/policy/ckpt-9000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer/ckpt-9000
+INFO:root:9000: Evaluation completed in 1.21s, average performance = 0.98, 00:33:43
+INFO:root:9300: 300 train loops completed in 66.32s, train reward=0.59, loss=2065.08, final reward=0.97, eval reward=0.95, 00:34:49
+INFO:root:9600: 300 train loops completed in 67.11s, train reward=0.59, loss=2071.84, final reward=0.97, eval reward=0.96, 00:35:56
+INFO:root:9900: 300 train loops completed in 67.61s, train reward=0.59, loss=2080.54, final reward=0.98, eval reward=0.97, 00:37:04
+INFO:root:10200: 300 train loops completed in 67.62s, train reward=0.59, loss=2091.70, final reward=0.98, eval reward=0.97, 00:38:11
+INFO:root:10500: 300 train loops completed in 66.76s, train reward=0.59, loss=2104.59, final reward=0.98, eval reward=0.97, 00:39:18
+INFO:root:10800: 300 train loops completed in 67.26s, train reward=0.59, loss=2119.30, final reward=0.98, eval reward=0.97, 00:40:25
+INFO:root:11100: 300 train loops completed in 67.59s, train reward=0.60, loss=2143.74, final reward=0.99, eval reward=0.97, 00:41:33
+INFO:root:11400: 300 train loops completed in 67.32s, train reward=0.60, loss=2175.51, final reward=0.99, eval reward=0.98, 00:42:40
+INFO:root:11700: 300 train loops completed in 67.02s, train reward=0.61, loss=2215.34, final reward=0.99, eval reward=0.98, 00:43:47
+INFO:root:12000: 300 train loops completed in 66.84s, train reward=0.61, loss=2258.49, final reward=0.99, eval reward=0.98, 00:44:54
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/ckpt-12000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/policy/ckpt-12000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer/ckpt-12000
+INFO:root:12000: Evaluation completed in 1.25s, average performance = 0.99, 00:44:55
+INFO:root:12300: 300 train loops completed in 67.74s, train reward=0.62, loss=2313.42, final reward=0.99, eval reward=0.98, 00:46:03
+INFO:root:12600: 300 train loops completed in 67.07s, train reward=0.63, loss=2375.09, final reward=1.00, eval reward=0.98, 00:47:10
+INFO:root:12900: 300 train loops completed in 66.69s, train reward=0.64, loss=2449.15, final reward=1.00, eval reward=0.98, 00:48:17
+INFO:root:13200: 300 train loops completed in 67.53s, train reward=0.65, loss=2525.84, final reward=1.00, eval reward=0.98, 00:49:24
+INFO:root:13500: 300 train loops completed in 67.23s, train reward=0.66, loss=2601.36, final reward=0.99, eval reward=0.98, 00:50:32
+INFO:root:13800: 300 train loops completed in 67.25s, train reward=0.67, loss=2686.93, final reward=1.00, eval reward=0.98, 00:51:39
+INFO:root:14100: 300 train loops completed in 67.28s, train reward=0.68, loss=2770.43, final reward=1.00, eval reward=0.98, 00:52:46
+INFO:root:14400: 300 train loops completed in 67.31s, train reward=0.69, loss=2858.36, final reward=1.00, eval reward=0.98, 00:53:53
+INFO:root:14700: 300 train loops completed in 66.55s, train reward=0.70, loss=2932.12, final reward=1.00, eval reward=0.98, 00:55:00
+INFO:root:15000: 300 train loops completed in 66.95s, train reward=0.71, loss=3014.68, final reward=1.00, eval reward=0.98, 00:56:07
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/ckpt-15000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/policy/ckpt-15000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer/ckpt-15000
+INFO:root:15000: Evaluation completed in 1.24s, average performance = 1.00, 00:56:08
+INFO:root:15300: 300 train loops completed in 67.03s, train reward=0.72, loss=3093.07, final reward=1.00, eval reward=0.98, 00:57:15
+INFO:root:15600: 300 train loops completed in 67.33s, train reward=0.73, loss=3169.59, final reward=1.00, eval reward=0.98, 00:58:22
+INFO:root:15900: 300 train loops completed in 66.83s, train reward=0.74, loss=3249.42, final reward=1.00, eval reward=0.98, 00:59:29
+INFO:root:16200: 300 train loops completed in 67.32s, train reward=0.74, loss=3310.62, final reward=1.00, eval reward=0.98, 01:00:37
+INFO:root:16500: 300 train loops completed in 67.41s, train reward=0.75, loss=3382.04, final reward=1.00, eval reward=0.98, 01:01:44
+INFO:root:16800: 300 train loops completed in 67.40s, train reward=0.76, loss=3450.20, final reward=1.00, eval reward=0.98, 01:02:51
+INFO:root:17100: 300 train loops completed in 67.59s, train reward=0.77, loss=3523.47, final reward=1.00, eval reward=0.98, 01:03:59
+INFO:root:17400: 300 train loops completed in 67.47s, train reward=0.77, loss=3582.84, final reward=1.00, eval reward=0.98, 01:05:07
+INFO:root:17700: 300 train loops completed in 67.43s, train reward=0.78, loss=3641.90, final reward=1.00, eval reward=0.98, 01:06:14
+INFO:root:18000: 300 train loops completed in 67.11s, train reward=0.79, loss=3701.88, final reward=1.00, eval reward=0.98, 01:07:21
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/ckpt-18000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/policy/ckpt-18000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer/ckpt-18000
+INFO:root:18000: Evaluation completed in 1.20s, average performance = 1.00, 01:07:22
+INFO:root:18300: 300 train loops completed in 67.37s, train reward=0.79, loss=3763.43, final reward=1.00, eval reward=0.99, 01:08:30
+INFO:root:18600: 300 train loops completed in 66.70s, train reward=0.80, loss=3817.39, final reward=1.00, eval reward=0.99, 01:09:36
+INFO:root:18900: 300 train loops completed in 67.42s, train reward=0.81, loss=3869.35, final reward=1.00, eval reward=0.99, 01:10:44
+INFO:root:19200: 300 train loops completed in 68.08s, train reward=0.81, loss=3919.92, final reward=1.00, eval reward=0.99, 01:11:52
+INFO:root:19500: 300 train loops completed in 67.74s, train reward=0.81, loss=3964.99, final reward=1.00, eval reward=0.98, 01:13:00
+INFO:root:19800: 300 train loops completed in 68.05s, train reward=0.82, loss=4014.41, final reward=1.00, eval reward=0.98, 01:14:08
+INFO:root:20100: 300 train loops completed in 67.81s, train reward=0.82, loss=4057.11, final reward=1.00, eval reward=0.98, 01:15:15
+INFO:root:20400: 300 train loops completed in 67.62s, train reward=0.83, loss=4099.35, final reward=1.00, eval reward=0.99, 01:16:23
+INFO:root:20700: 300 train loops completed in 67.82s, train reward=0.83, loss=4143.25, final reward=1.00, eval reward=0.99, 01:17:31
+INFO:root:21000: 300 train loops completed in 67.53s, train reward=0.84, loss=4179.37, final reward=1.00, eval reward=0.99, 01:18:38
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/ckpt-21000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/policy/ckpt-21000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer/ckpt-21000
+INFO:root:21000: Evaluation completed in 1.16s, average performance = 1.00, 01:18:40
+INFO:root:21300: 300 train loops completed in 67.31s, train reward=0.84, loss=4213.53, final reward=1.00, eval reward=0.99, 01:19:47
+INFO:root:21600: 300 train loops completed in 67.87s, train reward=0.84, loss=4243.84, final reward=1.00, eval reward=0.98, 01:20:55
+INFO:root:21900: 300 train loops completed in 67.41s, train reward=0.85, loss=4272.84, final reward=1.00, eval reward=0.98, 01:22:02
+INFO:root:22200: 300 train loops completed in 67.56s, train reward=0.85, loss=4302.92, final reward=1.00, eval reward=0.98, 01:23:10
+INFO:root:22500: 300 train loops completed in 66.95s, train reward=0.85, loss=4334.37, final reward=1.00, eval reward=0.98, 01:24:17
+INFO:root:22800: 300 train loops completed in 67.41s, train reward=0.86, loss=4361.92, final reward=1.00, eval reward=0.98, 01:25:24
+INFO:root:23100: 300 train loops completed in 67.83s, train reward=0.86, loss=4385.66, final reward=1.00, eval reward=0.99, 01:26:32
+INFO:root:23400: 300 train loops completed in 67.49s, train reward=0.86, loss=4411.94, final reward=1.00, eval reward=0.99, 01:27:39
+INFO:root:23700: 300 train loops completed in 67.51s, train reward=0.86, loss=4437.93, final reward=1.00, eval reward=0.99, 01:28:47
+INFO:root:24000: 300 train loops completed in 67.27s, train reward=0.86, loss=4459.77, final reward=1.00, eval reward=0.99, 01:29:54
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/ckpt-24000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/policy/ckpt-24000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer/ckpt-24000
+INFO:root:24000: Evaluation completed in 1.21s, average performance = 1.00, 01:29:55
+INFO:root:24300: 300 train loops completed in 67.67s, train reward=0.87, loss=4479.72, final reward=1.00, eval reward=0.99, 01:31:03
+INFO:root:24600: 300 train loops completed in 68.39s, train reward=0.87, loss=4500.21, final reward=1.00, eval reward=0.99, 01:32:12
+INFO:root:24900: 300 train loops completed in 68.09s, train reward=0.87, loss=4521.27, final reward=1.00, eval reward=0.99, 01:33:20
+INFO:root:25200: 300 train loops completed in 67.93s, train reward=0.87, loss=4540.04, final reward=1.00, eval reward=0.99, 01:34:28
+INFO:root:25500: 300 train loops completed in 67.90s, train reward=0.87, loss=4559.78, final reward=1.00, eval reward=0.99, 01:35:35
+INFO:root:25800: 300 train loops completed in 68.15s, train reward=0.88, loss=4577.38, final reward=1.00, eval reward=0.99, 01:36:44
+INFO:root:26100: 300 train loops completed in 68.05s, train reward=0.88, loss=4595.02, final reward=1.00, eval reward=0.99, 01:37:52
+INFO:root:26400: 300 train loops completed in 68.09s, train reward=0.88, loss=4608.24, final reward=1.00, eval reward=0.99, 01:39:00
+INFO:root:26700: 300 train loops completed in 67.22s, train reward=0.88, loss=4618.58, final reward=1.00, eval reward=0.99, 01:40:07
+INFO:root:27000: 300 train loops completed in 68.26s, train reward=0.88, loss=4635.03, final reward=1.00, eval reward=0.99, 01:41:15
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/ckpt-27000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/policy/ckpt-27000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer/ckpt-27000
+INFO:root:27000: Evaluation completed in 1.24s, average performance = 1.00, 01:41:16
+INFO:root:27300: 300 train loops completed in 67.93s, train reward=0.88, loss=4648.83, final reward=1.00, eval reward=0.99, 01:42:24
+INFO:root:27600: 300 train loops completed in 68.19s, train reward=0.88, loss=4661.83, final reward=1.00, eval reward=0.99, 01:43:33
+INFO:root:27900: 300 train loops completed in 68.57s, train reward=0.89, loss=4674.10, final reward=1.00, eval reward=0.99, 01:44:41
+INFO:root:28200: 300 train loops completed in 68.50s, train reward=0.89, loss=4687.11, final reward=1.00, eval reward=0.99, 01:45:50
+INFO:root:28500: 300 train loops completed in 68.42s, train reward=0.89, loss=4696.96, final reward=1.00, eval reward=0.99, 01:46:58
+INFO:root:28800: 300 train loops completed in 68.86s, train reward=0.89, loss=4708.00, final reward=1.00, eval reward=0.99, 01:48:07
+INFO:root:29100: 300 train loops completed in 69.92s, train reward=0.89, loss=4716.85, final reward=1.00, eval reward=0.99, 01:49:17
+INFO:root:29400: 300 train loops completed in 70.07s, train reward=0.89, loss=4728.34, final reward=1.00, eval reward=0.99, 01:50:27
+INFO:root:29700: 300 train loops completed in 70.04s, train reward=0.89, loss=4735.37, final reward=1.00, eval reward=0.99, 01:51:37
+INFO:root:30000: 300 train loops completed in 69.98s, train reward=0.89, loss=4743.24, final reward=1.00, eval reward=0.99, 01:52:47
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/ckpt-30000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/policy/ckpt-30000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_4/number_free_parameters_1/Rastrigin/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer/ckpt-30000
+INFO:root:30000: Evaluation completed in 1.21s, average performance = 1.00, 01:52:48
+INFO:root:abs_env_50_epsLen_1_numObs-4d-1free-3opt-Rastrigin - training finished in 01:52:49, final performance = 1.00
+INFO:root:Loaded contents of configfile /home/abuelktq/PycharmProjects/Kilian_modified/default.gin
+INFO:root:Starting run on absolute environment with reinforce agent on 10d-Styblinski_tang function with 1 free and 9 opt parameters. run_id abs_env_50_epsLen_1_numObs
+INFO:root:Starting training setup
+INFO:absl:No checkpoint available at /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint
+INFO:absl:No checkpoint available at /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/policy
+INFO:absl:No checkpoint available at /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer
+INFO:root:Setup completed in 0.48s
+INFO:root:Starting training loop, initial graph construction might take a bit
+INFO:root:30300: 300 train loops completed in 84.95s, train reward=0.80, loss=9808.07, final reward=0.73, eval reward=0.74, 00:01:25
+INFO:root:30600: 300 train loops completed in 82.15s, train reward=0.81, loss=4016.13, final reward=0.78, eval reward=0.78, 00:02:47
+INFO:root:30900: 300 train loops completed in 82.34s, train reward=0.81, loss=3985.14, final reward=0.77, eval reward=0.77, 00:04:09
+INFO:root:31200: 300 train loops completed in 81.25s, train reward=0.81, loss=3973.46, final reward=0.79, eval reward=0.79, 00:05:31
+INFO:root:31500: 300 train loops completed in 82.94s, train reward=0.82, loss=4031.63, final reward=0.81, eval reward=0.81, 00:06:54
+INFO:root:31800: 300 train loops completed in 82.29s, train reward=0.82, loss=4026.66, final reward=0.82, eval reward=0.82, 00:08:16
+INFO:root:32100: 300 train loops completed in 83.15s, train reward=0.82, loss=4049.44, final reward=0.83, eval reward=0.83, 00:09:39
+INFO:root:32400: 300 train loops completed in 82.29s, train reward=0.83, loss=4054.13, final reward=0.84, eval reward=0.84, 00:11:01
+INFO:root:32700: 300 train loops completed in 82.72s, train reward=0.83, loss=4088.78, final reward=0.86, eval reward=0.86, 00:12:24
+INFO:root:33000: 300 train loops completed in 83.21s, train reward=0.83, loss=4108.02, final reward=0.86, eval reward=0.86, 00:13:47
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/ckpt-33000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/policy/ckpt-33000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer/ckpt-33000
+INFO:root:33000: Evaluation completed in 337.79s, average performance = 0.87, 00:19:25
+INFO:root:33300: 300 train loops completed in 81.59s, train reward=0.84, loss=4144.61, final reward=0.88, eval reward=0.87, 00:20:47
+INFO:root:33600: 300 train loops completed in 80.31s, train reward=0.84, loss=4191.70, final reward=0.88, eval reward=0.87, 00:22:07
+INFO:root:33900: 300 train loops completed in 81.60s, train reward=0.85, loss=4232.91, final reward=0.90, eval reward=0.90, 00:23:29
+INFO:root:34200: 300 train loops completed in 81.10s, train reward=0.85, loss=4253.28, final reward=0.91, eval reward=0.90, 00:24:50
+INFO:root:34500: 300 train loops completed in 81.49s, train reward=0.85, loss=4242.22, final reward=0.90, eval reward=0.90, 00:26:11
+INFO:root:34800: 300 train loops completed in 80.30s, train reward=0.86, loss=4297.28, final reward=0.90, eval reward=0.90, 00:27:31
+INFO:root:35100: 300 train loops completed in 81.57s, train reward=0.86, loss=4348.84, final reward=0.90, eval reward=0.90, 00:28:53
+INFO:root:35400: 300 train loops completed in 80.36s, train reward=0.87, loss=4385.98, final reward=0.92, eval reward=0.92, 00:30:13
+INFO:root:35700: 300 train loops completed in 80.51s, train reward=0.87, loss=4412.99, final reward=0.92, eval reward=0.92, 00:31:34
+INFO:root:36000: 300 train loops completed in 80.41s, train reward=0.87, loss=4432.69, final reward=0.92, eval reward=0.92, 00:32:54
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/ckpt-36000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/policy/ckpt-36000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer/ckpt-36000
+INFO:root:36000: Evaluation completed in 347.09s, average performance = 0.92, 00:38:41
+INFO:root:36300: 300 train loops completed in 81.56s, train reward=0.88, loss=4480.73, final reward=0.93, eval reward=0.93, 00:40:03
+INFO:root:36600: 300 train loops completed in 80.89s, train reward=0.88, loss=4521.54, final reward=0.93, eval reward=0.93, 00:41:24
+INFO:root:36900: 300 train loops completed in 81.72s, train reward=0.88, loss=4517.10, final reward=0.94, eval reward=0.93, 00:42:46
+INFO:root:37200: 300 train loops completed in 81.49s, train reward=0.89, loss=4578.38, final reward=0.95, eval reward=0.94, 00:44:07
+INFO:root:37500: 300 train loops completed in 81.37s, train reward=0.89, loss=4598.95, final reward=0.95, eval reward=0.95, 00:45:28
+INFO:root:37800: 300 train loops completed in 80.71s, train reward=0.89, loss=4642.42, final reward=0.97, eval reward=0.96, 00:46:49
+INFO:root:38100: 300 train loops completed in 81.40s, train reward=0.89, loss=4663.09, final reward=0.97, eval reward=0.96, 00:48:11
+INFO:root:38400: 300 train loops completed in 81.35s, train reward=0.89, loss=4670.63, final reward=0.97, eval reward=0.97, 00:49:32
+INFO:root:38700: 300 train loops completed in 81.91s, train reward=0.90, loss=4718.86, final reward=0.97, eval reward=0.96, 00:50:54
+INFO:root:39000: 300 train loops completed in 80.78s, train reward=0.90, loss=4706.97, final reward=0.98, eval reward=0.97, 00:52:15
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/ckpt-39000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/policy/ckpt-39000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer/ckpt-39000
+INFO:root:39000: Evaluation completed in 345.76s, average performance = 0.99, 00:58:00
+INFO:root:39300: 300 train loops completed in 82.00s, train reward=0.90, loss=4751.19, final reward=0.98, eval reward=0.97, 00:59:22
+INFO:root:39600: 300 train loops completed in 81.76s, train reward=0.90, loss=4756.21, final reward=0.98, eval reward=0.97, 01:00:44
+INFO:root:39900: 300 train loops completed in 80.29s, train reward=0.90, loss=4765.19, final reward=0.97, eval reward=0.96, 01:02:04
+INFO:root:40200: 300 train loops completed in 81.10s, train reward=0.90, loss=4765.14, final reward=0.97, eval reward=0.97, 01:03:26
+INFO:root:40500: 300 train loops completed in 80.76s, train reward=0.91, loss=4753.32, final reward=0.98, eval reward=0.97, 01:04:46
+INFO:root:40800: 300 train loops completed in 81.64s, train reward=0.91, loss=4756.75, final reward=0.98, eval reward=0.97, 01:06:08
+INFO:root:41100: 300 train loops completed in 81.80s, train reward=0.91, loss=4753.21, final reward=0.98, eval reward=0.97, 01:07:30
+INFO:root:41400: 300 train loops completed in 81.65s, train reward=0.91, loss=4753.71, final reward=0.99, eval reward=0.97, 01:08:51
+INFO:root:41700: 300 train loops completed in 81.86s, train reward=0.91, loss=4757.23, final reward=0.98, eval reward=0.97, 01:10:13
+INFO:root:42000: 300 train loops completed in 81.63s, train reward=0.91, loss=4754.58, final reward=0.99, eval reward=0.97, 01:11:35
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/ckpt-42000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/policy/ckpt-42000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer/ckpt-42000
+INFO:root:42000: Evaluation completed in 340.53s, average performance = 0.98, 01:17:15
+INFO:root:42300: 300 train loops completed in 81.26s, train reward=0.91, loss=4751.32, final reward=0.98, eval reward=0.97, 01:18:37
+INFO:root:42600: 300 train loops completed in 80.24s, train reward=0.91, loss=4745.21, final reward=0.99, eval reward=0.97, 01:19:57
+INFO:root:42900: 300 train loops completed in 81.00s, train reward=0.91, loss=4766.88, final reward=0.98, eval reward=0.97, 01:21:18
+INFO:root:43200: 300 train loops completed in 81.80s, train reward=0.91, loss=4771.78, final reward=0.98, eval reward=0.97, 01:22:40
+INFO:root:43500: 300 train loops completed in 81.34s, train reward=0.91, loss=4780.04, final reward=0.98, eval reward=0.97, 01:24:01
+INFO:root:43800: 300 train loops completed in 80.89s, train reward=0.91, loss=4777.89, final reward=0.99, eval reward=0.97, 01:25:22
+INFO:root:44100: 300 train loops completed in 81.14s, train reward=0.91, loss=4781.80, final reward=0.99, eval reward=0.97, 01:26:43
+INFO:root:44400: 300 train loops completed in 81.79s, train reward=0.91, loss=4790.17, final reward=0.99, eval reward=0.97, 01:28:05
+INFO:root:44700: 300 train loops completed in 81.45s, train reward=0.91, loss=4798.91, final reward=0.98, eval reward=0.97, 01:29:26
+INFO:root:45000: 300 train loops completed in 81.82s, train reward=0.91, loss=4816.28, final reward=0.98, eval reward=0.97, 01:30:48
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/ckpt-45000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/policy/ckpt-45000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer/ckpt-45000
+INFO:root:45000: Evaluation completed in 345.36s, average performance = 0.99, 01:36:34
+INFO:root:45300: 300 train loops completed in 81.59s, train reward=0.91, loss=4813.36, final reward=0.99, eval reward=0.97, 01:37:55
+INFO:root:45600: 300 train loops completed in 80.98s, train reward=0.91, loss=4816.43, final reward=0.99, eval reward=0.98, 01:39:16
+INFO:root:45900: 300 train loops completed in 80.51s, train reward=0.91, loss=4815.22, final reward=0.99, eval reward=0.98, 01:40:37
+INFO:root:46200: 300 train loops completed in 80.97s, train reward=0.91, loss=4830.23, final reward=0.99, eval reward=0.98, 01:41:58
+INFO:root:46500: 300 train loops completed in 80.69s, train reward=0.91, loss=4827.70, final reward=0.99, eval reward=0.97, 01:43:18
+INFO:root:46800: 300 train loops completed in 81.18s, train reward=0.91, loss=4833.35, final reward=0.99, eval reward=0.97, 01:44:39
+INFO:root:47100: 300 train loops completed in 80.98s, train reward=0.91, loss=4842.45, final reward=0.99, eval reward=0.98, 01:46:00
+INFO:root:47400: 300 train loops completed in 80.09s, train reward=0.91, loss=4840.04, final reward=0.99, eval reward=0.98, 01:47:21
+INFO:root:47700: 300 train loops completed in 82.00s, train reward=0.91, loss=4824.49, final reward=0.99, eval reward=0.98, 01:48:43
+INFO:root:48000: 300 train loops completed in 82.02s, train reward=0.91, loss=4846.02, final reward=0.99, eval reward=0.98, 01:50:05
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/ckpt-48000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/policy/ckpt-48000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer/ckpt-48000
+INFO:root:48000: Evaluation completed in 333.66s, average performance = 0.99, 01:55:38
+INFO:root:48300: 300 train loops completed in 83.46s, train reward=0.92, loss=4853.06, final reward=0.99, eval reward=0.98, 01:57:02
+INFO:root:48600: 300 train loops completed in 82.99s, train reward=0.92, loss=4851.52, final reward=0.99, eval reward=0.98, 01:58:25
+INFO:root:48900: 300 train loops completed in 83.48s, train reward=0.92, loss=4848.94, final reward=0.99, eval reward=0.97, 01:59:48
+INFO:root:49200: 300 train loops completed in 83.16s, train reward=0.91, loss=4838.59, final reward=0.98, eval reward=0.97, 02:01:11
+INFO:root:49500: 300 train loops completed in 81.78s, train reward=0.92, loss=4853.61, final reward=0.98, eval reward=0.97, 02:02:33
+INFO:root:49800: 300 train loops completed in 82.59s, train reward=0.92, loss=4851.04, final reward=0.98, eval reward=0.97, 02:03:56
+INFO:root:50100: 300 train loops completed in 82.32s, train reward=0.92, loss=4854.36, final reward=0.99, eval reward=0.97, 02:05:18
+INFO:root:50400: 300 train loops completed in 82.55s, train reward=0.92, loss=4857.69, final reward=0.99, eval reward=0.97, 02:06:41
+INFO:root:50700: 300 train loops completed in 82.20s, train reward=0.92, loss=4854.75, final reward=0.99, eval reward=0.97, 02:08:03
+INFO:root:51000: 300 train loops completed in 82.18s, train reward=0.92, loss=4857.99, final reward=0.99, eval reward=0.97, 02:09:25
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/ckpt-51000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/policy/ckpt-51000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer/ckpt-51000
+INFO:root:51000: Evaluation completed in 332.50s, average performance = 0.99, 02:14:57
+INFO:root:51300: 300 train loops completed in 82.97s, train reward=0.92, loss=4867.19, final reward=0.99, eval reward=0.97, 02:16:20
+INFO:root:51600: 300 train loops completed in 82.60s, train reward=0.92, loss=4869.74, final reward=0.99, eval reward=0.97, 02:17:43
+INFO:root:51900: 300 train loops completed in 81.85s, train reward=0.92, loss=4868.78, final reward=0.99, eval reward=0.97, 02:19:05
+INFO:root:52200: 300 train loops completed in 82.30s, train reward=0.92, loss=4865.24, final reward=0.99, eval reward=0.98, 02:20:27
+INFO:root:52500: 300 train loops completed in 81.49s, train reward=0.92, loss=4871.93, final reward=0.99, eval reward=0.98, 02:21:49
+INFO:root:52800: 300 train loops completed in 82.12s, train reward=0.92, loss=4874.12, final reward=0.99, eval reward=0.98, 02:23:11
+INFO:root:53100: 300 train loops completed in 82.12s, train reward=0.92, loss=4874.54, final reward=0.99, eval reward=0.97, 02:24:33
+INFO:root:53400: 300 train loops completed in 82.23s, train reward=0.92, loss=4876.32, final reward=0.99, eval reward=0.97, 02:25:55
+INFO:root:53700: 300 train loops completed in 82.21s, train reward=0.92, loss=4868.51, final reward=0.99, eval reward=0.98, 02:27:17
+INFO:root:54000: 300 train loops completed in 81.95s, train reward=0.92, loss=4867.01, final reward=0.99, eval reward=0.98, 02:28:39
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/ckpt-54000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/policy/ckpt-54000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer/ckpt-54000
+INFO:root:54000: Evaluation completed in 334.97s, average performance = 0.99, 02:34:14
+INFO:root:54300: 300 train loops completed in 81.73s, train reward=0.92, loss=4879.76, final reward=0.99, eval reward=0.98, 02:35:36
+INFO:root:54600: 300 train loops completed in 82.39s, train reward=0.92, loss=4881.30, final reward=0.99, eval reward=0.98, 02:36:58
+INFO:root:54900: 300 train loops completed in 83.04s, train reward=0.92, loss=4880.78, final reward=0.99, eval reward=0.98, 02:38:22
+INFO:root:55200: 300 train loops completed in 81.81s, train reward=0.92, loss=4883.18, final reward=0.99, eval reward=0.97, 02:39:43
+INFO:root:55500: 300 train loops completed in 82.33s, train reward=0.92, loss=4883.25, final reward=0.99, eval reward=0.97, 02:41:06
+INFO:root:55800: 300 train loops completed in 81.95s, train reward=0.92, loss=4876.32, final reward=0.99, eval reward=0.97, 02:42:28
+INFO:root:56100: 300 train loops completed in 81.77s, train reward=0.92, loss=4872.57, final reward=0.98, eval reward=0.97, 02:43:49
+INFO:root:56400: 300 train loops completed in 82.22s, train reward=0.92, loss=4885.93, final reward=0.98, eval reward=0.97, 02:45:12
+INFO:root:56700: 300 train loops completed in 81.32s, train reward=0.92, loss=4885.72, final reward=0.99, eval reward=0.97, 02:46:33
+INFO:root:57000: 300 train loops completed in 81.61s, train reward=0.92, loss=4884.79, final reward=0.99, eval reward=0.98, 02:47:55
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/ckpt-57000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/policy/ckpt-57000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer/ckpt-57000
+INFO:root:57000: Evaluation completed in 333.33s, average performance = 0.99, 02:53:28
+INFO:root:57300: 300 train loops completed in 83.97s, train reward=0.92, loss=4888.47, final reward=0.99, eval reward=0.98, 02:54:52
+INFO:root:57600: 300 train loops completed in 83.01s, train reward=0.92, loss=4888.48, final reward=0.99, eval reward=0.98, 02:56:15
+INFO:root:57900: 300 train loops completed in 81.99s, train reward=0.92, loss=4888.02, final reward=0.99, eval reward=0.98, 02:57:37
+INFO:root:58200: 300 train loops completed in 81.98s, train reward=0.92, loss=4888.29, final reward=0.99, eval reward=0.98, 02:58:59
+INFO:root:58500: 300 train loops completed in 81.71s, train reward=0.92, loss=4887.24, final reward=0.99, eval reward=0.98, 03:00:21
+INFO:root:58800: 300 train loops completed in 81.08s, train reward=0.92, loss=4882.18, final reward=0.99, eval reward=0.98, 03:01:42
+INFO:root:59100: 300 train loops completed in 81.51s, train reward=0.92, loss=4882.33, final reward=0.99, eval reward=0.98, 03:03:03
+INFO:root:59400: 300 train loops completed in 81.81s, train reward=0.92, loss=4880.96, final reward=0.99, eval reward=0.98, 03:04:25
+INFO:root:59700: 300 train loops completed in 81.69s, train reward=0.92, loss=4878.72, final reward=0.99, eval reward=0.98, 03:05:47
+INFO:root:60000: 300 train loops completed in 81.75s, train reward=0.92, loss=4888.98, final reward=0.99, eval reward=0.98, 03:07:08
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/ckpt-60000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/policy/ckpt-60000
+INFO:absl:Saved checkpoint: /home/abuelktq/PycharmProjects/Kilian_modified/runs/agent_name_reinforce/input_dimension_10/number_free_parameters_1/Styblinski_tang/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer/ckpt-60000
+INFO:root:60000: Evaluation completed in 334.63s, average performance = 0.99, 03:12:43
+INFO:root:abs_env_50_epsLen_1_numObs-10d-1free-9opt-Styblinski_tang - training finished in 03:12:44, final performance = 0.99
