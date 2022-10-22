@@ -18,12 +18,12 @@ def plot_returns_and_losses(
     xx = np.arange(0, len(train_rewards))
     plt.plot(xx, train_rewards)
     plt.xlim(0, len(train_rewards))
-    plt.ylim(0, 1)
-    plt.ylabel("Training Reward")
+    # plt.ylim(0, 1)
+    plt.ylabel("Not Normalized Training Reward")
     plt.xlabel("Training Iteration Step")
-    plt.title("{}D {} - {} Free - Rraining Rewards".format(input_dimension, function_name, number_free_parameters))
+    plt.title("{}D {} - {} Free - Training Rewards".format(input_dimension, function_name, number_free_parameters))
     plt.grid()
-    plt.savefig(os.path.join(plot_dir, "train_rewards"), transparent=True)
+    plt.savefig(os.path.join(plot_dir, "not_normalized_train_rewards"), transparent=True)
     plt.clf()
 
     xx = np.arange(0, len(train_losses))
@@ -34,7 +34,7 @@ def plot_returns_and_losses(
     plt.xlabel("Training Iteration Step")
     plt.grid()
     plt.title("{}D {} - {} Free - Train Loss".format(input_dimension, function_name, number_free_parameters))
-    plt.savefig(os.path.join(plot_dir, "train_losses"), transparent=True)
+    plt.savefig(os.path.join(plot_dir, "not_normalized_train_losses"), transparent=True)
     plt.clf()
 
     xx = np.arange(0, (len(evaluation_performances) * quick_evaluation_interval), quick_evaluation_interval)
@@ -46,7 +46,7 @@ def plot_returns_and_losses(
     plt.grid()
     plt.ylim(0, 1)
     plt.title("{}D {} - {} Free - Evaluation Performance".format(input_dimension, function_name, number_free_parameters))
-    plt.savefig(os.path.join(plot_dir, "evaluation_performances"), transparent=True)
+    plt.savefig(os.path.join(plot_dir, "not_normalized_evaluation_performances"), transparent=True)
     plt.clf()
 
 

@@ -243,23 +243,23 @@ def train(
     save_data(
         csv_dir=csv_dir,
         data={
-            csv_dir+'\\full_metric_list.csv': full_metric_array,
-            csv_dir+'\\last_metric_list.csv': asarray(last_metric_list),
+            csv_dir+'\\not_normalized_full_metric_list.csv': full_metric_array,
+            csv_dir+'\\not_normalized_last_metric_list.csv': asarray(last_metric_list),
 
-            csv_dir+'\\average_reward_over_batches_and_actions.csv': full_metric_array[:, 0],
-            csv_dir+'\\reward_stds_over_batches_and_actions.csv': full_metric_array[:, 1],
-            csv_dir+'\\average_return_over_batch.csv': full_metric_array[:, 2],
-            csv_dir+'\\return_stds_over_batch.csv': full_metric_array[:, 3],
-            csv_dir+'\\average_final_objective_function_value_over_batch.csv': full_metric_array[:, 4],
-            csv_dir+'\\final_objective_function_value_stds_over_batch.csv': full_metric_array[:, 5],
-            csv_dir+'\\average_max_reward_of_episode_over_batches.csv': full_metric_array[:, 6],
-            csv_dir+'\\max_reward_of_episode_stds_over_batches.csv': full_metric_array[:, 7],
+            csv_dir+'\\not_normalized_average_reward_over_batches_and_actions.csv': full_metric_array[:, 0],
+            csv_dir+'\\not_normalized_reward_stds_over_batches_and_actions.csv': full_metric_array[:, 1],
+            csv_dir+'\\not_normalized_average_return_over_batch.csv': full_metric_array[:, 2],
+            csv_dir+'\\not_normalized_return_stds_over_batch.csv': full_metric_array[:, 3],
+            csv_dir+'\\not_normalized_average_final_objective_function_value_over_batch.csv': full_metric_array[:, 4],
+            csv_dir+'\\not_normalized_final_objective_function_value_stds_over_batch.csv': full_metric_array[:, 5],
+            csv_dir+'\\not_normalized_average_max_reward_of_episode_over_batches.csv': full_metric_array[:, 6],
+            csv_dir+'\\not_normalized_max_reward_of_episode_stds_over_batches.csv': full_metric_array[:, 7],
 
-            csv_dir + '\\train_rewards.csv': train_rewards.numpy(),
-            csv_dir + '\\train_losses.csv': train_losses.numpy(),
-            csv_dir + '\\evaluation_performances.csv': evaluation_performances.numpy(),
+            csv_dir + '\\not_normalized_train_rewards.csv': train_rewards.numpy(),
+            csv_dir + '\\not_normalized_train_losses.csv': train_losses.numpy(),
+            csv_dir + '\\not_normalized_evaluation_performances.csv': evaluation_performances.numpy(),
 
-            csv_dir+'\\execution_time.csv': asarray([((time.time_ns() - start_time) * 1e-9)])
+            csv_dir+'\\not_normalized_execution_time.csv': asarray([((time.time_ns() - start_time) * 1e-9)])
         }
     )
 
