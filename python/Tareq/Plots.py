@@ -218,6 +218,50 @@ def compare_rnn(
     plt.savefig((plot_dir + "\\MSE_{}D_{}_{}_free_rnn_comparison.png".format(input_dimension, function_name, number_free_parameters)), transparent=True)
     plt.clf()
 
+def compare_ppo(
+        reinforce,
+        ppo,
+        std1,
+        std2,
+        plot_dir,
+        input_dimension,
+        number_free_parameters,
+        function_name,
+        std_scale=0.1):
+    if function_name == "Styblinski_tang":
+        function_name = "Styblinski-Tang"
+
+    xx = np.arange(0, len(reinforce))
+
+    colors = [color for color in mcolors.TABLEAU_COLORS.values()]
+
+    plt.plot(xx, reinforce, color=colors[0], label="REINFORCE")
+    plt.fill_between(xx, reinforce, reinforce - std_scale * std1, color=colors[0], alpha=0.2)
+    plt.fill_between(xx, reinforce, reinforce + std_scale * std1, color=colors[0], alpha=0.2)
+
+    plt.plot(xx, ppo, color=colors[1], label="PPO")
+    plt.fill_between(xx, ppo, ppo - std_scale * std2, color=colors[1], alpha=0.2)
+    plt.fill_between(xx, ppo, ppo + std_scale * std2, color=colors[1], alpha=0.2)
+
+    plt.legend(loc='upper right')
+
+    plt.xlim(0, 10000)
+    plt.ylim(0)
+    plt.ylabel("Squared Error")  # ("Training Reward")
+    plt.xlabel("Training Iteration Step")
+    plt.title("{}D {} MSE Performance with {} Free Parameter".format(
+        input_dimension,
+        function_name,
+        number_free_parameters
+    ))
+    plt.grid()
+    plt.savefig((plot_dir + "\\MSE_{}D_{}_{}_free_ppo_comparison.png".format(
+        input_dimension,
+        function_name,
+        number_free_parameters
+    )), transparent=True)
+    plt.clf()
+
 
 if __name__ == "__main__":
     # i = 0
@@ -254,62 +298,62 @@ if __name__ == "__main__":
     #         )
     #         i += 1
     #         print("wow {}".format(i))
-    #
-    i = 0
-    base_directory = "C:\\Users\\Zeyad\\PycharmProjects\\Kilian_modified\\linux\\runs\\input_dimension_2"
-    function_comparison_2d(
-        ackley=load_array_from_csv(
-            csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\mse_over_batches.csv".format(
-                1, "Ackley")),
-        griewank=load_array_from_csv(
-            csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\mse_over_batches.csv".format(
-                1, "Griewank")),
-        levy=load_array_from_csv(
-            csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\mse_over_batches.csv".format(
-                1, "Levy")),
-        rastrigin=load_array_from_csv(
-            csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\mse_over_batches.csv".format(
-                1, "Rastrigin")),
-        rosenbrock=load_array_from_csv(
-            csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\mse_over_batches.csv".format(
-                1, "Rosenbrock")),
-        sphere=load_array_from_csv(
-            csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\mse_over_batches.csv".format(
-                1, "Sphere")),
-        styblinski_tang=load_array_from_csv(
-            csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\mse_over_batches.csv".format(
-                1, "Styblinski_tang")),
-        zakharov=load_array_from_csv(
-            csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\mse_over_batches.csv".format(
-                1, "Zakharov")),
-        std1=load_array_from_csv(
-            csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\std_mse_over_batches.csv".format(
-                1, "Ackley")),
-        std2=load_array_from_csv(
-            csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\std_mse_over_batches.csv".format(
-                1, "Griewank")),
-        std3=load_array_from_csv(
-            csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\std_mse_over_batches.csv".format(
-                1, "Levy")),
-        std4=load_array_from_csv(
-            csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\std_mse_over_batches.csv".format(
-                1, "Rastrigin")),
-        std5=load_array_from_csv(
-            csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\std_mse_over_batches.csv".format(
-                1, "Rosenbrock")),
-        std6=load_array_from_csv(
-            csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\std_mse_over_batches.csv".format(
-                1, "Sphere")),
-        std7=load_array_from_csv(
-            csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\std_mse_over_batches.csv".format(
-                1, "Styblinski_tang")),
-        std8=load_array_from_csv(
-            csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\std_mse_over_batches.csv".format(
-                1, "Zakharov")),
-        plot_dir=base_directory
-    )
-    i += 1
-    print("wow {}".format(i))
+
+    # i = 0
+    # base_directory = "C:\\Users\\Zeyad\\PycharmProjects\\Kilian_modified\\linux\\runs\\input_dimension_2"
+    # function_comparison_2d(
+    #     ackley=load_array_from_csv(
+    #         csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\mse_over_batches.csv".format(
+    #             1, "Ackley")),
+    #     griewank=load_array_from_csv(
+    #         csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\mse_over_batches.csv".format(
+    #             1, "Griewank")),
+    #     levy=load_array_from_csv(
+    #         csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\mse_over_batches.csv".format(
+    #             1, "Levy")),
+    #     rastrigin=load_array_from_csv(
+    #         csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\mse_over_batches.csv".format(
+    #             1, "Rastrigin")),
+    #     rosenbrock=load_array_from_csv(
+    #         csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\mse_over_batches.csv".format(
+    #             1, "Rosenbrock")),
+    #     sphere=load_array_from_csv(
+    #         csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\mse_over_batches.csv".format(
+    #             1, "Sphere")),
+    #     styblinski_tang=load_array_from_csv(
+    #         csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\mse_over_batches.csv".format(
+    #             1, "Styblinski_tang")),
+    #     zakharov=load_array_from_csv(
+    #         csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\mse_over_batches.csv".format(
+    #             1, "Zakharov")),
+    #     std1=load_array_from_csv(
+    #         csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\std_mse_over_batches.csv".format(
+    #             1, "Ackley")),
+    #     std2=load_array_from_csv(
+    #         csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\std_mse_over_batches.csv".format(
+    #             1, "Griewank")),
+    #     std3=load_array_from_csv(
+    #         csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\std_mse_over_batches.csv".format(
+    #             1, "Levy")),
+    #     std4=load_array_from_csv(
+    #         csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\std_mse_over_batches.csv".format(
+    #             1, "Rastrigin")),
+    #     std5=load_array_from_csv(
+    #         csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\std_mse_over_batches.csv".format(
+    #             1, "Rosenbrock")),
+    #     std6=load_array_from_csv(
+    #         csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\std_mse_over_batches.csv".format(
+    #             1, "Sphere")),
+    #     std7=load_array_from_csv(
+    #         csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\std_mse_over_batches.csv".format(
+    #             1, "Styblinski_tang")),
+    #     std8=load_array_from_csv(
+    #         csv_filename=base_directory + "\\number_free_parameters_{0}\\{1}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\std_mse_over_batches.csv".format(
+    #             1, "Zakharov")),
+    #     plot_dir=base_directory
+    # )
+    # i += 1
+    # print("wow {}".format(i))
 
     # i = 0
     # for function_name in FUNCTIONS.keys():
@@ -411,3 +455,68 @@ if __name__ == "__main__":
     #             )
     #             i += 1
     #             print("wow {}".format(i))
+
+    ## long runs
+    # input_dimension = 4
+    # number_free_parameters = 1
+    # function_name = "Rastrigin"
+    # plot_dir = "C:\\Users\\Zeyad\\PycharmProjects\\Kilian_modified\\linux\\runs_long\\agent_name_reinforce\\input_dimension_{0}\\number_free_parameters_{1}\\{2}\\abs_env_50_epsLen_1_numObs".format(
+    #     input_dimension,
+    #     number_free_parameters,
+    #     function_name
+    # )
+    # train_rewards = load_array_from_csv(csv_filename=plot_dir+"\\CSVs\\train_rewards.csv")
+    #
+    # xx = np.arange(0, len(train_rewards))
+    # plt.plot(xx, train_rewards)
+    # plt.xlim(0, len(train_rewards))
+    # plt.ylim(0, 1)
+    # plt.ylabel("Training Reward")
+    # plt.xlabel("Training Iteration Step")
+    # plt.title("{}D {} with {} Free Parameter - Long Training Performance".format(input_dimension, function_name, number_free_parameters))
+    # plt.grid()
+    # plt.savefig((plot_dir+"long_train_rewards"), transparent=True)
+    # plt.clf()
+
+    i = 0
+    for input_dimension in [10]:
+        for number_free_parameters in [9]:
+            for function_name in ["Ackley", "Griewank", "Rastrigin"]:  # FUNCTIONS.keys():
+                base_directory = "C:\\Users\\Zeyad\\PycharmProjects\\Kilian_modified\\linux"
+
+                nn = load_array_from_csv(csv_filename=base_directory+"\\runs\\input_dimension_{0}\\number_free_parameters_{1}\\{2}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\mse_over_batches.csv".format(
+                    input_dimension,
+                    number_free_parameters,
+                    function_name
+                ))
+                rnn = load_array_from_csv(csv_filename=base_directory+"\\runs_rnn\\agent_name_rnn_reinforce\\input_dimension_{0}\\number_free_parameters_{1}\\{2}\\abs_env_50_epsLen_1_numObs\\CSVs\\mse_over_batches.csv".format(
+                    input_dimension,
+                    number_free_parameters,
+                    function_name
+                ))
+
+                std1 = load_array_from_csv(
+                    csv_filename=base_directory + "\\runs\\input_dimension_{0}\\number_free_parameters_{1}\\{2}\\abs_reinforce_env_50_epsLen_1_numObs\\CSVs\\std_mse_over_batches.csv".format(
+                        input_dimension,
+                        number_free_parameters,
+                        function_name
+                    ))
+                std2 = load_array_from_csv(
+                    csv_filename=base_directory + "\\runs_rnn\\agent_name_rnn_reinforce\\input_dimension_{0}\\number_free_parameters_{1}\\{2}\\abs_env_50_epsLen_1_numObs\\CSVs\\std_mse_over_batches.csv".format(
+                        input_dimension,
+                        number_free_parameters,
+                        function_name
+                    ))
+
+                compare_rnn(
+                    nn=nn,
+                    rnn=rnn,
+                    std1=std1,
+                    std2=std2,
+                    plot_dir=base_directory,
+                    input_dimension=input_dimension,
+                    number_free_parameters=number_free_parameters,
+                    function_name=function_name
+                )
+                i += 1
+                print("wow {}".format(i))

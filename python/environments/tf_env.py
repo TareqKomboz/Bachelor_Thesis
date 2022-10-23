@@ -61,8 +61,7 @@ class TfEnv(TFEnvironment):
             minimum=tuple((-1 * ones(self.action_shape, dtype=int)).tolist()),
             maximum=tuple((ones(self.action_shape, dtype=int)).tolist())
         )
-        # reward_spec = specs.BoundedTensorSpec((), self._dtype, minimum=-0, maximum=1)
-        reward_spec = specs.BoundedTensorSpec((), self._dtype, minimum=-50000000000000, maximum=500)  # min-5e13
+        reward_spec = specs.BoundedTensorSpec((), self._dtype, minimum=-0, maximum=1)
         discount_spec = specs.BoundedTensorSpec((), self._dtype, minimum=0, maximum=1)
         step_type_spec = specs.BoundedTensorSpec((), tf.int32, minimum=0, maximum=1)
         time_step_spec = ts.TimeStep(

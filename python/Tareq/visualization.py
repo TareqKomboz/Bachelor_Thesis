@@ -8,7 +8,7 @@ from python.objective_functions.tf_objective_functions import FUNCTIONS
 
 
 @gin.configurable()
-def visualize_environment(objective_function, objective_function_name, parameter_bounds, input_dimension, font):
+def visualize_environment(objective_function, objective_function_name, parameter_bounds, input_dimension, factor, font):
     # define range for input
     parameter_bounds = parameter_bounds
     r_min, r_max = parameter_bounds[0], parameter_bounds[1]
@@ -45,8 +45,10 @@ def visualize_environment(objective_function, objective_function_name, parameter
 
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
-        ax.plot_surface(X=x, Y=y, Z=results, cmap=cm.Blues)
+        ax.plot_surface(X=factor*x, Y=factor*y, Z=results, cmap=cm.Blues_r)
 
+        if objective_function_name == "Styblinski_tang":
+            objective_function_name = "Styblinski Tang"
         plt.title("{0} Function".format(objective_function_name), fontdict=font["font_title"])
         plt.xlabel("x", fontdict=font_axis_labels)
         plt.ylabel("y", fontdict=font_axis_labels)
@@ -117,13 +119,31 @@ if __name__ == "__main__":
     #         }
     #     )
 
-    visualize_environment(
-        objective_function=FUNCTIONS["Rosenbrock"],
-        objective_function_name="Rosenbrock",
-        parameter_bounds=(-1.0, 1.0),
-        input_dimension=2,
-        font={
-            "font_title": {'family': 'sans-serif', 'color': 'black', 'size': 20},
-            "font_axis_labels": {'family': 'sans-serif', 'color': 'blue', 'size': 15}
-        }
-    )
+    for key in FUNCTIONS.keys():
+        if key == "Ackley":
+            factor = 20
+        elif key == "Griewank":
+            factor = 600
+        elif key == "Levy":
+            factor = 10
+        elif key == "Rastrigin":
+            factor = 5
+        elif key == "Rosenbrock":
+            factor = 2
+        elif key == "Sphere":
+            factor = 5
+        elif key == "Styblinski_tang":
+            factor = 5
+        elif key == "Zakharov":
+            factor = 5
+        visualize_environment(
+            objective_function=FUNCTIONS[key],
+            objective_function_name=key,
+            parameter_bounds=(-1.0, 1.0),
+            input_dimension=2,
+            factor=factor,
+            font={
+                "font_title": {'family': 'sans-serif', 'color': 'black', 'size': 20},
+                "font_axis_labels": {'family': 'sans-serif', 'color': 'blue', 'size': 15}
+            }
+        )

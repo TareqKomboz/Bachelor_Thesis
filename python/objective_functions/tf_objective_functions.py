@@ -203,42 +203,42 @@ def zakharov(x):
 
 def normalize_function(x, number_free_parameters, free_values, objective_function, function_name):
     f = objective_function(x)
-    # x_shape = x.shape
-    # d = x_shape[0]
-    # batch_size = x_shape[1]
-    # rest_zeros = tf.zeros(shape=(d-number_free_parameters, batch_size))
-    # rest_ones = tf.ones(shape=(d-number_free_parameters, batch_size))
-    #
-    # max_input_x = tf.concat(
-    #     values=[tf.convert_to_tensor(free_values), tf.convert_to_tensor(-1 * rest_ones)],
-    #     axis=0
-    # )
-    # my_max = objective_function(x=max_input_x)
-    #
-    # if function_name == "Ackley" \
-    #         or function_name == "Griewank" \
-    #         or function_name == "Rastrigin" \
-    #         or function_name == "Sphere" \
-    #         or function_name == "Zakharov":
-    #     min_input_opt = rest_zeros
-    # elif function_name == "Levy":
-    #     min_input_opt = rest_ones / 10.0
-    # elif function_name == "Rosenbrock":
-    #     min_input_opt = rest_ones / 2.0
-    # elif function_name == "Styblinski_tang":
-    #     my_min = -39.16599 * d
-    #     min_input_opt = (rest_ones * -2.903534) / 5.0
-    #
-    # min_input_x = tf.concat(
-    #     values=[tf.convert_to_tensor(free_values), tf.convert_to_tensor(min_input_opt)],
-    #     axis=0
-    # )
-    # my_min = objective_function(x=min_input_x)
-    #
-    # value = (my_max - f) / (my_max - my_min)
-    # clipped = tf.clip_by_value(value, clip_value_min=0.0, clip_value_max=1.0)
+    x_shape = x.shape
+    d = x_shape[0]
+    batch_size = x_shape[1]
+    rest_zeros = tf.zeros(shape=(d-number_free_parameters, batch_size))
+    rest_ones = tf.ones(shape=(d-number_free_parameters, batch_size))
 
-    return -f  # clipped
+    max_input_x = tf.concat(
+        values=[tf.convert_to_tensor(free_values), tf.convert_to_tensor(-1 * rest_ones)],
+        axis=0
+    )
+    my_max = objective_function(x=max_input_x)
+
+    if function_name == "Ackley" \
+            or function_name == "Griewank" \
+            or function_name == "Rastrigin" \
+            or function_name == "Sphere" \
+            or function_name == "Zakharov":
+        min_input_opt = rest_zeros
+    elif function_name == "Levy":
+        min_input_opt = rest_ones / 10.0
+    elif function_name == "Rosenbrock":
+        min_input_opt = rest_ones / 2.0
+    elif function_name == "Styblinski_tang":
+        my_min = -39.16599 * d
+        min_input_opt = (rest_ones * -2.903534) / 5.0
+
+    min_input_x = tf.concat(
+        values=[tf.convert_to_tensor(free_values), tf.convert_to_tensor(min_input_opt)],
+        axis=0
+    )
+    my_min = objective_function(x=min_input_x)
+
+    value = (my_max - f) / (my_max - my_min)
+    clipped = tf.clip_by_value(value, clip_value_min=0.0, clip_value_max=1.0)
+
+    return clipped
 
 
 FUNCTIONS = {

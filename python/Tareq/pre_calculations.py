@@ -50,7 +50,7 @@ def plot_mse(
     plt.ylim(0)
     plt.ylabel("Squared Error")
     plt.xlabel("Training Iteration Step")
-    plt.title("{}D {} - {} Free - Mean Squared Error".format(input_dimension, function_name, number_free_parameters))
+    plt.title("{}D {} with {} Free Parameter - MSE Performance".format(input_dimension, function_name, number_free_parameters))
     plt.grid()
     plt.savefig((plot_dir + "\\mse.png"), transparent=True)
     plt.clf()
@@ -73,7 +73,7 @@ if __name__ == "__main__":
                 axis=0
             )
             for function_name in FUNCTIONS.keys():
-                base_directory = "C:\\Users\\Zeyad\\PycharmProjects\\Kilian_modified\\linux\\runs_long\\agent_name_reinforce\\input_dimension_{0}\\number_free_parameters_{1}\\{2}\\abs_env_50_epsLen_1_numObs".format(
+                base_directory = "C:\\Users\\Zeyad\\PycharmProjects\\Kilian_modified\\linux\\runs_ppo\\agent_name_ppo\\input_dimension_{0}\\number_free_parameters_{1}\\{2}\\abs_env_50_epsLen_1_numObs".format(
                     input_dimension,
                     number_free_parameters,
                     function_name
@@ -143,8 +143,8 @@ if __name__ == "__main__":
                     values=[tf.convert_to_tensor(transposed_free_values), tf.convert_to_tensor(-1 * rest_ones)],
                     axis=0
                 )
-                for function_name in ["Styblinski_tang"]:  # FUNCTIONS.keys():
-                    base_directory = "C:\\Users\\Zeyad\\PycharmProjects\\Kilian_modified\\linux\\runs_long\\agent_name_reinforce\\input_dimension_{0}\\number_free_parameters_{1}\\{2}\\abs_env_50_epsLen_1_numObs".format(
+                for function_name in ["Ackley"]:  # FUNCTIONS.keys():
+                    base_directory = "C:\\Users\\Zeyad\\PycharmProjects\\Kilian_modified\\linux\\runs_ppo\\agent_name_ppo\\input_dimension_{0}\\number_free_parameters_{1}\\{2}\\abs_env_50_epsLen_1_numObs".format(
                         input_dimension,
                         number_free_parameters,
                         function_name
