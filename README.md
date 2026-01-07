@@ -1,4 +1,4 @@
-# Investigation of self-learned zeroth-order optimization algorithms testbench
+# Parameter-Dependent Self-Learning Optimization
 
 This repository contains our implementation of our testbench. 
 We provide a short guide to using our code for training and evaluation here.
@@ -35,6 +35,3 @@ To create a summary of all evaluations
 python python/scripts/evaluation/build_summary_table.py
 ```
 The output is in the `runs` folder, if SQL saving is set up, the summary is also in a table named `performance`
-# SQL
-To include saving to a SQL, the `write_to_sql` flag in the `EvaluationDriver` must be set.
-Further, the `python/db/db_connection.gin` file must be configured to point to a PostgreSQL database. Also, the `enable` flag must be set.
