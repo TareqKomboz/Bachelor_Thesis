@@ -1,37 +1,57 @@
-# Parameter-Dependent Self-Learning Optimization
+# Parameter-Dependent Learning to Optimize (L2O) via Reinforcement Learning
 
-This repository contains our implementation of our testbench. 
-We provide a short guide to using our code for training and evaluation here.
-# Training
-For training, create a `config.gin` file containing all hyperparameters located in the root directory.
-The `default.gin` file contains the default values as presented in our work.
-Start training with:
-```
-python python/main.py -c config.gin
-```
-If no config file is provided, the `default.gin` file is used.
-The training process is logged to the console, as well as to the `runs` folder located in the root directory.
-The structure of the `runs` folder is: `runs/agent_name/function_name/run_id`. Therefore, every unique run has its folder. 
-`agent_name` and `function_name` are given by the hyperparameters.
-`run_id` is built based on hyperparameters different from the defaults. 
-For details we refer to `python/common/build_run_id.py`
+This repository implements a framework for **Learning to Optimize (L2O)** using Reinforcement Learning. The project explores training RL agents to act as optimizers that can adapt to specific characteristics of function families, particularly in high-dimensional spaces with "free parameters" (fixed context) and "optimization parameters" (variables to be adjusted).
 
-# Evaluation
-For evaluation, you need a checkpoint of a policy in the corresponding run folder as such: `runs/agent_name/function_name/run_id/checkpoints/policy`
-Further, a `config.gin` file with the same values as the policy checkpoint.
-Then run:
-```
-python python/main.py -c config.gin -e True
-```
-The results are output to a folder in the run folder as such `run_folder/Step_global_step` where global_step is the amount of training iterations the policy has already been trained on
-If the SQL saving is enabled, all performances over time are put into an SQL table named `runs`.
+## Core Components
 
-To evaluate all runs in the `runs` folder in parallel, run 
+*   **Agents:** Implementation of REINFORCE and PPO agents using `tf_agents`.
+*   **Environments:** Custom TensorFlow-based environments (`TFEnvironment`) designed for high-dimensional optimization tasks.
+*   **Benchmark Functions:** Support for a variety of standard optimization benchmarks, including:
+    *   Ackley, Griewank, Levy, Rastrigin, Rosenbrock, Sphere, Styblinski-Tang, and Zakharov functions.
+*   **Configuration:** Extensive use of `gin-config` to ensure experiment reproducibility and modular parameter management.
+
+## Project Structure
+
+*   `python/main.py`: Entry point for both training and evaluation.
+*   `python/agents/`: Agent creation and architecture definitions.
+*   `python/environments/`: Custom RL environments for optimization.
+*   `python/objective_functions/`: Implementations of the benchmark functions in TensorFlow.
+*   `python/scripts/`: Utility scripts for batch evaluation, plotting, and data management.
+
+## How to Run
+
+### 1. Training
+To train an agent, use a `.gin` configuration file. The `default.gin` in the root directory provides a base configuration.
+```bash
+python python/main.py -c default.gin
 ```
-python python/scripts/evaluation/evaluate_all.py -a -t number_of_threads
+Training logs and checkpoints are saved in the `runs/` directory following the structure:
+`runs/agent_name_.../input_dimension_.../number_free_parameters_.../function_name/run_id/`
+
+### 2. Evaluation
+To evaluate a trained policy, use the `-e True` flag. The configuration file passed should match the one used during training.
+```bash
+python python/main.py -c runs/.../config.gin -e True
 ```
-To create a summary of all evaluations
-```
-python python/scripts/evaluation/build_summary_table.py
-```
-The output is in the `runs` folder, if SQL saving is set up, the summary is also in a table named `performance`
+Evaluation results are output to a `Step_global_step` folder within the specific run directory.
+
+### 3. Batch Evaluation & Plotting
+*   **Evaluate all runs in parallel:**
+    ```bash
+    python python/scripts/evaluation/evaluate_all.py -a -t <number_of_threads>
+    ```
+*   **Generate summary table:**
+    ```bash
+    python python/scripts/evaluation/build_summary_table.py
+    ```
+*   **Plotting:** Specialized plotting scripts are available in `python/scripts/plotting/` to visualize convergence (e.g., `plot_performance_from_runs_table.py`).
+
+## Requirements
+The project requires Python 3.x and the following libraries:
+*   TensorFlow
+*   TF-Agents
+*   Gin-config
+*   NumPy
+*   Pandas
+*   Matplotlib
+*   Natsort

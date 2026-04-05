@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.ndimage import gaussian_filter1d
 
-from definitons import ROOT_DIR
+from definitions import ROOT_DIR
 from objective_functions.tf_objective_functions import FUNCTIONS
 
 FINETUNING_DIR = os.path.join(ROOT_DIR, "finetuning")

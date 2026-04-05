@@ -9,7 +9,7 @@ import logging
 
 from common.build_run_id import get_run_id
 from common.utils import is_valid_filename
-from definitons import RUNS_DIR
+from definitions import RUNS_DIR
 from evaluation.evaluate import evaluate
 from training.train import train
 from objective_functions.tf_objective_functions import FUNCTIONS

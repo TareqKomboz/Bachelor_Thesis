@@ -4,7 +4,7 @@ import tensorflow as tf
 from tf_agents.drivers.dynamic_episode_driver import DynamicEpisodeDriver
 
 from objective_functions.tf_objective_functions import FUNCTIONS
-from definitons import ROOT_DIR, RUNS_DIR
+from definitions import ROOT_DIR, RUNS_DIR
 
 
 def is_valid_filename(parser, arg):

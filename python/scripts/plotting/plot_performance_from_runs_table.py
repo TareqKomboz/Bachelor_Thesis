@@ -11,7 +11,7 @@ import matplotlib.colors as mcolors
 
 from objective_functions.tf_objective_functions import FUNCTIONS
 from db.runs import read_from_sql
-from definitons import ROOT_DIR
+from definitions import ROOT_DIR
 
 PLOT_DIR = os.path.join(ROOT_DIR, "comparison_plots")
 COLORS = [color for color in mcolors.TABLEAU_COLORS.values()]

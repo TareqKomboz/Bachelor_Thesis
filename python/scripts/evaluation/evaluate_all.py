@@ -8,7 +8,7 @@ import time
 import gin
 
 from common.utils import get_run_identifiers_from_folder
-from definitons import PYTHON_DIR, RUNS_DIR, ROOT_DIR
+from definitions import PYTHON_DIR, RUNS_DIR, ROOT_DIR
 from main import main
 
 

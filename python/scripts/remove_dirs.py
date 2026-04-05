@@ -2,7 +2,7 @@ import glob
 import os
 import shutil
 
-from definitons import RUNS_DIR
+from definitions import RUNS_DIR
 
 ppo_dir = os.path.join(RUNS_DIR, "ppo")
 step_dirs = glob.glob(os.path.join(ppo_dir, '*/*/Step_*'))

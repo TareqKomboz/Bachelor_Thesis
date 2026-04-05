@@ -2,7 +2,7 @@ import glob
 import os
 
 
-from definitons import RUNS_DIR
+from defdefinitions import RUNS_DIR
 
 
 def change(starting_pattern, change_fn):

@@ -2,7 +2,7 @@ import glob
 import os
 
 from common.build_run_id import get_run_id
-from definitons import RUNS_DIR
+from definitions import RUNS_DIR
 
 CONFIGFILES = glob.glob(os.path.join(RUNS_DIR, '*/*/*/config.gin'))
 

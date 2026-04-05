@@ -3,7 +3,7 @@ import shutil
 
 from objective_functions.tf_objective_functions import FUNCTIONS
 from db.postgres import DBEngine, initialize_db
-from definitons import RUNS_DIR
+from definitions import RUNS_DIR
 import pandas as pd
 
 START_COLUMNS = ['algorithm', 'trained_on', 'run_id']

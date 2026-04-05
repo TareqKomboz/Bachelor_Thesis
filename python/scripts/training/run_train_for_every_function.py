@@ -6,7 +6,7 @@ import time
 
 from objective_functions.tf_objective_functions import FUNCTIONS
 from common.utils import is_valid_filename
-from definitons import PYTHON_DIR, ROOT_DIR
+from definitions import PYTHON_DIR, ROOT_DIR
 
 
 def change_if_function_name(line, name):

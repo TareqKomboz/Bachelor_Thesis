@@ -6,7 +6,7 @@ import numpy as np
 import tensorflow as tf
 
 from objective_functions.tf_objective_functions import FUNCTIONS
-from definitons import RUNS_DIR
+from definitions import RUNS_DIR
 from evaluation.plot_utils import plot_performance_over_time_with_stds, plot, plot_performance_by_function
 
 episode_length = 200
