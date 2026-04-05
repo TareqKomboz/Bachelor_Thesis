@@ -1,40 +1,55 @@
 # Parameter-Dependent Learning to Optimize (L2O) via Reinforcement Learning
 
-This repository implements a framework for **Learning to Optimize (L2O)** using Reinforcement Learning. The project explores training RL agents to act as optimizers that can adapt to specific characteristics of function families, particularly in high-dimensional spaces with "free parameters" (fixed context) and "optimization parameters" (variables to be adjusted).
+This project implements a professional and modular framework for **Learning to Optimize (L2O)** using Reinforcement Learning. Originally developed for my Bachelor's Thesis, it has been refactored for a high-quality PhD application showcase.
 
-## Core Components
+The framework trains RL agents (REINFORCE and PPO) to act as optimizers for high-dimensional mathematical functions. A key focus is **Parameter-Dependent Optimization**, where the agent learns to optimize a subset of parameters while being conditioned on fixed "free parameters" (context).
 
-*   **l2o Package:** The core library containing:
-    *   `agents/`: Implementation of REINFORCE and PPO agents using `tf_agents`.
-    *   `environments/`: Custom TensorFlow-based environments for optimization.
-    *   `objective_functions/`: Benchmark functions (Ackley, Rosenbrock, etc.) in TensorFlow.
-    *   `evaluation/` & `training/`: Drivers for the RL lifecycle.
-    *   `analysis/`: Scripts for MSE calculations and visualizations.
-*   **Configuration:** Experiment settings managed via `gin-config` in the `configs/` directory.
+## ✨ Key Features
+- **Custom RL Environments:** High-performance TensorFlow-based environments specifically designed for optimization benchmarks.
+- **Benchmark Suite:** Support for standard functions: Ackley, Griewank, Levy, Rastrigin, Rosenbrock, Sphere, Styblinski-Tang, and Zakharov.
+- **Modern Package Structure:** Fully integrated `l2o` package following professional Python conventions.
+- **Config-Driven Experiments:** Reproducible runs managed via `gin-config`.
 
-## How to Run
+## 📂 Project Structure
 
-### 1. Training
-To train an agent, use the `main.py` entry point with a `.gin` configuration file.
+```text
+Bachelor_Thesis/
+├── l2o/                # Core Package (Library & Tools)
+│   ├── agents/         # REINFORCE & PPO Architectures
+│   ├── environments/   # Custom Optimization Environments
+│   ├── objective_functions/ # Benchmark implementations
+│   ├── training/       # Training drivers and batch scripts
+│   ├── evaluation/     # Evaluation, plotting, and analysis
+│   └── utils/          # Project management and data utilities
+├── configs/            # Experiment configurations (.gin)
+├── main.py             # Main entry point (Wrapper)
+├── requirements.txt    # Project dependencies
+└── README.md
+```
+
+## 🚀 Getting Started
+
+### 1. Installation
+The project requires Python 3.x and TensorFlow.
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Training an Agent
+Run the main entry point with a configuration file:
 ```bash
 python main.py -c configs/default.gin
 ```
-Logs and checkpoints are saved in the `runs/` directory.
-
-### 2. Evaluation
-To evaluate a trained policy, use the `-e True` flag:
+Or use the package execution:
 ```bash
-python main.py -c runs/.../config.gin -e True
+python -m l2o -c configs/default.gin
 ```
 
-### 3. Utility Scripts
-The `scripts/` directory contains tools for batch processing and management:
-*   **Evaluate all runs:** `python scripts/evaluation/evaluate_all.py -a -t <threads>`
-*   **Generate summary:** `python scripts/evaluation/build_summary_table.py`
+### 3. Running Tools
+Utilities are integrated into the package. For example, to evaluate all runs:
+```bash
+python -m l2o.evaluation.evaluate_all -a -t 8
+```
 
-## Requirements
-Ensure you have the following installed:
-*   TensorFlow & TF-Agents
-*   Gin-config
-*   NumPy, Pandas, Matplotlib, Natsort
-(See `requirements.txt` for details)
+---
+*Developed as part of my Bachelor's Thesis. Refactored and modernized in 2026.*

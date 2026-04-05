@@ -88,8 +88,8 @@ def plot(step_counter, plot_dir, function_values):
             max_reward_of_episode_stds_over_batches
         )
     ]
-    f = open(os.path.join(plot_dir, "summary.txt"), 'w')
-    f.writelines(summary)
+    with open(os.path.join(plot_dir, "summary.txt"), 'w') as f:
+        f.writelines(summary)
 
     return (
         average_reward_over_batches_and_actions,

@@ -119,13 +119,9 @@ def train(
     )
 
     train_checkpointer.initialize_or_restore().expect_partial()
-    load_status = policy_checkpointer.initialize_or_restore().expect_partial()
+    policy_checkpointer.initialize_or_restore().expect_partial()
     rb_checkpointer.initialize_or_restore().expect_partial()
-    try:
-        load_status.assert_consumed()
-        pass
-    except AssertionError:
-        pass
+
     logging.info("Setup completed in {:.2f}s".format((time.time_ns() - start_time) * 1e-9))
 
     # training loop
@@ -243,23 +239,23 @@ def train(
     save_data(
         csv_dir=csv_dir,
         data={
-            csv_dir+'\\not_normalized_full_metric_list.csv': full_metric_array,
-            csv_dir+'\\not_normalized_last_metric_list.csv': asarray(last_metric_list),
+            os.path.join(csv_dir, 'not_normalized_full_metric_list.csv'): full_metric_array,
+            os.path.join(csv_dir, 'not_normalized_last_metric_list.csv'): asarray(last_metric_list),
 
-            csv_dir+'\\not_normalized_average_reward_over_batches_and_actions.csv': full_metric_array[:, 0],
-            csv_dir+'\\not_normalized_reward_stds_over_batches_and_actions.csv': full_metric_array[:, 1],
-            csv_dir+'\\not_normalized_average_return_over_batch.csv': full_metric_array[:, 2],
-            csv_dir+'\\not_normalized_return_stds_over_batch.csv': full_metric_array[:, 3],
-            csv_dir+'\\not_normalized_average_final_objective_function_value_over_batch.csv': full_metric_array[:, 4],
-            csv_dir+'\\not_normalized_final_objective_function_value_stds_over_batch.csv': full_metric_array[:, 5],
-            csv_dir+'\\not_normalized_average_max_reward_of_episode_over_batches.csv': full_metric_array[:, 6],
-            csv_dir+'\\not_normalized_max_reward_of_episode_stds_over_batches.csv': full_metric_array[:, 7],
+            os.path.join(csv_dir, 'not_normalized_average_reward_over_batches_and_actions.csv'): full_metric_array[:, 0],
+            os.path.join(csv_dir, 'not_normalized_reward_stds_over_batches_and_actions.csv'): full_metric_array[:, 1],
+            os.path.join(csv_dir, 'not_normalized_average_return_over_batch.csv'): full_metric_array[:, 2],
+            os.path.join(csv_dir, 'not_normalized_return_stds_over_batch.csv'): full_metric_array[:, 3],
+            os.path.join(csv_dir, 'not_normalized_average_final_objective_function_value_over_batch.csv'): full_metric_array[:, 4],
+            os.path.join(csv_dir, 'not_normalized_final_objective_function_value_stds_over_batch.csv'): full_metric_array[:, 5],
+            os.path.join(csv_dir, 'not_normalized_average_max_reward_of_episode_over_batches.csv'): full_metric_array[:, 6],
+            os.path.join(csv_dir, 'not_normalized_max_reward_of_episode_stds_over_batches.csv'): full_metric_array[:, 7],
 
-            csv_dir + '\\not_normalized_train_rewards.csv': train_rewards.numpy(),
-            csv_dir + '\\not_normalized_train_losses.csv': train_losses.numpy(),
-            csv_dir + '\\not_normalized_evaluation_performances.csv': evaluation_performances.numpy(),
+            os.path.join(csv_dir, 'not_normalized_train_rewards.csv'): train_rewards.numpy(),
+            os.path.join(csv_dir, 'not_normalized_train_losses.csv'): train_losses.numpy(),
+            os.path.join(csv_dir, 'not_normalized_evaluation_performances.csv'): evaluation_performances.numpy(),
 
-            csv_dir+'\\not_normalized_execution_time.csv': asarray([((time.time_ns() - start_time) * 1e-9)])
+            os.path.join(csv_dir, 'not_normalized_execution_time.csv'): asarray([((time.time_ns() - start_time) * 1e-9)])
         }
     )
 
