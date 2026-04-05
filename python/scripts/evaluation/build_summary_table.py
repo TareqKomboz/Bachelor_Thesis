@@ -119,35 +119,24 @@ def find_summaries_and_write_to_file(file, value_name="train_final"):
     df = pd.DataFrame(data=data, columns=columns)
     df.loc[(df.trained_on == "ackley,griewank,levy,rastrigin,rosenbrock,sphere,styblinski_tang,zakharov"),
            'trained_on'] = 'all'
-    df['overall'] = 0
-    for function_name in FUNCTIONS.keys():
-        df['overall'] += df[function_name]
-    df['overall'] /= len(FUNCTIONS.keys())
+    df['overall'] = df[[f for f in FUNCTIONS.keys()]].mean(axis=1)
 
-    df['in_distribution'] = 0
-    df['out_of_distribution'] = 0
-    for i, (trained_on, translation) in enumerate(zip(trained_ons, translations)):
-        if trained_on is None:
-            df['out_of_distribution'][i] = df['overall'][i]
-            df['in_distribution'][i] = df['overall'][i]
-        elif trained_on == 'all':
-            for name in FUNCTIONS.keys():
-                df['in_distribution'][i] += df['{}_control'.format(name)][i]
-        elif len(trained_on.split(",")) >= 4:
-            function_name = trained_on
-            for name in function_name:
-                df['in_distribution'][i] += df['{}_control'.format(name)][i]
-        elif len(trained_on.split(",")) > 1:
-            function_name = trained_on.split(",")
-            for name in function_name:
-                df['in_distribution'][i] += df['{}_control'.format(name)][i]
-
+    # Simplified categorization logic
+    df['in_distribution'] = 0.0
+    df['out_of_distribution'] = 0.0
+    
+    for i, trained_on in enumerate(trained_ons):
+        if trained_on == 'all' or trained_on is None:
+            df.at[i, 'in_distribution'] = df.at[i, 'overall']
+            df.at[i, 'out_of_distribution'] = df.at[i, 'overall']
         else:
-            df['in_distribution'][i] += df['{}_control'.format(trained_on)][i]
-            for name in FUNCTIONS.keys():
-                if name == trained_on:
-                    continue
-                df['out_of_distribution'][i] += 5 * df[name][i]
+            trained_functions = trained_on.split(",")
+            # In-distribution: average performance on functions it was trained on
+            df.at[i, 'in_distribution'] = df.loc[i, [f for f in trained_functions if f in df.columns]].mean()
+            # Out-of-distribution: average performance on functions it was NOT trained on
+            other_functions = [f for f in FUNCTIONS.keys() if f not in trained_functions]
+            if other_functions:
+                df.at[i, 'out_of_distribution'] = df.loc[i, [f for f in other_functions if f in df.columns]].mean()
 
     df.to_csv(file)
     print("Summary written to: {}".format(file))
