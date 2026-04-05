@@ -7,8 +7,8 @@ import time
 
 import gin
 
-from common.utils import get_run_identifiers_from_folder
-from definitions import PYTHON_DIR, RUNS_DIR, ROOT_DIR
+from l2o.common.utils import get_run_identifiers_from_folder
+from l2o.definitions import RUNS_DIR, ROOT_DIR
 from main import main
 
 
@@ -16,7 +16,7 @@ from main import main
 # then finds all config.gin in the runs folder and runs an evaluation for every single one, with 8 parallel threads
 # if run_all is not set, runs in completed.csv will be ignored
 
-MAIN_SCRIPT = os.path.join(PYTHON_DIR, "main.py")
+MAIN_SCRIPT = os.path.join(ROOT_DIR, "main.py")
 CONFIGFILES = glob.glob(os.path.join(RUNS_DIR, '*/*/*/config.gin'))
 COMPLETED_FILE = os.path.join(RUNS_DIR, "completed.csv")
 

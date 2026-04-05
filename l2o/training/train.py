@@ -8,14 +8,14 @@ import logging
 from tf_agents.replay_buffers import tf_uniform_replay_buffer
 from tf_agents.utils import common
 
-from agents.create_agent import create_agent
-from objective_functions.tf_objective_functions import FUNCTIONS
-from environments.create_environment import create_environment
-from evaluation.evaluation_driver import EvaluationDriver
-from evaluation.evaluation_utils import plot_returns_and_losses
-from training.training_driver import TrainingDriver
+from l2o.agents.create_agent import create_agent
+from l2o.objective_functions.tf_objective_functions import FUNCTIONS
+from l2o.environments.create_environment import create_environment
+from l2o.evaluation.evaluation_driver import EvaluationDriver
+from l2o.evaluation.evaluation_utils import plot_returns_and_losses
+from l2o.training.training_driver import TrainingDriver
 
-from common.utils import save_data
+from l2o.common.utils import save_data
 
 from numpy import ones, asarray
 

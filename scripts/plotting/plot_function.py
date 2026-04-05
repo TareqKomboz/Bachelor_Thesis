@@ -7,8 +7,8 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-from definitions import ROOT_DIR
-from objective_functions.tf_objective_functions import FUNCTIONS
+from l2o.definitions import ROOT_DIR
+from l2o.objective_functions.tf_objective_functions import FUNCTIONS
 
 PLOT_DIR = os.path.join(ROOT_DIR, "function_plots")
 

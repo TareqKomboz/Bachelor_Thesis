@@ -1,4 +1,4 @@
-from environments.tf_env_abs_obs_abs_act import TfEnvAbsObsAbsAct
+from l2o.environments.tf_env_abs_obs_abs_act import TfEnvAbsObsAbsAct
 
 
 def create_environment(

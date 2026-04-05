@@ -2,7 +2,7 @@ import os
 import shutil
 from pathlib import Path
 
-from definitions import RUNS_DIR, ROOT_DIR
+from l2o.definitions import RUNS_DIR, ROOT_DIR
 
 MIN_RUNS_DIR = os.path.join("D:", "runs")
 

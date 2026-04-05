@@ -6,10 +6,10 @@ import time
 import tensorflow as tf
 from tf_agents.utils import common
 
-from agents.create_agent import create_agent
-from objective_functions.tf_objective_functions import FUNCTIONS
+from l2o.agents.create_agent import create_agent
+from l2o.objective_functions.tf_objective_functions import FUNCTIONS
 
-from evaluation.evaluation_driver import EvaluationDriver
+from l2o.evaluation.evaluation_driver import EvaluationDriver
 
 
 def evaluate(plot_dir, environment_type, agent_name, input_dimension, function_name, number_free_parameters, episode_length):

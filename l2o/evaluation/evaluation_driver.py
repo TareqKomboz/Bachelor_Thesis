@@ -2,12 +2,12 @@ import os
 
 import gin
 
-from objective_functions.tf_objective_functions import FUNCTIONS
-from environments.create_environment import create_environment
-from evaluation.evaluation_utils import build_evaluation_parameters, build_evaluation_parameters_new
+from l2o.objective_functions.tf_objective_functions import FUNCTIONS
+from l2o.environments.create_environment import create_environment
+from l2o.evaluation.evaluation_utils import build_evaluation_parameters, build_evaluation_parameters_new
 import tensorflow as tf
 
-from evaluation.plot_utils import plot, plot_performance_over_time_with_stds
+from l2o.evaluation.plot_utils import plot, plot_performance_over_time_with_stds
 
 
 @gin.configurable("evaluation_driver_init")

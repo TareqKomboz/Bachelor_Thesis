@@ -7,12 +7,12 @@ import shutil
 import gin
 import logging
 
-from common.build_run_id import get_run_id
-from common.utils import is_valid_filename
-from definitions import RUNS_DIR
-from evaluation.evaluate import evaluate
-from training.train import train
-from objective_functions.tf_objective_functions import FUNCTIONS
+from l2o.common.build_run_id import get_run_id
+from l2o.common.utils import is_valid_filename
+from l2o.definitions import RUNS_DIR
+from l2o.evaluation.evaluate import evaluate
+from l2o.training.train import train
+from l2o.objective_functions.tf_objective_functions import FUNCTIONS
 
 
 @gin.configurable

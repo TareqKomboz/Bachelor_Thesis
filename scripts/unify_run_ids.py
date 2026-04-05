@@ -1,8 +1,8 @@
 import glob
 import os
 
-from common.build_run_id import get_run_id
-from definitions import RUNS_DIR
+from l2o.common.build_run_id import get_run_id
+from l2o.definitions import RUNS_DIR
 
 CONFIGFILES = glob.glob(os.path.join(RUNS_DIR, '*/*/*/config.gin'))
 

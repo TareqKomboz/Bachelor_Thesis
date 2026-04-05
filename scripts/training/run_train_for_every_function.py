@@ -4,9 +4,9 @@ import subprocess
 import sys
 import time
 
-from objective_functions.tf_objective_functions import FUNCTIONS
-from common.utils import is_valid_filename
-from definitions import PYTHON_DIR, ROOT_DIR
+from l2o.objective_functions.tf_objective_functions import FUNCTIONS
+from l2o.common.utils import is_valid_filename
+from l2o.definitions import ROOT_DIR
 
 
 def change_if_function_name(line, name):
@@ -15,6 +15,9 @@ def change_if_function_name(line, name):
         line[1] = name
         line = line[0] + "= " + line[1]
     return line
+
+
+MAIN_SCRIPT = os.path.join(ROOT_DIR, "main.py")
 
 
 def create_configfiles(configfile):

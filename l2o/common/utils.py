@@ -4,7 +4,7 @@ from numpy import savetxt, loadtxt, array, float32, ones
 from tf_agents.drivers.dynamic_episode_driver import DynamicEpisodeDriver
 import gin
 
-from definitions import ROOT_DIR, RUNS_DIR
+from l2o.definitions import ROOT_DIR, RUNS_DIR
 
 
 def is_valid_filename(parser, arg):

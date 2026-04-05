@@ -1,7 +1,7 @@
 import tensorflow as tf
 from tf_agents.utils import common
 
-from environments.tf_env import TfEnv
+from l2o.environments.tf_env import TfEnv
 
 
 class TfEnvAbsObsAbsAct(TfEnv):
