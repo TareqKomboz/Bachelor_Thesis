@@ -1,8 +1,18 @@
+import os
+os.environ["TF_USE_LEGACY_KERAS"] = "1"
+
 import argparse
 import os
 import sys
 import time
 import shutil
+
+import tensorflow as tf
+try:
+    import tf_keras as keras
+    sys.modules['keras'] = keras
+except ImportError:
+    pass
 
 import gin
 import logging
