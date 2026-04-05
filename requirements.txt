@@ -1,0 +1,7 @@
+tensorflow
+tf-agents
+gin-config
+numpy
+pandas
+matplotlib
+natsort

@@ -2,7 +2,6 @@ import os
 import shutil
 
 from objective_functions.tf_objective_functions import FUNCTIONS
-from db.postgres import DBEngine, initialize_db
 from definitions import RUNS_DIR
 import pandas as pd
 
@@ -165,15 +164,6 @@ def plot_table_by_function_values(file):
     df_by_function.to_csv(file2)
 
 
-def insert_into_postgres(file):
-    initialize_db()
-    connector = DBEngine()
-    df = pd.read_csv(file)
-    n_rows = df.to_sql('performance', connector.engine, if_exists='replace')
-    print("inserted {} rows into table {}".format(n_rows, connector.dbname))
-
-
 if __name__ == "__main__":
     file = os.path.join(RUNS_DIR, "{}.csv".format("final summary"))
     find_summaries_and_write_to_file(file, "train_final")
-    insert_into_postgres(file)
