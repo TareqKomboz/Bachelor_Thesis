@@ -1,0 +1,12 @@
+INFO:root:Loaded contents of configfile /Users/tareqabuelkomboz/Documents/Career/2_University/Bachelor/Bachelorarbeit/Bachelor_Thesis/configs/default.gin
+INFO:root:Starting run on absolute environment with reinforce agent on 2d-Ackley function with 1 free and 1 opt parameters. run_id abs_env_50_epsLen_1_numObs
+INFO:root:Starting training setup
+WARNING:absl:At this time, the v2.11+ optimizer `tf.keras.optimizers.Adam` runs slowly on M1/M2 Macs, please use the legacy TF-Keras optimizer instead, located at `tf.keras.optimizers.legacy.Adam`.
+INFO:absl:No checkpoint available at /Users/tareqabuelkomboz/Documents/Career/2_University/Bachelor/Bachelorarbeit/Bachelor_Thesis/runs/agent_name_reinforce/input_dimension_2/number_free_parameters_1/Ackley/abs_env_50_epsLen_1_numObs/checkpoint
+INFO:absl:No checkpoint available at /Users/tareqabuelkomboz/Documents/Career/2_University/Bachelor/Bachelorarbeit/Bachelor_Thesis/runs/agent_name_reinforce/input_dimension_2/number_free_parameters_1/Ackley/abs_env_50_epsLen_1_numObs/checkpoint/policy
+INFO:absl:No checkpoint available at /Users/tareqabuelkomboz/Documents/Career/2_University/Bachelor/Bachelorarbeit/Bachelor_Thesis/runs/agent_name_reinforce/input_dimension_2/number_free_parameters_1/Ackley/abs_env_50_epsLen_1_numObs/checkpoint/replay_buffer
+INFO:root:Setup completed in 0.09s
+INFO:root:Starting training loop, initial graph construction might take a bit
+WARNING:tensorflow:From /Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/tensorflow/python/autograph/impl/api.py:459: ReplayBuffer.get_next (from tf_agents.replay_buffers.replay_buffer) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `as_dataset(..., single_deterministic_pass=False) instead.
